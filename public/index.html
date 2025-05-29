@@ -813,7 +813,7 @@
           testimonialGrid.innerHTML = `
             <div style="text-align: center; padding: 20px; color: var(--danger);">
               <i class="fas fa-exclamation-triangle"></i> Gagal memuat testimoni. 
-              <button onclick="loadTestimonials()" class="btn" style="margin-top: 10px; padding: 5px 10px;">
+              <button onclick="window.loadTestimonials()" class="btn" style="margin-top: 10px; padding: 5px 10px;">
                 <i class="fas fa-redo"></i> Coba Lagi
               </button>
             </div>
@@ -1095,6 +1095,9 @@
         renderProducts();
         loadTestimonials(); // Memuat testimoni dari GitHub
       });
+
+      // Ekspos fungsi ke window untuk tombol "Coba Lagi"
+      window.loadTestimonials = loadTestimonials;
     </script>
   </body>
 </html>
