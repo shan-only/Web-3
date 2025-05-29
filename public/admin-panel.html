@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - YUDZXML STORE 77</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      :root {
+        --bg-dark: #121212;
+        --card-bg: #1d1f25;
+        --accent: #33aaff;
+        --accent2: #0066ff;
+        --text-light: #e0f0ff;
+        --text-muted: #88bbff;
+        --input-bg: #2a2a3a;
+        --border-color: #3399ff;
+        --success: #00cc99;
+        --danger: #ff4d6d;
+        --transition: all 0.3s ease;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg-dark);
+        color: var(--text-light);
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+      }
+
+      .admin-container {
+        width: 100%;
+        max-width: 1200px;
+        background: rgba(30, 30, 40, 0.8);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(51, 153, 255, 0.3);
+      }
+
+      /* Admin Panel */
+      #adminPanel {
+        padding: 2rem;
+      }
+
+      .admin-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--accent2);
+      }
+
+      .admin-title {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .tabs {
+        display: flex;
+        margin-bottom: 2rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .tab-btn {
+        padding: 1rem 2rem;
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .tab-btn.active {
+        color: var(--accent);
+      }
+
+      .tab-btn.active::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--accent);
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+        animation: fadeIn 0.5s ease;
+      }
+
+      .admin-section {
+        background: rgba(30, 30, 40, 0.6);
+        padding: 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        border: 1px solid rgba(51, 153, 255, 0.2);
+      }
+
+      .admin-section h3 {
+        color: var(--accent);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .form-group {
+        margin-bottom: 1.2rem;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 0.8rem;
+        border-radius: 10px;
+        border: 1px solid rgba(51, 153, 255, 0.3);
+        background: var(--input-bg);
+        color: var(--text-light);
+        font-size: 1rem;
+      }
+
+      textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+
+      .btn-submit {
+        padding: 1rem 1.5rem;
+        background: linear-gradient(45deg, var(--success), #00b383);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: var(--transition);
+        margin-top: 1rem;
+      }
+
+      .btn-submit:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 204, 153, 0.4);
+      }
+
+      .logout-btn {
+        display: block;
+        margin: 2rem auto 0;
+        padding: 0.8rem 1.5rem;
+        background: linear-gradient(45deg, #ff4d4d, #cc0000);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .status-message {
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+        text-align: center;
+        display: none;
+      }
+
+      .status-success {
+        background: rgba(0, 204, 153, 0.2);
+        border: 1px solid var(--success);
+        color: var(--success);
+      }
+
+      .status-error {
+        background: rgba(255, 77, 109, 0.2);
+        border: 1px solid var(--danger);
+        color: var(--danger);
+      }
+
+      /* Animasi */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Notifikasi Akses Langsung */
+      .access-notice {
+        text-align: center;
+        padding: 10px;
+        background: rgba(51, 170, 255, 0.2);
+        border: 1px solid var(--accent);
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="admin-container">
+      <!-- Admin Panel (langsung ditampilkan) -->
+      <div id="adminPanel">
+        <div class="access-notice"><i class="fas fa-unlock-alt"></i> Akses langsung diaktifkan - Login tidak diperlukan</div>
+
+        <div class="admin-header">
+          <h1 class="admin-title">YUDZXML STORE 77</h1>
+          <p>Admin Panel - Kelola Produk dan Testimoni</p>
+        </div>
+
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="products">Produk</button>
+          <button class="tab-btn" data-tab="testimonials">Testimoni</button>
+        </div>
+
+        <!-- Produk Tab -->
+        <div id="productsTab" class="tab-content active">
+          <div class="admin-section">
+            <h3>Tambah Produk Baru</h3>
+            <form id="productForm">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="productName">Nama Produk</label>
+                  <input type="text" id="productName" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="productImage">Link Gambar</label>
+                  <input type="text" id="productImage" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="productPrice">Harga Dasar</label>
+                  <input type="number" id="productPrice" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="productDescription">Deskripsi Produk</label>
+                  <textarea id="productDescription" required></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label for="productPackages">Paket (opsional)</label>
+                  <textarea id="productPackages" placeholder="Format: Nama Paket - Harga (satu per baris)"></textarea>
+                </div>
+              </div>
+
+              <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Simpan Produk</button>
+            </form>
+            <div id="productStatus" class="status-message"></div>
+          </div>
+        </div>
+
+        <!-- Testimoni Tab -->
+        <div id="testimonialsTab" class="tab-content">
+          <div class="admin-section">
+            <h3>Tambah Testimoni Baru</h3>
+            <form id="testimonialForm">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="testimonialName">Nama Pelanggan</label>
+                  <input type="text" id="testimonialName" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="testimonialRating">Rating (1-5)</label>
+                  <input type="number" id="testimonialRating" min="1" max="5" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="testimonialComment">Komentar</label>
+                  <textarea id="testimonialComment" required></textarea>
+                </div>
+              </div>
+
+              <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Simpan Testimoni</button>
+            </form>
+            <div id="testimonialStatus" class="status-message"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Konfigurasi API
+      const API_BASE = "/api";
+      const PRODUCTS_API = `${API_BASE}/products`;
+      const TESTIMONIALS_API = `${API_BASE}/testimonials`;
+
+      // Elemen DOM
+      const adminPanel = document.getElementById("adminPanel");
+      const productForm = document.getElementById("productForm");
+      const testimonialForm = document.getElementById("testimonialForm");
+      const tabBtns = document.querySelectorAll(".tab-btn");
+      const tabContents = document.querySelectorAll(".tab-content");
+
+      // Fungsi untuk menampilkan pesan status
+      function showStatus(element, message, isSuccess = true) {
+        element.textContent = message;
+        element.className = isSuccess ? "status-message status-success" : "status-message status-error";
+        element.style.display = "block";
+
+        // Sembunyikan setelah 3 detik
+        setTimeout(() => {
+          element.style.display = "none";
+        }, 3000);
+      }
+
+      // Fungsi untuk mengubah tab
+      function switchTab(tabId) {
+        // Nonaktifkan semua tab
+        tabContents.forEach((tab) => {
+          tab.classList.remove("active");
+        });
+
+        tabBtns.forEach((btn) => {
+          btn.classList.remove("active");
+        });
+
+        // Aktifkan tab yang dipilih
+        document.getElementById(`${tabId}Tab`).classList.add("active");
+        document.querySelector(`.tab-btn[data-tab="${tabId}"]`).classList.add("active");
+      }
+
+      // Fungsi untuk mengirim produk ke API
+      async function saveProduct(e) {
+        e.preventDefault();
+        const statusElement = document.getElementById("productStatus");
+
+        const product = {
+          name: document.getElementById("productName").value,
+          image: document.getElementById("productImage").value,
+          price: parseFloat(document.getElementById("productPrice").value),
+          description: document.getElementById("productDescription").value,
+          packages: [],
+        };
+
+        // Parsing paket jika ada
+        const packagesText = document.getElementById("productPackages").value.trim();
+        if (packagesText) {
+          const packageLines = packagesText.split("\n");
+          product.packages = packageLines
+            .map((line) => {
+              const [name, price] = line.split("-").map((part) => part.trim());
+              return {
+                name,
+                price: parseFloat(price.replace(/\D/g, "")),
+              };
+            })
+            .filter((pkg) => pkg.name && !isNaN(pkg.price));
+        }
+
+        try {
+          const response = await fetch(PRODUCTS_API, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(product),
+          });
+
+          if (response.ok) {
+            showStatus(statusElement, "Produk berhasil disimpan!");
+            productForm.reset();
+          } else {
+            const error = await response.json();
+            showStatus(statusElement, `Gagal menyimpan produk: ${error.message}`, false);
+          }
+        } catch (error) {
+          showStatus(statusElement, "Terjadi kesalahan jaringan", false);
+        }
+      }
+
+      // Fungsi untuk mengirim testimoni ke API
+      async function saveTestimonial(e) {
+        e.preventDefault();
+        const statusElement = document.getElementById("testimonialStatus");
+
+        const testimonial = {
+          name: document.getElementById("testimonialName").value,
+          rating: parseInt(document.getElementById("testimonialRating").value),
+          comment: document.getElementById("testimonialComment").value,
+          date: new Date().toISOString().split("T")[0], // Format YYYY-MM-DD
+        };
+
+        try {
+          const response = await fetch(TESTIMONIALS_API, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(testimonial),
+          });
+
+          if (response.ok) {
+            showStatus(statusElement, "Testimoni berhasil disimpan!");
+            testimonialForm.reset();
+          } else {
+            const error = await response.json();
+            showStatus(statusElement, `Gagal menyimpan testimoni: ${error.message}`, false);
+          }
+        } catch (error) {
+          showStatus(statusElement, "Terjadi kesalahan jaringan", false);
+        }
+      }
+
+      // Event Listeners
+      productForm.addEventListener("submit", saveProduct);
+      testimonialForm.addEventListener("submit", saveTestimonial);
+
+      tabBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          switchTab(btn.dataset.tab);
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YUDZXML STORE 77</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      /* Variabel warna - tema modern gelap */
+      :root {
+        --bg-dark: #121212;
+        --card-bg: #1d1f25;
+        --accent: #33aaff;
+        --accent2: #0066ff;
+        --text-light: #e0f0ff;
+        --text-muted: #88bbff;
+        --input-bg: #2a2a3a;
+        --border-color: #3399ff;
+        --success: #00cc99;
+        --danger: #ff4d6d;
+        --transition: all 0.3s ease;
+      }
+
+      /* Reset dasar */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg-dark);
+        color: var(--text-light);
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      /* Header */
+      header {
+        text-align: center;
+        padding: 2rem 1rem;
+        background: linear-gradient(135deg, #0d1b2a, #1b263b);
+        position: relative;
+        overflow: hidden;
+        border-bottom: 3px solid var(--accent);
+      }
+
+      header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--accent2), var(--accent));
+        box-shadow: 0 0 15px var(--accent);
+      }
+
+      .logo {
+        font-size: 2.8rem;
+        margin-bottom: 1rem;
+        color: var(--text-light);
+        text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent2);
+      }
+
+      h1 {
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .subtitle {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        max-width: 600px;
+        margin: 0 auto 1.5rem;
+      }
+
+      /* Tombol utama */
+      .btn {
+        display: inline-block;
+        background: linear-gradient(45deg, var(--accent2), var(--accent));
+        color: white;
+        padding: 0.8rem 1.8rem;
+        border-radius: 50px;
+        font-weight: 600;
+        text-decoration: none;
+        margin: 0.5rem;
+        transition: var(--transition);
+        box-shadow: 0 4px 15px rgba(51, 153, 255, 0.4);
+        border: none;
+        cursor: pointer;
+      }
+
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(51, 153, 255, 0.6);
+      }
+
+      .btn-testimoni {
+        background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+      }
+
+      .btn-admin {
+        background: linear-gradient(45deg, #00cc99, #00b383);
+      }
+
+      /* Produk */
+      .products-section {
+        padding: 3rem 1rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .section-title {
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 1.8rem;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        position: relative;
+        display: inline-block;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 0 1rem;
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        border-radius: 10px;
+      }
+
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.8rem;
+      }
+
+      .product-card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        overflow: hidden;
+        transition: var(--transition);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        position: relative;
+        border: 1px solid rgba(51, 153, 255, 0.2);
+      }
+
+      .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(51, 153, 255, 0.25);
+      }
+
+      .product-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: var(--success);
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+      }
+
+      .product-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-bottom: 2px solid rgba(51, 153, 255, 0.3);
+      }
+
+      .product-content {
+        padding: 1.5rem;
+      }
+
+      .product-title {
+        font-size: 1.3rem;
+        margin-bottom: 0.8rem;
+        color: var(--accent);
+      }
+
+      .product-description {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        margin-bottom: 1.2rem;
+        min-height: 60px;
+      }
+
+      .product-price {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--accent2);
+        margin-bottom: 1.2rem;
+        text-align: center;
+      }
+
+      .product-actions {
+        display: flex;
+        gap: 0.8rem;
+      }
+
+      .action-btn {
+        flex: 1;
+        padding: 0.7rem;
+        border-radius: 10px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .btn-order {
+        background: linear-gradient(45deg, var(--accent2), var(--accent));
+        color: white;
+      }
+
+      .btn-details {
+        background: rgba(51, 153, 255, 0.15);
+        color: var(--accent);
+      }
+
+      /* Modal */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        backdrop-filter: blur(5px);
+      }
+
+      .modal-overlay.active {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .modal-content {
+        background: var(--card-bg);
+        border-radius: 16px;
+        width: 90%;
+        max-width: 500px;
+        padding: 2rem;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        transform: translateY(20px);
+        transition: transform 0.4s ease;
+        border: 1px solid rgba(51, 153, 255, 0.3);
+      }
+
+      .modal-overlay.active .modal-content {
+        transform: translateY(0);
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: color 0.3s ease;
+      }
+
+      .modal-close:hover {
+        color: var(--accent);
+      }
+
+      .modal-title {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        color: var(--accent);
+      }
+
+      .modal-subtitle {
+        color: var(--text-muted);
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+
+      /* Detail Paket */
+      .package-list {
+        margin-bottom: 1.5rem;
+      }
+
+      .package-item {
+        background: rgba(51, 153, 255, 0.1);
+        padding: 0.8rem;
+        border-radius: 10px;
+        margin-bottom: 0.8rem;
+        border-left: 3px solid var(--accent);
+      }
+
+      .package-name {
+        font-weight: 600;
+        color: var(--accent);
+        margin-bottom: 0.3rem;
+      }
+
+      .package-price {
+        color: var(--accent2);
+        font-weight: 700;
+      }
+
+      /* Form */
+      .form-group {
+        margin-bottom: 1.2rem;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 0.8rem;
+        border-radius: 10px;
+        border: 1px solid rgba(51, 153, 255, 0.3);
+        background: var(--input-bg);
+        color: var(--text-light);
+        font-size: 1rem;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px rgba(51, 153, 255, 0.2);
+      }
+
+      .btn-submit {
+        width: 100%;
+        padding: 1rem;
+        background: linear-gradient(45deg, var(--success), #00b383);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-top: 1rem;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .btn-submit:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 204, 153, 0.4);
+      }
+
+      /* Testimoni */
+      .testimonial-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.8rem;
+        margin-top: 2rem;
+      }
+
+      .testimonial-card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 1.5rem;
+        position: relative;
+        border: 1px solid rgba(51, 153, 255, 0.2);
+      }
+
+      .testimonial-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .testimonial-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+        color: white;
+      }
+
+      .testimonial-rating {
+        color: gold;
+        margin-bottom: 0.5rem;
+      }
+
+      .testimonial-text {
+        color: var(--text-muted);
+        font-style: italic;
+      }
+
+      /* Admin Login Modal */
+      .admin-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+
+      .admin-modal.active {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .admin-modal-content {
+        background: var(--card-bg);
+        border-radius: 16px;
+        width: 90%;
+        max-width: 400px;
+        padding: 2rem;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(51, 153, 255, 0.3);
+      }
+
+      .admin-modal-title {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        color: var(--accent);
+      }
+
+      /* Footer */
+      footer {
+        text-align: center;
+        padding: 2rem 1rem;
+        margin-top: 3rem;
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--text-muted);
+        border-top: 1px solid rgba(51, 153, 255, 0.1);
+      }
+
+      /* Responsif */
+      @media (max-width: 768px) {
+        .products-grid,
+        .testimonial-grid {
+          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        }
+      }
+
+      @media (max-width: 480px) {
+        .logo {
+          font-size: 2.2rem;
+        }
+
+        h1 {
+          font-size: 1.8rem;
+        }
+
+        .products-grid,
+        .testimonial-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Animasi */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .fade-in {
+        animation: fadeIn 0.6s ease forwards;
+      }
+
+      .delay-1 {
+        animation-delay: 0.1s;
+      }
+      .delay-2 {
+        animation-delay: 0.2s;
+      }
+      .delay-3 {
+        animation-delay: 0.3s;
+      }
+      .delay-4 {
+        animation-delay: 0.4s;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <header>
+      <div class="logo fade-in">
+        <i class="fas fa-store"></i>
+      </div>
+      <h1 class="fade-in delay-1">YUDZXML STORE 77</h1>
+      <p class="subtitle fade-in delay-2">Tempat terbaik untuk mendapatkan produk digital berkualitas tinggi</p>
+      <div>
+        <a href="#testimoni" class="btn btn-testimoni fade-in delay-3"> <i class="fas fa-comment-alt"></i> Lihat Testimoni </a>
+        <button class="btn btn-admin fade-in delay-4" id="adminLoginBtn"><i class="fas fa-lock"></i> Admin Login</button>
+      </div>
+    </header>
+
+    <!-- Produk Section -->
+    <section class="products-section" id="produk">
+      <h2 class="section-title">Produk Kami</h2>
+
+      <div class="products-grid">
+        <!-- Produk 1 -->
+        <div class="product-card fade-in">
+          <span class="product-badge">TERLARIS</span>
+          <img src="https://images.unsplash.com/photo-1550009158-9ebf69173e03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Script Bot" class="product-image" />
+          <div class="product-content">
+            <h3 class="product-title">Script Bot Premium</h3>
+            <p class="product-description">Script bot dengan fitur lengkap untuk otomasi tugas dan meningkatkan produktivitas Anda.</p>
+
+            <div class="product-packages">
+              <div class="package-item">
+                <span class="package-name">Basic</span>
+                <span class="package-price">Rp 100.000</span>
+              </div>
+              <div class="package-item">
+                <span class="package-name">Standard</span>
+                <span class="package-price">Rp 150.000</span>
+              </div>
+              <div class="package-item">
+                <span class="package-name">Pro</span>
+                <span class="package-price">Rp 250.000</span>
+              </div>
+            </div>
+
+            <div class="product-actions">
+              <button class="action-btn btn-order" data-product="1">Order</button>
+              <button class="action-btn btn-details" data-product="1">Detail</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Produk 2 -->
+        <div class="product-card fade-in delay-1">
+          <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Panel Pterodactyl" class="product-image" />
+          <div class="product-content">
+            <h3 class="product-title">Panel Pterodactyl</h3>
+            <p class="product-description">Solusi manajemen server game dengan performa tinggi dan antarmuka yang intuitif.</p>
+
+            <div class="product-packages">
+              <div class="package-item">
+                <span class="package-name">Starter</span>
+                <span class="package-price">Rp 75.000</span>
+              </div>
+              <div class="package-item">
+                <span class="package-name">Business</span>
+                <span class="package-price">Rp 125.000</span>
+              </div>
+              <div class="package-item">
+                <span class="package-name">Enterprise</span>
+                <span class="package-price">Rp 200.000</span>
+              </div>
+            </div>
+
+            <div class="product-actions">
+              <button class="action-btn btn-order" data-product="2">Order</button>
+              <button class="action-btn btn-details" data-product="2">Detail</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Produk 3 -->
+        <div class="product-card fade-in delay-2">
+          <span class="product-badge">BARU</span>
+          <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Hosting Premium" class="product-image" />
+          <div class="product-content">
+            <h3 class="product-title">Hosting Premium</h3>
+            <p class="product-description">Hosting dengan kecepatan tinggi dan uptime 99.9%, dukungan 24/7, dan keamanan terbaik.</p>
+
+            <div class="product-packages">
+              <div class="package-item">
+                <span class="package-name">Basic</span>
+                <span class="package-price">Rp 150.000/bln</span>
+              </div>
+              <div class="package-item">
+                <span class="package-name">Pro</span>
+                <span class="package-price">Rp 250.000/bln</span>
+              </div>
+              <div class="package-item">
+                <span class="package-name">Business</span>
+                <span class="package-price">Rp 400.000/bln</span>
+              </div>
+            </div>
+
+            <div class="product-actions">
+              <button class="action-btn btn-order" data-product="3">Order</button>
+              <button class="action-btn btn-details" data-product="3">Detail</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimoni Section -->
+    <section class="products-section" id="testimoni" style="background: rgba(0, 0, 0, 0.05); padding-bottom: 4rem">
+      <h2 class="section-title">Testimoni Pelanggan</h2>
+
+      <div class="testimonial-grid">
+        <!-- Testimoni 1 -->
+        <div class="testimonial-card fade-in">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div>
+              <h3>Rizal F.</h3>
+              <div class="testimonial-rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="testimonial-text">"Script botnya keren banget! Fiturnya lengkap dan harganya terjangkau. Proses order juga cepat dan adminnya ramah."</p>
+        </div>
+
+        <!-- Testimoni 2 -->
+        <div class="testimonial-card fade-in delay-1">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div>
+              <h3>Siti M.</h3>
+              <div class="testimonial-rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+            </div>
+          </div>
+          <p class="testimonial-text">"Panel Pterodactylnya sangat mudah digunakan. Performa server game saya meningkat signifikan setelah migrasi ke sini."</p>
+        </div>
+
+        <!-- Testimoni 3 -->
+        <div class="testimonial-card fade-in delay-2">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div>
+              <h3>Budi K.</h3>
+              <div class="testimonial-rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="testimonial-text">"Hostingnya kencang dan jarang down. Support 24 jam sangat membantu saat saya mengalami kendala teknis tengah malam."</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal Detail Produk -->
+    <div class="modal-overlay" id="detailModal">
+      <div class="modal-content">
+        <button class="modal-close" id="closeDetailModal">&times;</button>
+        <h3 class="modal-title" id="detailProductTitle"></h3>
+        <p class="modal-subtitle" id="detailProductDescription"></p>
+
+        <div class="package-list" id="packageList">
+          <!-- Paket produk akan ditampilkan di sini -->
+        </div>
+
+        <button class="btn-submit" id="orderFromDetailBtn"><i class="fas fa-shopping-cart"></i> Order Sekarang</button>
+      </div>
+    </div>
+
+    <!-- Modal Order -->
+    <div class="modal-overlay" id="orderModal">
+      <div class="modal-content">
+        <button class="modal-close" id="closeOrderModal">&times;</button>
+        <h3 class="modal-title">Form Order</h3>
+
+        <form id="orderForm">
+          <div class="form-group">
+            <label for="customerName">Nama Lengkap</label>
+            <input type="text" id="customerName" required placeholder="Masukkan nama Anda" />
+          </div>
+
+          <div class="form-group">
+            <label for="productName">Produk</label>
+            <input type="text" id="productName" readonly />
+          </div>
+
+          <div class="form-group">
+            <label for="packageSelect">Pilih Paket</label>
+            <select id="packageSelect" required>
+              <option value="">-- Pilih Paket --</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="productPrice">Harga</label>
+            <input type="text" id="productPrice" readonly />
+          </div>
+
+          <div class="form-group">
+            <label for="productDescription">Deskripsi Produk</label>
+            <textarea id="productDescription" rows="3" readonly></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit"><i class="fab fa-whatsapp"></i> Order via WhatsApp</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div class="admin-modal" id="adminLoginModal">
+      <div class="admin-modal-content">
+        <button class="modal-close" id="closeAdminModal">&times;</button>
+        <h3 class="admin-modal-title">Admin Login</h3>
+
+        <form id="adminLoginForm">
+          <div class="form-group">
+            <label for="adminUsername">Username</label>
+            <input type="text" id="adminUsername" required />
+          </div>
+
+          <div class="form-group">
+            <label for="adminPassword">Password</label>
+            <input type="password" id="adminPassword" required />
+          </div>
+
+          <button type="submit" class="btn-submit"><i class="fas fa-sign-in-alt"></i> Login</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 <strong>YUDZXML STORE 77</strong> &mdash; Made with <i class="fas fa-heart" style="color: var(--accent)"></i></p>
+    </footer>
+
+    <script>
+      // Data produk dengan paket
+      const products = [
+        {
+          id: 1,
+          name: "Script Bot Premium",
+          price: 100000,
+          description: "Script bot dengan fitur lengkap untuk otomasi tugas dan meningkatkan produktivitas Anda. Cocok untuk berbagai platform dan kebutuhan bisnis.",
+          image: "https://images.unsplash.com/photo-1550009158-9ebf69173e03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+          packages: [
+            { id: 1, name: "Paket Basic", price: 100000, description: "Fitur dasar untuk pemula" },
+            { id: 2, name: "Paket Standard", price: 150000, description: "Fitur lengkap untuk kebutuhan umum" },
+            { id: 3, name: "Paket Pro", price: 250000, description: "Semua fitur termasuk dukungan premium" },
+          ],
+        },
+        {
+          id: 2,
+          name: "Panel Pterodactyl",
+          price: 75000,
+          description: "Solusi manajemen server game dengan performa tinggi dan antarmuka yang intuitif. Cocok untuk game server skala kecil hingga besar.",
+          image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+          packages: [
+            { id: 4, name: "Paket Starter", price: 75000, description: "Untuk server kecil (max 10 pemain)" },
+            { id: 5, name: "Paket Business", price: 125000, description: "Untuk server menengah (max 50 pemain)" },
+            { id: 6, name: "Paket Enterprise", price: 200000, description: "Untuk server besar (unlimited)" },
+          ],
+        },
+        {
+          id: 3,
+          name: "Hosting Premium",
+          price: 150000,
+          description: "Hosting dengan kecepatan tinggi dan uptime 99.9%, dukungan 24/7, dan keamanan terbaik. Cocok untuk website bisnis dan e-commerce.",
+          image: "https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+          packages: [
+            { id: 7, name: "Paket Basic", price: 150000, description: "1 GB Storage, 10 GB Bandwidth" },
+            { id: 8, name: "Paket Pro", price: 250000, description: "5 GB Storage, 50 GB Bandwidth" },
+            { id: 9, name: "Paket Business", price: 400000, description: "Unlimited Storage & Bandwidth" },
+          ],
+        },
+      ];
+
+      // Kredensial admin
+      const ADMIN_USERNAME = "snayders";
+      const ADMIN_PASSWORD = "123";
+
+      // Elemen DOM
+      const detailModal = document.getElementById("detailModal");
+      const closeDetailModal = document.getElementById("closeDetailModal");
+      const orderModal = document.getElementById("orderModal");
+      const closeOrderModal = document.getElementById("closeOrderModal");
+      const orderForm = document.getElementById("orderForm");
+      const productNameInput = document.getElementById("productName");
+      const productPriceInput = document.getElementById("productPrice");
+      const packageSelect = document.getElementById("packageSelect");
+      const productDescriptionInput = document.getElementById("productDescription");
+      const packageList = document.getElementById("packageList");
+      const detailProductTitle = document.getElementById("detailProductTitle");
+      const detailProductDescription = document.getElementById("detailProductDescription");
+      const orderFromDetailBtn = document.getElementById("orderFromDetailBtn");
+      const adminLoginBtn = document.getElementById("adminLoginBtn");
+      const adminLoginModal = document.getElementById("adminLoginModal");
+      const closeAdminModal = document.getElementById("closeAdminModal");
+      const adminLoginForm = document.getElementById("adminLoginForm");
+      const adminUsernameInput = document.getElementById("adminUsername");
+      const adminPasswordInput = document.getElementById("adminPassword");
+
+      // Variabel untuk produk yang dipilih
+      let selectedProduct = null;
+      let selectedPackage = null;
+
+      // Format harga ke Rupiah
+      function formatPrice(price) {
+        return new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR",
+          maximumFractionDigits: 0,
+        }).format(price);
+      }
+
+      // Fungsi untuk membuka modal detail
+      function openDetailModal(productId) {
+        selectedProduct = products.find((p) => p.id == productId);
+
+        if (selectedProduct) {
+          detailProductTitle.textContent = selectedProduct.name;
+          detailProductDescription.textContent = selectedProduct.description;
+
+          // Tampilkan paket
+          packageList.innerHTML = "";
+          selectedProduct.packages.forEach((pkg) => {
+            const packageItem = document.createElement("div");
+            packageItem.className = "package-item";
+            packageItem.innerHTML = `
+            <div class="package-name">${pkg.name}</div>
+            <div class="package-price">${formatPrice(pkg.price)}</div>
+            <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">${pkg.description}</div>
+          `;
+            packageList.appendChild(packageItem);
+          });
+
+          detailModal.classList.add("active");
+        }
+      }
+
+      // Fungsi untuk membuka modal order
+      function openOrderModal(productId, packageId = null) {
+        selectedProduct = products.find((p) => p.id == productId);
+
+        if (selectedProduct) {
+          productNameInput.value = selectedProduct.name;
+          productDescriptionInput.value = selectedProduct.description;
+
+          // Reset dropdown paket
+          packageSelect.innerHTML = '<option value="">-- Pilih Paket --</option>';
+
+          // Tambahkan opsi paket
+          selectedProduct.packages.forEach((pkg) => {
+            const option = document.createElement("option");
+            option.value = pkg.id;
+            option.textContent = `${pkg.name} - ${formatPrice(pkg.price)}`;
+            packageSelect.appendChild(option);
+
+            // Jika ada packageId, set sebagai selected
+            if (packageId && pkg.id == packageId) {
+              option.selected = true;
+              productPriceInput.value = formatPrice(pkg.price);
+              selectedPackage = pkg;
+            }
+          });
+
+          // Set harga default jika tidak ada packageId
+          if (!packageId && selectedProduct.packages.length > 0) {
+            packageSelect.value = selectedProduct.packages[0].id;
+            productPriceInput.value = formatPrice(selectedProduct.packages[0].price);
+            selectedPackage = selectedProduct.packages[0];
+          }
+
+          orderModal.classList.add("active");
+        }
+      }
+
+      // Update harga saat paket dipilih
+      packageSelect.addEventListener("change", function () {
+        if (this.value) {
+          const packageId = parseInt(this.value);
+          const pkg = selectedProduct.packages.find((p) => p.id === packageId);
+          if (pkg) {
+            productPriceInput.value = formatPrice(pkg.price);
+            selectedPackage = pkg;
+          }
+        }
+      });
+
+      // Fungsi untuk menutup modal
+      function closeModal() {
+        detailModal.classList.remove("active");
+        orderModal.classList.remove("active");
+        adminLoginModal.classList.remove("active");
+        selectedProduct = null;
+        selectedPackage = null;
+      }
+
+      // Event listener untuk tombol detail
+      document.querySelectorAll(".btn-details").forEach((button) => {
+        button.addEventListener("click", function () {
+          const productId = this.getAttribute("data-product");
+          openDetailModal(productId);
+        });
+      });
+
+      // Event listener untuk tombol order
+      document.querySelectorAll(".btn-order").forEach((button) => {
+        button.addEventListener("click", function () {
+          const productId = this.getAttribute("data-product");
+          openOrderModal(productId);
+        });
+      });
+
+      // Event listener untuk tombol order dari detail
+      orderFromDetailBtn.addEventListener("click", function () {
+        if (selectedProduct) {
+          closeModal();
+          setTimeout(() => {
+            openOrderModal(selectedProduct.id);
+          }, 300);
+        }
+      });
+
+      // Event listener untuk menutup modal
+      closeDetailModal.addEventListener("click", closeModal);
+      closeOrderModal.addEventListener("click", closeModal);
+      closeAdminModal.addEventListener("click", closeModal);
+
+      // Event listener untuk klik di luar modal
+      detailModal.addEventListener("click", function (e) {
+        if (e.target === detailModal) {
+          closeModal();
+        }
+      });
+
+      orderModal.addEventListener("click", function (e) {
+        if (e.target === orderModal) {
+          closeModal();
+        }
+      });
+
+      adminLoginModal.addEventListener("click", function (e) {
+        if (e.target === adminLoginModal) {
+          closeModal();
+        }
+      });
+
+      // Submit form order
+      orderForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const customerName = document.getElementById("customerName").value;
+
+        if (!selectedProduct || !selectedPackage) {
+          alert("Silakan pilih produk dan paket terlebih dahulu");
+          return;
+        }
+
+        // Format pesan WhatsApp
+        let message = `Halo Admin SNAYDER'S STORE, saya ingin melakukan pemesanan:\n\n`;
+        message += `Nama: ${customerName}\n`;
+        message += `Produk: ${selectedProduct.name}\n`;
+        message += `Paket: ${selectedPackage.name}\n`;
+        message += `Harga: ${formatPrice(selectedPackage.price)}\n\n`;
+        message += `Deskripsi Produk:\n${selectedProduct.description}\n\n`;
+        message += `Terima kasih, saya tunggu konfirmasinya.`;
+
+        // Encode pesan untuk URL
+        const encodedMessage = encodeURIComponent(message);
+
+        // Buka WhatsApp
+        window.open(`https://wa.me/6287866361260?text=${encodedMessage}`, "_blank");
+
+        // Reset form dan tutup modal
+        orderForm.reset();
+        closeModal();
+      });
+
+      // Buka modal login admin
+      adminLoginBtn.addEventListener("click", () => {
+        adminLoginModal.classList.add("active");
+      });
+
+      // Login admin
+      adminLoginForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const username = adminUsernameInput.value;
+        const password = adminPasswordInput.value;
+
+        if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+          // Simpan status login di localStorage
+          localStorage.setItem("adminLoggedIn", "true");
+          alert("Login berhasil! Anda akan diarahkan ke panel admin.");
+
+          // Redirect ke panel admin (bisa dibuatkan halaman terpisah)
+          window.location.href = "admin-panel.html";
+        } else {
+          alert("Username atau password salah!");
+        }
+      });
+
+      // Animasi scroll halus untuk link
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          const targetId = this.getAttribute("href");
+          if (targetId === "#") return;
+
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: "smooth",
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
