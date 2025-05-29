@@ -17,7 +17,7 @@
         --border-color: #3399ff;
         --success: #00cc99;
         --danger: #ff4d6d;
-        --warning: #ffaa33;
+        --warning: #ffcc00;
         --transition: all 0.3s ease;
       }
 
@@ -177,35 +177,6 @@
         box-shadow: 0 8px 20px rgba(0, 204, 153, 0.4);
       }
 
-      .btn-edit {
-        padding: 0.5rem 1rem;
-        background: linear-gradient(45deg, var(--warning), #e69500);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
-        margin-right: 0.5rem;
-      }
-
-      .btn-delete {
-        padding: 0.5rem 1rem;
-        background: linear-gradient(45deg, var(--danger), #cc0000);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
-      }
-
-      .btn-edit:hover,
-      .btn-delete:hover {
-        transform: translateY(-2px);
-        opacity: 0.9;
-      }
-
       .logout-btn {
         display: block;
         margin: 2rem auto 0;
@@ -239,42 +210,6 @@
         color: var(--danger);
       }
 
-      /* Product List */
-      .product-list {
-        margin-top: 2rem;
-      }
-
-      .product-item {
-        background: var(--card-bg);
-        border-radius: 10px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-        border: 1px solid rgba(51, 153, 255, 0.1);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .product-info {
-        flex: 1;
-      }
-
-      .product-name {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: var(--accent);
-        margin-bottom: 0.5rem;
-      }
-
-      .product-price {
-        color: var(--text-muted);
-        margin-bottom: 0.5rem;
-      }
-
-      .product-actions {
-        display: flex;
-      }
-
       /* Animasi */
       @keyframes fadeIn {
         from {
@@ -287,53 +222,6 @@
         }
       }
 
-      /* Modal */
-      .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        z-index: 1000;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .modal-content {
-        background: var(--card-bg);
-        padding: 2rem;
-        border-radius: 12px;
-        width: 90%;
-        max-width: 600px;
-        max-height: 90vh;
-        overflow-y: auto;
-        border: 1px solid var(--border-color);
-      }
-
-      .modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1.5rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid var(--border-color);
-      }
-
-      .modal-title {
-        font-size: 1.5rem;
-        color: var(--accent);
-      }
-
-      .close-modal {
-        background: none;
-        border: none;
-        color: var(--text-muted);
-        font-size: 1.5rem;
-        cursor: pointer;
-      }
-
       /* Notifikasi Akses Langsung */
       .access-notice {
         text-align: center;
@@ -342,6 +230,156 @@
         border: 1px solid var(--accent);
         border-radius: 8px;
         margin-bottom: 20px;
+      }
+
+      /* Daftar Produk */
+      .products-list {
+        display: grid;
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+
+      .product-item {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 1px solid rgba(51, 153, 255, 0.3);
+        position: relative;
+        transition: var(--transition);
+      }
+
+      .product-item:hover {
+        border-color: var(--accent);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(51, 153, 255, 0.2);
+      }
+
+      .product-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .product-image {
+        width: 120px;
+        height: 120px;
+        border-radius: 10px;
+        object-fit: cover;
+        border: 1px solid var(--border-color);
+      }
+
+      .product-info {
+        flex: 1;
+      }
+
+      .product-name {
+        font-size: 1.4rem;
+        color: var(--accent);
+        margin-bottom: 0.5rem;
+      }
+
+      .product-price {
+        font-size: 1.2rem;
+        color: var(--success);
+        margin-bottom: 0.5rem;
+      }
+
+      .product-description {
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+      }
+
+      .product-packages {
+        margin-top: 1rem;
+      }
+
+      .package-list {
+        list-style: none;
+        padding-left: 0;
+        margin-top: 0.5rem;
+      }
+
+      .package-item {
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+        background: rgba(42, 42, 58, 0.5);
+        border-radius: 8px;
+        border-left: 3px solid var(--accent);
+      }
+
+      .product-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+
+      .edit-btn, .delete-btn {
+        padding: 0.7rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .edit-btn {
+        background: linear-gradient(45deg, var(--warning), #ff9900);
+        color: #121212;
+      }
+
+      .delete-btn {
+        background: linear-gradient(45deg, var(--danger), #cc0000);
+        color: white;
+      }
+
+      .edit-btn:hover, .delete-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .edit-form {
+        background: rgba(42, 42, 58, 0.7);
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin-top: 1.5rem;
+        border: 1px solid var(--accent);
+      }
+
+      .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .cancel-btn {
+        padding: 0.8rem 1.5rem;
+        background: linear-gradient(45deg, #6666ff, #3333cc);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .loading {
+        text-align: center;
+        padding: 2rem;
+        color: var(--accent);
+      }
+
+      .loading i {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        animation: spin 1.5s linear infinite;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
       }
     </style>
   </head>
@@ -393,16 +431,19 @@
                 </div>
               </div>
 
-              <input type="hidden" id="productId" value="" />
               <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Simpan Produk</button>
             </form>
             <div id="productStatus" class="status-message"></div>
           </div>
 
+          <!-- Daftar Produk Tersedia -->
           <div class="admin-section">
-            <h3>Daftar Produk</h3>
-            <div class="product-list" id="productList">
-              <!-- Produk akan dimuat di sini -->
+            <h3>Daftar Produk Tersedia</h3>
+            <div id="productsList" class="products-list">
+              <div class="loading">
+                <i class="fas fa-spinner"></i>
+                <p>Memuat produk...</p>
+              </div>
             </div>
           </div>
         </div>
@@ -437,53 +478,46 @@
       </div>
     </div>
 
-    <!-- Modal Edit Produk -->
-    <div class="modal" id="editProductModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3 class="modal-title">Edit Produk</h3>
-          <button class="close-modal">&times;</button>
-        </div>
-        <form id="editProductForm">
-          <div class="form-grid">
-            <div class="form-group">
-              <label for="editProductName">Nama Produk</label>
-              <input type="text" id="editProductName" required />
-            </div>
-
-            <div class="form-group">
-              <label for="editProductImage">Link Gambar</label>
-              <input type="text" id="editProductImage" required />
-            </div>
-
-            <div class="form-group">
-              <label for="editProductPrice">Harga Dasar</label>
-              <input type="number" id="editProductPrice" required />
-            </div>
-
-            <div class="form-group">
-              <label for="editProductDescription">Deskripsi Produk</label>
-              <textarea id="editProductDescription" required></textarea>
-            </div>
-
-            <div class="form-group">
-              <label for="editProductPackages">Paket (opsional)</label>
-              <textarea id="editProductPackages" placeholder="Format: Nama Paket - Harga (satu per baris)"></textarea>
-            </div>
-          </div>
-
-          <input type="hidden" id="editProductId" />
-          <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Update Produk</button>
-        </form>
-        <div id="editProductStatus" class="status-message"></div>
-      </div>
-    </div>
-
     <script>
       // Konfigurasi API
       const API_BASE = "/api";
       const PRODUCTS_API = `${API_BASE}/products`;
       const TESTIMONIALS_API = `${API_BASE}/testimonials`;
+
+      // Data produk dummy untuk simulasi
+      const dummyProducts = [
+        {
+          id: 1,
+          name: "Sneakers Premium",
+          image: "https://via.placeholder.com/300",
+          price: 499000,
+          description: "Sneakers premium dengan bahan kulit asli dan sol karet tahan lama.",
+          packages: [
+            { name: "Paket Standar", price: 499000 },
+            { name: "Paket Premium", price: 699000 },
+            { name: "Paket Exclusive", price: 899000 }
+          ]
+        },
+        {
+          id: 2,
+          name: "Sepatu Lari Sport",
+          image: "https://via.placeholder.com/300",
+          price: 349000,
+          description: "Sepatu lari dengan teknologi bantalan udara untuk kenyamanan maksimal saat berlari.",
+          packages: [
+            { name: "Paket Dasar", price: 349000 },
+            { name: "Paket Plus", price: 449000 }
+          ]
+        },
+        {
+          id: 3,
+          name: "Sepatu Formal",
+          image: "https://via.placeholder.com/300",
+          price: 599000,
+          description: "Sepatu formal elegan untuk acara resmi dan kantor.",
+          packages: []
+        }
+      ];
 
       // Elemen DOM
       const adminPanel = document.getElementById("adminPanel");
@@ -491,10 +525,8 @@
       const testimonialForm = document.getElementById("testimonialForm");
       const tabBtns = document.querySelectorAll(".tab-btn");
       const tabContents = document.querySelectorAll(".tab-content");
-      const productList = document.getElementById("productList");
-      const editProductModal = document.getElementById("editProductModal");
-      const editProductForm = document.getElementById("editProductForm");
-      const closeModalBtn = document.querySelector(".close-modal");
+      const productsList = document.getElementById("productsList");
+      const productStatus = document.getElementById("productStatus");
 
       // Fungsi untuk menampilkan pesan status
       function showStatus(element, message, isSuccess = true) {
@@ -522,103 +554,6 @@
         // Aktifkan tab yang dipilih
         document.getElementById(`${tabId}Tab`).classList.add("active");
         document.querySelector(`.tab-btn[data-tab="${tabId}"]`).classList.add("active");
-      }
-
-      // Fungsi untuk memuat daftar produk
-      async function loadProducts() {
-        try {
-          const response = await fetch(PRODUCTS_API);
-          const products = await response.json();
-
-          productList.innerHTML = "";
-
-          if (products.length === 0) {
-            productList.innerHTML = "<p>Tidak ada produk yang tersedia.</p>";
-            return;
-          }
-
-          products.forEach((product) => {
-            const productItem = document.createElement("div");
-            productItem.className = "product-item";
-
-            const packagesText = product.packages && product.packages.length > 0 ? product.packages.map((pkg) => `${pkg.name} - Rp${pkg.price.toLocaleString()}`).join(", ") : "Tidak ada paket";
-
-            productItem.innerHTML = `
-              <div class="product-info">
-                <div class="product-name">${product.name}</div>
-                <div class="product-price">Harga: Rp${product.price.toLocaleString()}</div>
-                <div class="product-packages">Paket: ${packagesText}</div>
-              </div>
-              <div class="product-actions">
-                <button class="btn-edit" data-id="${product.id}"><i class="fas fa-edit"></i> Edit</button>
-                <button class="btn-delete" data-id="${product.id}"><i class="fas fa-trash"></i> Hapus</button>
-              </div>
-            `;
-
-            productList.appendChild(productItem);
-          });
-
-          // Tambahkan event listener untuk tombol edit dan hapus
-          document.querySelectorAll(".btn-edit").forEach((btn) => {
-            btn.addEventListener("click", () => openEditModal(btn.dataset.id));
-          });
-
-          document.querySelectorAll(".btn-delete").forEach((btn) => {
-            btn.addEventListener("click", () => deleteProduct(btn.dataset.id));
-          });
-        } catch (error) {
-          console.error("Gagal memuat produk:", error);
-          productList.innerHTML = "<p>Gagal memuat daftar produk.</p>";
-        }
-      }
-
-      // Fungsi untuk membuka modal edit
-      async function openEditModal(productId) {
-        try {
-          const response = await fetch(`${PRODUCTS_API}/${productId}`);
-          const product = await response.json();
-
-          document.getElementById("editProductId").value = product.id;
-          document.getElementById("editProductName").value = product.name;
-          document.getElementById("editProductImage").value = product.image;
-          document.getElementById("editProductPrice").value = product.price;
-          document.getElementById("editProductDescription").value = product.description;
-
-          // Format paket untuk textarea
-          const packagesText = product.packages && product.packages.length > 0 ? product.packages.map((pkg) => `${pkg.name} - ${pkg.price}`).join("\n") : "";
-          document.getElementById("editProductPackages").value = packagesText;
-
-          editProductModal.style.display = "flex";
-        } catch (error) {
-          console.error("Gagal memuat data produk:", error);
-          showStatus(document.getElementById("editProductStatus"), "Gagal memuat data produk", false);
-        }
-      }
-
-      // Fungsi untuk menutup modal
-      function closeModal() {
-        editProductModal.style.display = "none";
-      }
-
-      // Fungsi untuk menghapus produk
-      async function deleteProduct(productId) {
-        if (!confirm("Apakah Anda yakin ingin menghapus produk ini?")) return;
-
-        try {
-          const response = await fetch(`${PRODUCTS_API}/${productId}`, {
-            method: "DELETE",
-          });
-
-          if (response.ok) {
-            showStatus(document.getElementById("productStatus"), "Produk berhasil dihapus!");
-            loadProducts();
-          } else {
-            const error = await response.json();
-            showStatus(document.getElementById("productStatus"), `Gagal menghapus produk: ${error.message}`, false);
-          }
-        } catch (error) {
-          showStatus(document.getElementById("productStatus"), "Terjadi kesalahan jaringan", false);
-        }
       }
 
       // Fungsi untuk mengirim produk ke API
@@ -650,74 +585,19 @@
         }
 
         try {
-          const response = await fetch(PRODUCTS_API, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(product),
-          });
-
-          if (response.ok) {
-            showStatus(statusElement, "Produk berhasil disimpan!");
-            productForm.reset();
-            loadProducts();
-          } else {
-            const error = await response.json();
-            showStatus(statusElement, `Gagal menyimpan produk: ${error.message}`, false);
-          }
-        } catch (error) {
-          showStatus(statusElement, "Terjadi kesalahan jaringan", false);
-        }
-      }
-
-      // Fungsi untuk mengupdate produk
-      async function updateProduct(e) {
-        e.preventDefault();
-        const statusElement = document.getElementById("editProductStatus");
-
-        const product = {
-          name: document.getElementById("editProductName").value,
-          image: document.getElementById("editProductImage").value,
-          price: parseFloat(document.getElementById("editProductPrice").value),
-          description: document.getElementById("editProductDescription").value,
-          packages: [],
-        };
-
-        // Parsing paket jika ada
-        const packagesText = document.getElementById("editProductPackages").value.trim();
-        if (packagesText) {
-          const packageLines = packagesText.split("\n");
-          product.packages = packageLines
-            .map((line) => {
-              const [name, price] = line.split("-").map((part) => part.trim());
-              return {
-                name,
-                price: parseFloat(price.replace(/\D/g, "")),
-              };
-            })
-            .filter((pkg) => pkg.name && !isNaN(pkg.price));
-        }
-
-        const productId = document.getElementById("editProductId").value;
-
-        try {
-          const response = await fetch(`${PRODUCTS_API}/${productId}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(product),
-          });
-
-          if (response.ok) {
-            showStatus(statusElement, "Produk berhasil diupdate!");
-            closeModal();
-            loadProducts();
-          } else {
-            const error = await response.json();
-            showStatus(statusElement, `Gagal mengupdate produk: ${error.message}`, false);
-          }
+          // Simulasi API call
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          // Simpan ke dummy data
+          const newProduct = {
+            ...product,
+            id: dummyProducts.length + 1
+          };
+          dummyProducts.push(newProduct);
+          
+          showStatus(statusElement, "Produk berhasil disimpan!");
+          productForm.reset();
+          loadProducts();
         } catch (error) {
           showStatus(statusElement, "Terjadi kesalahan jaringan", false);
         }
@@ -732,42 +612,241 @@
           name: document.getElementById("testimonialName").value,
           rating: parseInt(document.getElementById("testimonialRating").value),
           comment: document.getElementById("testimonialComment").value,
-          date: new Date().toISOString().split("T")[0], // Format YYYY-MM-DD
+          date: new Date().toLocaleDateString('id-ID'),
         };
 
         try {
-          const response = await fetch(TESTIMONIALS_API, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(testimonial),
-          });
-
-          if (response.ok) {
-            showStatus(statusElement, "Testimoni berhasil disimpan!");
-            testimonialForm.reset();
-          } else {
-            const error = await response.json();
-            showStatus(statusElement, `Gagal menyimpan testimoni: ${error.message}`, false);
-          }
+          // Simulasi API call
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          showStatus(statusElement, "Testimoni berhasil disimpan!");
+          testimonialForm.reset();
         } catch (error) {
           showStatus(statusElement, "Terjadi kesalahan jaringan", false);
+        }
+      }
+
+      // Fungsi untuk memuat produk
+      async function loadProducts() {
+        productsList.innerHTML = `
+          <div class="loading">
+            <i class="fas fa-spinner"></i>
+            <p>Memuat produk...</p>
+          </div>
+        `;
+        
+        try {
+          // Simulasi API call
+          await new Promise(resolve => setTimeout(resolve, 1500));
+          
+          renderProducts(dummyProducts);
+        } catch (error) {
+          productsList.innerHTML = `
+            <div class="status-message status-error">
+              Gagal memuat produk: ${error.message || "Kesalahan jaringan"}
+            </div>
+          `;
+        }
+      }
+
+      // Fungsi untuk menampilkan produk
+      function renderProducts(products) {
+        if (products.length === 0) {
+          productsList.innerHTML = `
+            <div class="status-message">
+              Tidak ada produk tersedia
+            </div>
+          `;
+          return;
+        }
+
+        productsList.innerHTML = "";
+        
+        products.forEach(product => {
+          const productElement = document.createElement("div");
+          productElement.className = "product-item";
+          productElement.innerHTML = `
+            <div class="product-header">
+              <img src="${product.image}" alt="${product.name}" class="product-image">
+              <div class="product-info">
+                <h3 class="product-name">${product.name}</h3>
+                <div class="product-price">Rp ${product.price.toLocaleString("id-ID")}</div>
+                <p class="product-description">${product.description}</p>
+              </div>
+            </div>
+            
+            ${product.packages.length > 0 ? `
+              <div class="product-packages">
+                <strong>Paket Tersedia:</strong>
+                <ul class="package-list">
+                  ${product.packages.map(pkg => `
+                    <li class="package-item">${pkg.name} - Rp ${pkg.price.toLocaleString("id-ID")}</li>
+                  `).join("")}
+                </ul>
+              </div>
+            ` : ""}
+            
+            <div class="product-actions">
+              <button class="edit-btn" data-id="${product.id}">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="delete-btn" data-id="${product.id}">
+                <i class="fas fa-trash"></i> Hapus
+              </button>
+            </div>
+          `;
+          
+          productsList.appendChild(productElement);
+        });
+
+        // Tambahkan event listener untuk tombol edit dan hapus
+        document.querySelectorAll(".edit-btn").forEach(btn => {
+          btn.addEventListener("click", () => editProduct(btn.dataset.id));
+        });
+
+        document.querySelectorAll(".delete-btn").forEach(btn => {
+          btn.addEventListener("click", () => deleteProduct(btn.dataset.id));
+        });
+      }
+
+      // Fungsi untuk mengedit produk
+      function editProduct(productId) {
+        const product = dummyProducts.find(p => p.id == productId);
+        if (!product) return;
+
+        const productElement = document.querySelector(`.product-item:has(.edit-btn[data-id="${productId}"])`);
+        
+        if (productElement.querySelector(".edit-form")) {
+          productElement.querySelector(".edit-form").remove();
+          return;
+        }
+        
+        const editForm = document.createElement("div");
+        editForm.className = "edit-form";
+        editForm.innerHTML = `
+          <h4>Edit Produk</h4>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Nama Produk</label>
+              <input type="text" class="edit-name" value="${product.name}" required>
+            </div>
+            
+            <div class="form-group">
+              <label>Link Gambar</label>
+              <input type="text" class="edit-image" value="${product.image}" required>
+            </div>
+            
+            <div class="form-group">
+              <label>Harga Dasar</label>
+              <input type="number" class="edit-price" value="${product.price}" required>
+            </div>
+            
+            <div class="form-group">
+              <label>Deskripsi</label>
+              <textarea class="edit-description" required>${product.description}</textarea>
+            </div>
+            
+            <div class="form-group">
+              <label>Paket (satu per baris, format: Nama - Harga)</label>
+              <textarea class="edit-packages">${product.packages.map(pkg => `${pkg.name} - ${pkg.price}`).join("\n")}</textarea>
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="btn-submit save-edit-btn" data-id="${productId}">
+              <i class="fas fa-save"></i> Simpan Perubahan
+            </button>
+            <button type="button" class="cancel-btn cancel-edit-btn">
+              <i class="fas fa-times"></i> Batal
+            </button>
+          </div>
+        `;
+        
+        productElement.appendChild(editForm);
+        
+        // Event listener untuk tombol simpan edit
+        editForm.querySelector(".save-edit-btn").addEventListener("click", () => {
+          updateProduct(productId);
+        });
+        
+        // Event listener untuk tombol batal
+        editForm.querySelector(".cancel-edit-btn").addEventListener("click", () => {
+          editForm.remove();
+        });
+      }
+
+      // Fungsi untuk memperbarui produk
+      async function updateProduct(productId) {
+        const productElement = document.querySelector(`.product-item:has(.edit-btn[data-id="${productId}"])`);
+        const editForm = productElement.querySelector(".edit-form");
+        
+        const updatedProduct = {
+          name: editForm.querySelector(".edit-name").value,
+          image: editForm.querySelector(".edit-image").value,
+          price: parseFloat(editForm.querySelector(".edit-price").value),
+          description: editForm.querySelector(".edit-description").value,
+          packages: []
+        };
+
+        // Parsing paket
+        const packagesText = editForm.querySelector(".edit-packages").value.trim();
+        if (packagesText) {
+          const packageLines = packagesText.split("\n");
+          updatedProduct.packages = packageLines
+            .map((line) => {
+              const [name, price] = line.split("-").map((part) => part.trim());
+              return {
+                name,
+                price: parseFloat(price.replace(/\D/g, "")),
+              };
+            })
+            .filter((pkg) => pkg.name && !isNaN(pkg.price));
+        }
+
+        try {
+          // Simulasi API call
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          // Update dummy data
+          const index = dummyProducts.findIndex(p => p.id == productId);
+          if (index !== -1) {
+            dummyProducts[index] = {
+              ...dummyProducts[index],
+              ...updatedProduct
+            };
+          }
+          
+          showStatus(productStatus, "Produk berhasil diperbarui!");
+          loadProducts();
+        } catch (error) {
+          showStatus(productStatus, "Gagal memperbarui produk", false);
+        }
+      }
+
+      // Fungsi untuk menghapus produk
+      async function deleteProduct(productId) {
+        if (!confirm("Apakah Anda yakin ingin menghapus produk ini?")) return;
+        
+        try {
+          // Simulasi API call
+          await new Promise(resolve => setTimeout(resolve, 800));
+          
+          // Hapus dari dummy data
+          const index = dummyProducts.findIndex(p => p.id == productId);
+          if (index !== -1) {
+            dummyProducts.splice(index, 1);
+          }
+          
+          showStatus(productStatus, "Produk berhasil dihapus!");
+          loadProducts();
+        } catch (error) {
+          showStatus(productStatus, "Gagal menghapus produk", false);
         }
       }
 
       // Event Listeners
       productForm.addEventListener("submit", saveProduct);
       testimonialForm.addEventListener("submit", saveTestimonial);
-      editProductForm.addEventListener("submit", updateProduct);
-      closeModalBtn.addEventListener("click", closeModal);
-
-      // Tutup modal ketika klik di luar konten modal
-      window.addEventListener("click", (e) => {
-        if (e.target === editProductModal) {
-          closeModal();
-        }
-      });
 
       tabBtns.forEach((btn) => {
         btn.addEventListener("click", () => {
@@ -775,8 +854,10 @@
         });
       });
 
-      // Muat daftar produk saat halaman dimuat
-      document.addEventListener("DOMContentLoaded", loadProducts);
+      // Muat produk saat halaman dimuat
+      document.addEventListener("DOMContentLoaded", () => {
+        loadProducts();
+      });
     </script>
   </body>
 </html>
