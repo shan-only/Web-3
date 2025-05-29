@@ -61,7 +61,7 @@ function githubRequest(path, method = "GET", data = null) {
 module.exports = async (req, res) => {
   // Handle CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   if (req.method === "OPTIONS") {
@@ -123,8 +123,9 @@ module.exports = async (req, res) => {
         });
       }
 
-      // Add date
+      // Add date and generate ID
       newTestimonial.date = new Date().toISOString().split("T")[0];
+      newTestimonial.id = Math.random().toString(36).substr(2, 9);
 
       // Get current testimonials
       let fileData;
@@ -164,12 +165,145 @@ module.exports = async (req, res) => {
 
       return res.status(201).json({ 
         success: true,
-        message: "Testimoni berhasil ditambahkan" 
+        message: "Testimoni berhasil ditambahkan",
+        testimonial: newTestimonial
+      });
+    }
+
+    // PUT: Update testimonial
+    if (req.method === "PUT") {
+      const updatedTestimonial = req.body;
+      
+      // Validate data
+      if (!updatedTestimonial.id || !updatedTestimonial.name || !updatedTestimonial.rating || !updatedTestimonial.comment) {
+        return res.status(400).json({ 
+          error: "ID, nama, rating, dan komentar wajib diisi" 
+        });
+      }
+
+      // Convert rating to number
+      updatedTestimonial.rating = parseInt(updatedTestimonial.rating);
+      if (isNaN(updatedTestimonial.rating)) {
+        return res.status(400).json({ 
+          error: "Rating harus berupa angka" 
+        });
+      }
+
+      // Get current testimonials
+      let fileData;
+      try {
+        fileData = await githubRequest(
+          `/repos/${REPO}/contents/${FILEPATH}?ref=${BRANCH}`
+        );
+      } catch (error) {
+        if (error.statusCode === 404) {
+          return res.status(404).json({ error: "File testimonials tidak ditemukan" });
+        }
+        throw error;
+      }
+
+      const content = Buffer.from(fileData.content, "base64").toString("utf8");
+      let testimonials = [];
+      try {
+        testimonials = JSON.parse(content);
+      } catch (e) {
+        return res.status(500).json({ 
+          error: "Invalid JSON format in testimonials file",
+          details: e.message
+        });
+      }
+
+      // Find index of testimonial by id
+      const index = testimonials.findIndex(t => t.id === updatedTestimonial.id);
+      if (index === -1) {
+        return res.status(404).json({ error: "Testimonial tidak ditemukan" });
+      }
+
+      // Preserve original date
+      updatedTestimonial.date = testimonials[index].date;
+      
+      // Update testimonial
+      testimonials[index] = updatedTestimonial;
+
+      // Prepare update payload
+      const updatePayload = {
+        message: `Update testimoni dari: ${updatedTestimonial.name}`,
+        content: Buffer.from(JSON.stringify(testimonials, null, 2)).toString("base64"),
+        branch: BRANCH,
+        sha: fileData.sha
+      };
+
+      // Update file on GitHub
+      await githubRequest(`/repos/${REPO}/contents/${FILEPATH}`, "PUT", updatePayload);
+
+      return res.status(200).json({ 
+        success: true,
+        message: "Testimoni berhasil diperbarui",
+        testimonial: updatedTestimonial
+      });
+    }
+
+    // DELETE: Delete testimonial
+    if (req.method === "DELETE") {
+      const { id } = req.query; // Mengambil id dari query string
+
+      if (!id) {
+        return res.status(400).json({ error: "ID testimonial wajib diisi" });
+      }
+
+      // Get current testimonials
+      let fileData;
+      try {
+        fileData = await githubRequest(
+          `/repos/${REPO}/contents/${FILEPATH}?ref=${BRANCH}`
+        );
+      } catch (error) {
+        if (error.statusCode === 404) {
+          return res.status(404).json({ error: "File testimonials tidak ditemukan" });
+        }
+        throw error;
+      }
+
+      const content = Buffer.from(fileData.content, "base64").toString("utf8");
+      let testimonials = [];
+      try {
+        testimonials = JSON.parse(content);
+      } catch (e) {
+        return res.status(500).json({ 
+          error: "Invalid JSON format in testimonials file",
+          details: e.message
+        });
+      }
+
+      // Find testimonial by id
+      const index = testimonials.findIndex(t => t.id === id);
+      if (index === -1) {
+        return res.status(404).json({ error: "Testimonial tidak ditemukan" });
+      }
+
+      const deletedTestimonial = testimonials[index];
+      testimonials.splice(index, 1);
+
+      // Prepare update payload
+      const updatePayload = {
+        message: `Hapus testimoni dari: ${deletedTestimonial.name}`,
+        content: Buffer.from(JSON.stringify(testimonials, null, 2)).toString("base64"),
+        branch: BRANCH,
+        sha: fileData.sha
+      };
+
+      // Update file on GitHub
+      await githubRequest(`/repos/${REPO}/contents/${FILEPATH}`, "PUT", updatePayload);
+
+      return res.status(200).json({ 
+        success: true,
+        message: "Testimoni berhasil dihapus",
+        testimonial: deletedTestimonial
       });
     }
 
     return res.status(405).json({ 
-      error: "Method not allowed. Only GET and POST are supported." 
+      error: "Method not allowed. Only GET, POST, PUT, DELETE are supported." 
     });
   } catch (error) {
     console.error("Testimonials API Error:", error);
