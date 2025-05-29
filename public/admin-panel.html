@@ -17,6 +17,7 @@
         --border-color: #3399ff;
         --success: #00cc99;
         --danger: #ff4d6d;
+        --warning: #ffaa33;
         --transition: all 0.3s ease;
       }
 
@@ -176,6 +177,35 @@
         box-shadow: 0 8px 20px rgba(0, 204, 153, 0.4);
       }
 
+      .btn-edit {
+        padding: 0.5rem 1rem;
+        background: linear-gradient(45deg, var(--warning), #e69500);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        margin-right: 0.5rem;
+      }
+
+      .btn-delete {
+        padding: 0.5rem 1rem;
+        background: linear-gradient(45deg, var(--danger), #cc0000);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .btn-edit:hover,
+      .btn-delete:hover {
+        transform: translateY(-2px);
+        opacity: 0.9;
+      }
+
       .logout-btn {
         display: block;
         margin: 2rem auto 0;
@@ -209,6 +239,42 @@
         color: var(--danger);
       }
 
+      /* Product List */
+      .product-list {
+        margin-top: 2rem;
+      }
+
+      .product-item {
+        background: var(--card-bg);
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(51, 153, 255, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .product-info {
+        flex: 1;
+      }
+
+      .product-name {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--accent);
+        margin-bottom: 0.5rem;
+      }
+
+      .product-price {
+        color: var(--text-muted);
+        margin-bottom: 0.5rem;
+      }
+
+      .product-actions {
+        display: flex;
+      }
+
       /* Animasi */
       @keyframes fadeIn {
         from {
@@ -219,6 +285,53 @@
           opacity: 1;
           transform: translateY(0);
         }
+      }
+
+      /* Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background: var(--card-bg);
+        padding: 2rem;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+        border: 1px solid var(--border-color);
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .modal-title {
+        font-size: 1.5rem;
+        color: var(--accent);
+      }
+
+      .close-modal {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-size: 1.5rem;
+        cursor: pointer;
       }
 
       /* Notifikasi Akses Langsung */
@@ -280,9 +393,17 @@
                 </div>
               </div>
 
+              <input type="hidden" id="productId" value="" />
               <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Simpan Produk</button>
             </form>
             <div id="productStatus" class="status-message"></div>
+          </div>
+
+          <div class="admin-section">
+            <h3>Daftar Produk</h3>
+            <div class="product-list" id="productList">
+              <!-- Produk akan dimuat di sini -->
+            </div>
           </div>
         </div>
 
@@ -316,6 +437,48 @@
       </div>
     </div>
 
+    <!-- Modal Edit Produk -->
+    <div class="modal" id="editProductModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Edit Produk</h3>
+          <button class="close-modal">&times;</button>
+        </div>
+        <form id="editProductForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="editProductName">Nama Produk</label>
+              <input type="text" id="editProductName" required />
+            </div>
+
+            <div class="form-group">
+              <label for="editProductImage">Link Gambar</label>
+              <input type="text" id="editProductImage" required />
+            </div>
+
+            <div class="form-group">
+              <label for="editProductPrice">Harga Dasar</label>
+              <input type="number" id="editProductPrice" required />
+            </div>
+
+            <div class="form-group">
+              <label for="editProductDescription">Deskripsi Produk</label>
+              <textarea id="editProductDescription" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="editProductPackages">Paket (opsional)</label>
+              <textarea id="editProductPackages" placeholder="Format: Nama Paket - Harga (satu per baris)"></textarea>
+            </div>
+          </div>
+
+          <input type="hidden" id="editProductId" />
+          <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Update Produk</button>
+        </form>
+        <div id="editProductStatus" class="status-message"></div>
+      </div>
+    </div>
+
     <script>
       // Konfigurasi API
       const API_BASE = "/api";
@@ -328,6 +491,10 @@
       const testimonialForm = document.getElementById("testimonialForm");
       const tabBtns = document.querySelectorAll(".tab-btn");
       const tabContents = document.querySelectorAll(".tab-content");
+      const productList = document.getElementById("productList");
+      const editProductModal = document.getElementById("editProductModal");
+      const editProductForm = document.getElementById("editProductForm");
+      const closeModalBtn = document.querySelector(".close-modal");
 
       // Fungsi untuk menampilkan pesan status
       function showStatus(element, message, isSuccess = true) {
@@ -357,134 +524,259 @@
         document.querySelector(`.tab-btn[data-tab="${tabId}"]`).classList.add("active");
       }
 
+      // Fungsi untuk memuat daftar produk
+      async function loadProducts() {
+        try {
+          const response = await fetch(PRODUCTS_API);
+          const products = await response.json();
+
+          productList.innerHTML = "";
+
+          if (products.length === 0) {
+            productList.innerHTML = "<p>Tidak ada produk yang tersedia.</p>";
+            return;
+          }
+
+          products.forEach((product) => {
+            const productItem = document.createElement("div");
+            productItem.className = "product-item";
+
+            const packagesText = product.packages && product.packages.length > 0 ? product.packages.map((pkg) => `${pkg.name} - Rp${pkg.price.toLocaleString()}`).join(", ") : "Tidak ada paket";
+
+            productItem.innerHTML = `
+              <div class="product-info">
+                <div class="product-name">${product.name}</div>
+                <div class="product-price">Harga: Rp${product.price.toLocaleString()}</div>
+                <div class="product-packages">Paket: ${packagesText}</div>
+              </div>
+              <div class="product-actions">
+                <button class="btn-edit" data-id="${product.id}"><i class="fas fa-edit"></i> Edit</button>
+                <button class="btn-delete" data-id="${product.id}"><i class="fas fa-trash"></i> Hapus</button>
+              </div>
+            `;
+
+            productList.appendChild(productItem);
+          });
+
+          // Tambahkan event listener untuk tombol edit dan hapus
+          document.querySelectorAll(".btn-edit").forEach((btn) => {
+            btn.addEventListener("click", () => openEditModal(btn.dataset.id));
+          });
+
+          document.querySelectorAll(".btn-delete").forEach((btn) => {
+            btn.addEventListener("click", () => deleteProduct(btn.dataset.id));
+          });
+        } catch (error) {
+          console.error("Gagal memuat produk:", error);
+          productList.innerHTML = "<p>Gagal memuat daftar produk.</p>";
+        }
+      }
+
+      // Fungsi untuk membuka modal edit
+      async function openEditModal(productId) {
+        try {
+          const response = await fetch(`${PRODUCTS_API}/${productId}`);
+          const product = await response.json();
+
+          document.getElementById("editProductId").value = product.id;
+          document.getElementById("editProductName").value = product.name;
+          document.getElementById("editProductImage").value = product.image;
+          document.getElementById("editProductPrice").value = product.price;
+          document.getElementById("editProductDescription").value = product.description;
+
+          // Format paket untuk textarea
+          const packagesText = product.packages && product.packages.length > 0 ? product.packages.map((pkg) => `${pkg.name} - ${pkg.price}`).join("\n") : "";
+          document.getElementById("editProductPackages").value = packagesText;
+
+          editProductModal.style.display = "flex";
+        } catch (error) {
+          console.error("Gagal memuat data produk:", error);
+          showStatus(document.getElementById("editProductStatus"), "Gagal memuat data produk", false);
+        }
+      }
+
+      // Fungsi untuk menutup modal
+      function closeModal() {
+        editProductModal.style.display = "none";
+      }
+
+      // Fungsi untuk menghapus produk
+      async function deleteProduct(productId) {
+        if (!confirm("Apakah Anda yakin ingin menghapus produk ini?")) return;
+
+        try {
+          const response = await fetch(`${PRODUCTS_API}/${productId}`, {
+            method: "DELETE",
+          });
+
+          if (response.ok) {
+            showStatus(document.getElementById("productStatus"), "Produk berhasil dihapus!");
+            loadProducts();
+          } else {
+            const error = await response.json();
+            showStatus(document.getElementById("productStatus"), `Gagal menghapus produk: ${error.message}`, false);
+          }
+        } catch (error) {
+          showStatus(document.getElementById("productStatus"), "Terjadi kesalahan jaringan", false);
+        }
+      }
+
       // Fungsi untuk mengirim produk ke API
       async function saveProduct(e) {
         e.preventDefault();
         const statusElement = document.getElementById("productStatus");
-        const submitBtn = productForm.querySelector('button[type="submit"]');
-        const originalBtnText = submitBtn.innerHTML;
 
-        // Tampilkan loading
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
-        submitBtn.disabled = true;
+        const product = {
+          name: document.getElementById("productName").value,
+          image: document.getElementById("productImage").value,
+          price: parseFloat(document.getElementById("productPrice").value),
+          description: document.getElementById("productDescription").value,
+          packages: [],
+        };
+
+        // Parsing paket jika ada
+        const packagesText = document.getElementById("productPackages").value.trim();
+        if (packagesText) {
+          const packageLines = packagesText.split("\n");
+          product.packages = packageLines
+            .map((line) => {
+              const [name, price] = line.split("-").map((part) => part.trim());
+              return {
+                name,
+                price: parseFloat(price.replace(/\D/g, "")),
+              };
+            })
+            .filter((pkg) => pkg.name && !isNaN(pkg.price));
+        }
 
         try {
-          const product = {
-            name: document.getElementById("productName").value.trim(),
-            image: document.getElementById("productImage").value.trim(),
-            price: parseFloat(document.getElementById("productPrice").value),
-            description: document.getElementById("productDescription").value.trim(),
-            packages: [],
-          };
-
-          // Validasi dasar
-          if (!product.name || !product.image || isNaN(product.price) || !product.description) {
-            throw new Error("Semua field wajib diisi dengan benar");
-          }
-
-          // Parsing paket
-          const packagesText = document.getElementById("productPackages").value.trim();
-          if (packagesText) {
-            product.packages = packagesText
-              .split("\n")
-              .map((line) => line.trim())
-              .filter((line) => line)
-              .map((line) => {
-                const [name, price] = line.split("-").map((part) => part.trim());
-                return {
-                  name: name || "Paket",
-                  price: parseFloat(price.replace(/\D/g, "")) || 0,
-                };
-              });
-          }
-
           const response = await fetch(PRODUCTS_API, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+            },
             body: JSON.stringify(product),
           });
-
-          const result = await response.json();
 
           if (response.ok) {
             showStatus(statusElement, "Produk berhasil disimpan!");
             productForm.reset();
+            loadProducts();
           } else {
-            throw new Error(result.error || "Gagal menyimpan produk");
+            const error = await response.json();
+            showStatus(statusElement, `Gagal menyimpan produk: ${error.message}`, false);
           }
         } catch (error) {
-          showStatus(statusElement, `Error: ${error.message}`, false);
-          console.error("Save product error:", error);
-        } finally {
-          submitBtn.innerHTML = originalBtnText;
-          submitBtn.disabled = false;
+          showStatus(statusElement, "Terjadi kesalahan jaringan", false);
         }
       }
 
-      // FUNGSI BARU: Untuk menyimpan testimonial
+      // Fungsi untuk mengupdate produk
+      async function updateProduct(e) {
+        e.preventDefault();
+        const statusElement = document.getElementById("editProductStatus");
+
+        const product = {
+          name: document.getElementById("editProductName").value,
+          image: document.getElementById("editProductImage").value,
+          price: parseFloat(document.getElementById("editProductPrice").value),
+          description: document.getElementById("editProductDescription").value,
+          packages: [],
+        };
+
+        // Parsing paket jika ada
+        const packagesText = document.getElementById("editProductPackages").value.trim();
+        if (packagesText) {
+          const packageLines = packagesText.split("\n");
+          product.packages = packageLines
+            .map((line) => {
+              const [name, price] = line.split("-").map((part) => part.trim());
+              return {
+                name,
+                price: parseFloat(price.replace(/\D/g, "")),
+              };
+            })
+            .filter((pkg) => pkg.name && !isNaN(pkg.price));
+        }
+
+        const productId = document.getElementById("editProductId").value;
+
+        try {
+          const response = await fetch(`${PRODUCTS_API}/${productId}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(product),
+          });
+
+          if (response.ok) {
+            showStatus(statusElement, "Produk berhasil diupdate!");
+            closeModal();
+            loadProducts();
+          } else {
+            const error = await response.json();
+            showStatus(statusElement, `Gagal mengupdate produk: ${error.message}`, false);
+          }
+        } catch (error) {
+          showStatus(statusElement, "Terjadi kesalahan jaringan", false);
+        }
+      }
+
+      // Fungsi untuk mengirim testimoni ke API
       async function saveTestimonial(e) {
         e.preventDefault();
         const statusElement = document.getElementById("testimonialStatus");
-        const submitBtn = testimonialForm.querySelector('button[type="submit"]');
-        const originalBtnText = submitBtn.innerHTML;
 
-        // Tampilkan loading
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
-        submitBtn.disabled = true;
+        const testimonial = {
+          name: document.getElementById("testimonialName").value,
+          rating: parseInt(document.getElementById("testimonialRating").value),
+          comment: document.getElementById("testimonialComment").value,
+          date: new Date().toISOString().split("T")[0], // Format YYYY-MM-DD
+        };
 
         try {
-          const testimonial = {
-            name: document.getElementById("testimonialName").value.trim(),
-            rating: parseInt(document.getElementById("testimonialRating").value),
-            comment: document.getElementById("testimonialComment").value.trim(),
-            date: new Date().toISOString().split("T")[0],
-          };
-
-          // Validasi
-          if (!testimonial.name || isNaN(testimonial.rating) || testimonial.rating < 1 || testimonial.rating > 5 || !testimonial.comment) {
-            throw new Error("Isi semua field dengan benar (rating 1-5)");
-          }
-
           const response = await fetch(TESTIMONIALS_API, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+            },
             body: JSON.stringify(testimonial),
           });
-
-          const result = await response.json();
 
           if (response.ok) {
             showStatus(statusElement, "Testimoni berhasil disimpan!");
             testimonialForm.reset();
           } else {
-            throw new Error(result.error || "Gagal menyimpan testimoni");
+            const error = await response.json();
+            showStatus(statusElement, `Gagal menyimpan testimoni: ${error.message}`, false);
           }
         } catch (error) {
-          showStatus(statusElement, `Error: ${error.message}`, false);
-          console.error("Save testimonial error:", error);
-        } finally {
-          submitBtn.innerHTML = originalBtnText;
-          submitBtn.disabled = false;
+          showStatus(statusElement, "Terjadi kesalahan jaringan", false);
         }
       }
 
       // Event Listeners
-      document.addEventListener("DOMContentLoaded", function () {
-        // Perbaikan: Pastikan elemen ada sebelum menambahkan event listener
-        if (productForm) {
-          productForm.addEventListener("submit", saveProduct);
-        }
+      productForm.addEventListener("submit", saveProduct);
+      testimonialForm.addEventListener("submit", saveTestimonial);
+      editProductForm.addEventListener("submit", updateProduct);
+      closeModalBtn.addEventListener("click", closeModal);
 
-        if (testimonialForm) {
-          testimonialForm.addEventListener("submit", saveTestimonial);
+      // Tutup modal ketika klik di luar konten modal
+      window.addEventListener("click", (e) => {
+        if (e.target === editProductModal) {
+          closeModal();
         }
+      });
 
-        tabBtns.forEach((btn) => {
-          btn.addEventListener("click", () => {
-            switchTab(btn.dataset.tab);
-          });
+      tabBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          switchTab(btn.dataset.tab);
         });
       });
+
+      // Muat daftar produk saat halaman dimuat
+      document.addEventListener("DOMContentLoaded", loadProducts);
     </script>
   </body>
 </html>
