@@ -1,909 +1,1162 @@
 <!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - SNAYDER'S STORE</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-      :root {
-        --bg-dark: #121212;
-        --card-bg: #1d1f25;
-        --accent: #33aaff;
-        --accent2: #0066ff;
-        --text-light: #e0f0ff;
-        --text-muted: #88bbff;
-        --input-bg: #2a2a3a;
-        --border-color: #3399ff;
-        --success: #00cc99;
-        --danger: #ff4d6d;
-        --warning: #ffcc00;
-        --transition: all 0.3s ease;
-      }
-
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-
-      body {
-        background-color: var(--bg-dark);
-        color: var(--text-light);
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        line-height: 1.6;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 1rem;
-      }
-
-      .admin-container {
-        width: 100%;
-        max-width: 1200px;
-        background: rgba(30, 30, 40, 0.8);
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        border: 1px solid rgba(51, 153, 255, 0.3);
-      }
-
-      /* Admin Panel */
-      #adminPanel {
-        padding: 2rem;
-      }
-
-      .admin-header {
-        text-align: center;
-        margin-bottom: 2rem;
-        padding-bottom: 1rem;
-        border-bottom: 2px solid var(--accent2);
-      }
-
-      .admin-title {
-        font-size: 2rem;
-        margin-bottom: 0.5rem;
-        background: linear-gradient(90deg, var(--accent), var(--accent2));
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-
-      .tabs {
-        display: flex;
-        margin-bottom: 2rem;
-        border-bottom: 1px solid var(--border-color);
-      }
-
-      .tab-btn {
-        padding: 1rem 2rem;
-        background: none;
-        border: none;
-        color: var(--text-muted);
-        font-size: 1.1rem;
-        font-weight: 600;
-        cursor: pointer;
-        position: relative;
-      }
-
-      .tab-btn.active {
-        color: var(--accent);
-      }
-
-      .tab-btn.active::after {
-        content: "";
-        position: absolute;
-        bottom: -1px;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: var(--accent);
-      }
-
-      .tab-content {
-        display: none;
-      }
-
-      .tab-content.active {
-        display: block;
-        animation: fadeIn 0.5s ease;
-      }
-
-      .admin-section {
-        background: rgba(30, 30, 40, 0.6);
-        padding: 1.5rem;
-        border-radius: 12px;
-        margin-bottom: 2rem;
-        border: 1px solid rgba(51, 153, 255, 0.2);
-      }
-
-      .admin-section h3 {
-        color: var(--accent);
-        margin-bottom: 1.5rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 1px solid var(--border-color);
-      }
-
-      .form-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 1.5rem;
-      }
-
-      .form-group {
-        margin-bottom: 1.2rem;
-      }
-
-      label {
-        display: block;
-        margin-bottom: 0.5rem;
-        color: var(--text-muted);
-        font-weight: 500;
-      }
-
-      input,
-      select,
-      textarea {
-        width: 100%;
-        padding: 0.8rem;
-        border-radius: 10px;
-        border: 1px solid rgba(51, 153, 255, 0.3);
-        background: var(--input-bg);
-        color: var(--text-light);
-        font-size: 1rem;
-      }
-
-      textarea {
-        min-height: 100px;
-        resize: vertical;
-      }
-
-      .btn-submit {
-        padding: 1rem 1.5rem;
-        background: linear-gradient(45deg, var(--success), #00b383);
-        color: white;
-        border: none;
-        border-radius: 10px;
-        font-weight: 600;
-        font-size: 1.1rem;
-        cursor: pointer;
-        transition: var(--transition);
-        margin-top: 1rem;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-      }
-
-      .btn-submit i {
-        font-size: 0.9em;
-      }
-
-      .btn-submit:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(0, 204, 153, 0.4);
-      }
-
-      .btn-edit {
-        background: linear-gradient(45deg, var(--warning), #e6b800);
-      }
-
-      .btn-edit:hover {
-        box-shadow: 0 8px 20px rgba(255, 204, 0, 0.4);
-      }
-
-      .btn-delete {
-        background: linear-gradient(45deg, var(--danger), #cc0000);
-      }
-
-      .btn-delete:hover {
-        box-shadow: 0 8px 20px rgba(255, 77, 109, 0.4);
-      }
-
-      .btn-cancel {
-        background: linear-gradient(45deg, #666, #444);
-      }
-
-      .btn-cancel:hover {
-        box-shadow: 0 8px 20px rgba(102, 102, 102, 0.4);
-      }
-
-      .logout-btn {
-        display: block;
-        margin: 2rem auto 0;
-        padding: 0.8rem 1.5rem;
-        background: linear-gradient(45deg, #ff4d4d, #cc0000);
-        color: white;
-        border: none;
-        border-radius: 10px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
-      }
-
-      .status-message {
-        padding: 1rem;
-        border-radius: 8px;
-        margin-top: 1rem;
-        text-align: center;
-        display: none;
-      }
-
-      .status-success {
-        background: rgba(0, 204, 153, 0.2);
-        border: 1px solid var(--success);
-        color: var(--success);
-      }
-
-      .status-error {
-        background: rgba(255, 77, 109, 0.2);
-        border: 1px solid var(--danger);
-        color: var(--danger);
-      }
-
-      /* Animasi */
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      /* Notifikasi Akses Langsung */
-      .access-notice {
-        text-align: center;
-        padding: 10px;
-        background: rgba(51, 170, 255, 0.2);
-        border: 1px solid var(--accent);
-        border-radius: 8px;
-        margin-bottom: 20px;
-      }
-
-      /* Tabel Produk */
-      .products-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 1rem;
-        background: rgba(40, 40, 50, 0.5);
-        border-radius: 10px;
-        overflow: hidden;
-      }
-
-      .products-table th {
-        background: rgba(51, 153, 255, 0.3);
-        padding: 12px 15px;
-        text-align: left;
-        color: var(--accent);
-        font-weight: 600;
-      }
-
-      .products-table td {
-        padding: 12px 15px;
-        border-bottom: 1px solid rgba(51, 153, 255, 0.1);
-      }
-
-      .products-table tr:last-child td {
-        border-bottom: none;
-      }
-
-      .products-table tr:hover {
-        background: rgba(51, 153, 255, 0.05);
-      }
-
-      .product-image {
-        width: 60px;
-        height: 60px;
-        border-radius: 8px;
-        object-fit: cover;
-        background: rgba(255, 255, 255, 0.1);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .product-image i {
-        font-size: 24px;
-        color: var(--text-muted);
-      }
-
-      .action-buttons {
-        display: flex;
-        gap: 8px;
-      }
-
-      .action-btn {
-        padding: 8px 12px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: var(--transition);
-        font-size: 0.9rem;
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-      }
-
-      .action-btn i {
-        font-size: 0.9em;
-      }
-
-      .edit-btn {
-        background: rgba(255, 204, 0, 0.15);
-        color: var(--warning);
-      }
-
-      .edit-btn:hover {
-        background: rgba(255, 204, 0, 0.25);
-      }
-
-      .delete-btn {
-        background: rgba(255, 77, 109, 0.15);
-        color: var(--danger);
-      }
-
-      .delete-btn:hover {
-        background: rgba(255, 77, 109, 0.25);
-      }
-
-      .modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-        opacity: 0;
-        visibility: hidden;
-        transition: var(--transition);
-      }
-
-      .modal.active {
-        opacity: 1;
-        visibility: visible;
-      }
-
-      .modal-content {
-        background: var(--card-bg);
-        border-radius: 16px;
-        padding: 2rem;
-        max-width: 500px;
-        width: 90%;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-        border: 1px solid var(--border-color);
-        transform: translateY(-20px);
-        transition: var(--transition);
-      }
-
-      .modal.active .modal-content {
-        transform: translateY(0);
-      }
-
-      .modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1.5rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid var(--border-color);
-      }
-
-      .modal-title {
-        color: var(--accent);
-        font-size: 1.5rem;
-      }
-
-      .close-modal {
-        background: none;
-        border: none;
-        color: var(--text-muted);
-        font-size: 1.5rem;
-        cursor: pointer;
-        transition: var(--transition);
-      }
-
-      .close-modal:hover {
-        color: var(--accent);
-      }
-
-      .modal-buttons {
-        display: flex;
-        gap: 12px;
-        margin-top: 1.5rem;
-      }
-
-      .modal-buttons button {
-        flex: 1;
-      }
-
-      /* Loading spinner */
-      .loading {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        border: 3px solid rgba(255, 255, 255, 0.3);
-        border-radius: 50%;
-        border-top-color: #fff;
-        animation: spin 1s ease-in-out infinite;
-        margin-right: 8px;
-      }
-
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      /* Responsif */
-      @media (max-width: 768px) {
-        .products-table {
-          display: block;
-          overflow-x: auto;
+        :root {
+            --bg-dark: #121212;
+            --card-bg: #1d1f25;
+            --accent: #33aaff;
+            --accent2: #0066ff;
+            --text-light: #e0f0ff;
+            --text-muted: #88bbff;
+            --input-bg: #2a2a3a;
+            --border-color: #3399ff;
+            --success: #00cc99;
+            --danger: #ff4d6d;
+            --warning: #ffcc00;
+            --transition: all 0.3s ease;
         }
 
-        .action-buttons {
-          flex-direction: column;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: var(--text-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .admin-container {
+            width: 100%;
+            max-width: 1200px;
+            background: rgba(30, 30, 40, 0.85);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(51, 153, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        #adminPanel {
+            padding: 2rem;
+        }
+
+        .admin-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--accent2);
+        }
+
+        .admin-title {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
         }
 
         .tabs {
-          flex-wrap: wrap;
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
         }
 
         .tab-btn {
-          padding: 0.8rem 1rem;
-          font-size: 0.9rem;
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
         }
-      }
+
+        .tab-btn:hover {
+            color: var(--accent);
+        }
+
+        .tab-btn.active {
+            color: var(--accent);
+        }
+
+        .tab-btn.active::after {
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .admin-section {
+            background: rgba(30, 30, 40, 0.6);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(51, 153, 255, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .admin-section h3 {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-section h3 i {
+            font-size: 1.2em;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 10px;
+            border: 1px solid rgba(51, 153, 255, 0.3);
+            background: var(--input-bg);
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(51, 153, 255, 0.2);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn-submit {
+            padding: 1rem 1.5rem;
+            background: linear-gradient(45deg, var(--success), #00b383);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-submit i {
+            font-size: 0.9em;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 204, 153, 0.4);
+        }
+
+        .btn-edit {
+            background: linear-gradient(45deg, var(--warning), #e6b800);
+        }
+
+        .btn-edit:hover {
+            box-shadow: 0 8px 20px rgba(255, 204, 0, 0.4);
+        }
+
+        .btn-delete {
+            background: linear-gradient(45deg, var(--danger), #cc0000);
+        }
+
+        .btn-delete:hover {
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.4);
+        }
+
+        .btn-cancel {
+            background: linear-gradient(45deg, #666, #444);
+        }
+
+        .btn-cancel:hover {
+            box-shadow: 0 8px 20px rgba(102, 102, 102, 0.4);
+        }
+
+        .logout-btn {
+            display: block;
+            margin: 2rem auto 0;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(45deg, #ff4d4d, #cc0000);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 200px;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.4);
+        }
+
+        .status-message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            text-align: center;
+            display: none;
+        }
+
+        .status-success {
+            background: rgba(0, 204, 153, 0.2);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .status-error {
+            background: rgba(255, 77, 109, 0.2);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: rgba(40, 40, 50, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .products-table th {
+            background: rgba(51, 153, 255, 0.3);
+            padding: 12px 15px;
+            text-align: left;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .products-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(51, 153, 255, 0.1);
+        }
+
+        .products-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .products-table tr:hover {
+            background: rgba(51, 153, 255, 0.05);
+        }
+
+        .product-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-image i {
+            font-size: 24px;
+            color: var(--text-muted);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .action-btn i {
+            font-size: 0.9em;
+        }
+
+        .edit-btn {
+            background: rgba(255, 204, 0, 0.15);
+            color: var(--warning);
+        }
+
+        .edit-btn:hover {
+            background: rgba(255, 204, 0, 0.25);
+        }
+
+        .delete-btn {
+            background: rgba(255, 77, 109, 0.15);
+            color: var(--danger);
+        }
+
+        .delete-btn:hover {
+            background: rgba(255, 77, 109, 0.25);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
+            transform: translateY(-20px);
+            transition: var(--transition);
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-title {
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--accent);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 1.5rem;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .star-rating {
+            color: gold;
+            font-size: 1.2em;
+            letter-spacing: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .products-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab-btn {
+                padding: 0.8rem 1rem;
+                font-size: 0.9rem;
+                flex: 1;
+                text-align: center;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
-  </head>
-  <body>
-    <script>
-      // Cek login status
-      const isLoggedIn = localStorage.getItem('adminLoggedIn') === 'true';
-      if (!isLoggedIn) {
-        window.location.href = 'index.html';
-      }
-    </script>
-
+</head>
+<body>
     <div class="admin-container">
-      <div id="adminPanel">
-        <div class="admin-header">
-          <h1 class="admin-title">SNAYDER'S STORE</h1>
-          <p>Admin Panel - Kelola Produk</p>
-        </div>
-
-        <div class="tabs">
-          <button class="tab-btn active" data-tab="products">Produk</button>
-          <button class="tab-btn" data-tab="testimonials">Testimoni</button>
-        </div>
-
-        <!-- Produk Tab -->
-        <div id="productsTab" class="tab-content active">
-          <div class="admin-section">
-            <h3>Tambah Produk Baru</h3>
-            <form id="productForm">
-              <input type="hidden" id="productId" value="" />
-              <div class="form-grid">
-                <div class="form-group">
-                  <label for="productName">Nama Produk</label>
-                  <input type="text" id="productName" required />
-                </div>
-
-                <div class="form-group">
-                  <label for="productImage">Link Gambar</label>
-                  <input type="text" id="productImage" required />
-                </div>
-
-                <div class="form-group">
-                  <label for="productPrice">Harga Dasar</label>
-                  <input type="number" id="productPrice" required />
-                </div>
-
-                <div class="form-group">
-                  <label for="productDescription">Deskripsi Produk</label>
-                  <textarea id="productDescription" required></textarea>
-                </div>
-
-                <div class="form-group">
-                  <label for="productPackages">Paket (opsional)</label>
-                  <textarea id="productPackages" placeholder="Format: Nama Paket - Harga (satu per baris)"></textarea>
-                </div>
-              </div>
-
-              <div class="action-buttons">
-                <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Simpan Produk</button>
-                <button type="button" id="cancelEditBtn" class="btn-submit btn-cancel" style="display: none"><i class="fas fa-times"></i> Batal</button>
-              </div>
-            </form>
-            <div id="productStatus" class="status-message"></div>
-          </div>
-
-          <div class="admin-section">
-            <h3>Daftar Produk Tersedia</h3>
-            <div id="productsList">
-              <p style="text-align: center; padding: 20px; color: var(--text-muted)">Memuat daftar produk...</p>
+        <div id="adminPanel">
+            <div class="admin-header">
+                <h1 class="admin-title">SNAYDER'S STORE</h1>
+                <p>Admin Panel - Kelola Produk dan Testimonial</p>
             </div>
-          </div>
+
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="products">Produk</button>
+                <button class="tab-btn" data-tab="testimonials">Testimonial</button>
+            </div>
+
+            <!-- Produk Tab -->
+            <div id="productsTab" class="tab-content active">
+                <div class="admin-section">
+                    <h3><i class="fas fa-plus-circle"></i> Tambah Produk Baru</h3>
+                    <form id="productForm">
+                        <input type="hidden" id="productId" value="" />
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="productName">Nama Produk</label>
+                                <input type="text" id="productName" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productImage">Link Gambar</label>
+                                <input type="text" id="productImage" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productPrice">Harga Dasar</label>
+                                <input type="number" id="productPrice" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productDescription">Deskripsi Produk</label>
+                                <textarea id="productDescription" required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productPackages">Paket (opsional)</label>
+                                <textarea id="productPackages" placeholder="Format: Nama Paket - Harga (satu per baris)"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Simpan Produk</button>
+                            <button type="button" id="cancelEditBtn" class="btn-submit btn-cancel" style="display: none"><i class="fas fa-times"></i> Batal</button>
+                        </div>
+                    </form>
+                    <div id="productStatus" class="status-message"></div>
+                </div>
+
+                <div class="admin-section">
+                    <h3><i class="fas fa-list"></i> Daftar Produk Tersedia</h3>
+                    <div id="productsList">
+                        <p style="text-align: center; padding: 20px; color: var(--text-muted)"><span class="loading"></span> Memuat daftar produk...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonial Tab -->
+            <div id="testimonialsTab" class="tab-content">
+                <div class="admin-section">
+                    <h3><i class="fas fa-comment-medical"></i> Tambah Testimonial Baru</h3>
+                    <form id="testimonialForm">
+                        <input type="hidden" id="testimonialId" value="" />
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="testimonialName">Nama Pelanggan</label>
+                                <input type="text" id="testimonialName" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="testimonialRating">Rating (1-5)</label>
+                                <input type="number" id="testimonialRating" min="1" max="5" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="testimonialComment">Komentar</label>
+                                <textarea id="testimonialComment" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Simpan Testimonial</button>
+                            <button type="button" id="cancelTestimonialEditBtn" class="btn-submit btn-cancel" style="display: none"><i class="fas fa-times"></i> Batal</button>
+                        </div>
+                    </form>
+                    <div id="testimonialStatus" class="status-message"></div>
+                </div>
+
+                <div class="admin-section">
+                    <h3><i class="fas fa-comments"></i> Daftar Testimonial Tersedia</h3>
+                    <div id="testimonialsList">
+                        <p style="text-align: center; padding: 20px; color: var(--text-muted)"><span class="loading"></span> Memuat daftar testimonial...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tombol Logout -->
+            <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
-
-        <!-- Testimoni Tab -->
-        <div id="testimonialsTab" class="tab-content">
-          <div class="admin-section">
-            <h3>Tambah Testimoni Baru</h3>
-            <form id="testimonialForm">
-              <div class="form-grid">
-                <div class="form-group">
-                  <label for="testimonialName">Nama Pelanggan</label>
-                  <input type="text" id="testimonialName" required />
-                </div>
-
-                <div class="form-group">
-                  <label for="testimonialRating">Rating (1-5)</label>
-                  <input type="number" id="testimonialRating" min="1" max="5" required />
-                </div>
-
-                <div class="form-group">
-                  <label for="testimonialComment">Komentar</label>
-                  <textarea id="testimonialComment" required></textarea>
-                </div>
-              </div>
-
-              <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Simpan Testimoni</button>
-            </form>
-            <div id="testimonialStatus" class="status-message"></div>
-          </div>
-        </div>
-
-        <!-- Tombol Logout -->
-        <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
-      </div>
     </div>
 
-    <!-- Modal Konfirmasi Hapus -->
+    <!-- Modal Konfirmasi Hapus Produk -->
     <div class="modal" id="deleteModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Konfirmasi Hapus</h3>
-          <button class="close-modal">&times;</button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Konfirmasi Hapus</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <p>Apakah Anda yakin ingin menghapus produk "<span id="deleteProductName"></span>"? Tindakan ini tidak dapat dibatalkan.</p>
+            <div class="modal-buttons">
+                <button class="btn-submit btn-cancel" id="cancelDelete"><i class="fas fa-times"></i> Batal</button>
+                <button class="btn-submit btn-delete" id="confirmDelete"><i class="fas fa-trash"></i> Hapus</button>
+            </div>
         </div>
-        <p>Apakah Anda yakin ingin menghapus produk "<span id="deleteProductName"></span>"? Tindakan ini tidak dapat dibatalkan.</p>
-        <div class="modal-buttons">
-          <button class="btn-submit btn-cancel" id="cancelDelete"><i class="fas fa-times"></i> Batal</button>
-          <button class="btn-submit btn-delete" id="confirmDelete"><i class="fas fa-trash"></i> Hapus</button>
+    </div>
+
+    <!-- Modal Konfirmasi Hapus Testimonial -->
+    <div class="modal" id="deleteTestimonialModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Konfirmasi Hapus</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <p>Apakah Anda yakin ingin menghapus testimonial dari "<span id="deleteTestimonialName"></span>"? Tindakan ini tidak dapat dibatalkan.</p>
+            <div class="modal-buttons">
+                <button class="btn-submit btn-cancel" id="cancelTestimonialDelete"><i class="fas fa-times"></i> Batal</button>
+                <button class="btn-submit btn-delete" id="confirmTestimonialDelete"><i class="fas fa-trash"></i> Hapus</button>
+            </div>
         </div>
-      </div>
     </div>
 
     <script>
-      // Konfigurasi API
-      const API_BASE = "/api";
-      const PRODUCTS_API = `${API_BASE}/products`;
+        // Konfigurasi API
+        const API_BASE = "/api";
+        const PRODUCTS_API = `${API_BASE}/products`;
+        const TESTIMONIALS_API = `${API_BASE}/testimonials`;
 
-      // Elemen DOM
-      const adminPanel = document.getElementById("adminPanel");
-      const productForm = document.getElementById("productForm");
-      const testimonialForm = document.getElementById("testimonialForm");
-      const tabBtns = document.querySelectorAll(".tab-btn");
-      const tabContents = document.querySelectorAll(".tab-content");
-      const productsList = document.getElementById("productsList");
-      const productIdInput = document.getElementById("productId");
-      const cancelEditBtn = document.getElementById("cancelEditBtn");
-      const deleteModal = document.getElementById("deleteModal");
-      const closeModalBtn = document.querySelector(".close-modal");
-      const cancelDeleteBtn = document.getElementById("cancelDelete");
-      const confirmDeleteBtn = document.getElementById("confirmDelete");
-      const deleteProductName = document.getElementById("deleteProductName");
-      const logoutBtn = document.getElementById("logoutBtn");
+        // Elemen DOM
+        const adminPanel = document.getElementById("adminPanel");
+        const productForm = document.getElementById("productForm");
+        const testimonialForm = document.getElementById("testimonialForm");
+        const tabBtns = document.querySelectorAll(".tab-btn");
+        const tabContents = document.querySelectorAll(".tab-content");
+        const productsList = document.getElementById("productsList");
+        const testimonialsList = document.getElementById("testimonialsList");
+        const productIdInput = document.getElementById("productId");
+        const testimonialIdInput = document.getElementById("testimonialId");
+        const cancelEditBtn = document.getElementById("cancelEditBtn");
+        const cancelTestimonialEditBtn = document.getElementById("cancelTestimonialEditBtn");
+        const deleteModal = document.getElementById("deleteModal");
+        const closeModalBtn = document.querySelector(".close-modal");
+        const cancelDeleteBtn = document.getElementById("cancelDelete");
+        const confirmDeleteBtn = document.getElementById("confirmDelete");
+        const deleteProductName = document.getElementById("deleteProductName");
+        const logoutBtn = document.getElementById("logoutBtn");
+        const deleteTestimonialModal = document.getElementById("deleteTestimonialModal");
+        const deleteTestimonialName = document.getElementById("deleteTestimonialName");
+        const cancelTestimonialDeleteBtn = document.getElementById("cancelTestimonialDelete");
+        const confirmTestimonialDeleteBtn = document.getElementById("confirmTestimonialDelete");
 
-      // Variabel global
-      let products = [];
-      let productToDelete = null;
+        // Variabel global
+        let products = [];
+        let testimonials = [];
+        let productToDelete = null;
+        let testimonialToDelete = null;
 
-      // Fungsi untuk menampilkan pesan status
-      function showStatus(element, message, isSuccess = true) {
-        element.textContent = message;
-        element.className = isSuccess ? "status-message status-success" : "status-message status-error";
-        element.style.display = "block";
+        // Fungsi untuk menampilkan pesan status
+        function showStatus(element, message, isSuccess = true) {
+            element.textContent = message;
+            element.className = isSuccess ? "status-message status-success" : "status-message status-error";
+            element.style.display = "block";
 
-        // Sembunyikan setelah 3 detik
-        setTimeout(() => {
-          element.style.display = "none";
-        }, 3000);
-      }
+            // Sembunyikan setelah 3 detik
+            setTimeout(() => {
+                element.style.display = "none";
+            }, 3000);
+        }
 
-      // Fungsi untuk mengubah tab
-      function switchTab(tabId) {
-        // Nonaktifkan semua tab
-        tabContents.forEach((tab) => {
-          tab.classList.remove("active");
+        // Fungsi untuk mengubah tab
+        function switchTab(tabId) {
+            // Nonaktifkan semua tab
+            tabContents.forEach((tab) => {
+                tab.classList.remove("active");
+            });
+
+            tabBtns.forEach((btn) => {
+                btn.classList.remove("active");
+            });
+
+            // Aktifkan tab yang dipilih
+            document.getElementById(`${tabId}Tab`).classList.add("active");
+            document.querySelector(`.tab-btn[data-tab="${tabId}"]`).classList.add("active");
+        }
+
+        // Fungsi untuk menampilkan modal konfirmasi hapus
+        function showDeleteModal(product) {
+            productToDelete = product;
+            deleteProductName.textContent = product.name;
+            deleteModal.classList.add("active");
+        }
+
+        // Fungsi untuk menyembunyikan modal
+        function hideDeleteModal() {
+            deleteModal.classList.remove("active");
+            productToDelete = null;
+        }
+
+        // Fungsi untuk menampilkan modal konfirmasi hapus testimonial
+        function showDeleteTestimonialModal(testimonial) {
+            testimonialToDelete = testimonial;
+            deleteTestimonialName.textContent = testimonial.name;
+            deleteTestimonialModal.classList.add("active");
+        }
+
+        // Fungsi untuk menyembunyikan modal testimonial
+        function hideDeleteTestimonialModal() {
+            deleteTestimonialModal.classList.remove("active");
+            testimonialToDelete = null;
+        }
+
+        // Fungsi untuk memuat daftar produk dari API
+        async function loadProducts() {
+            try {
+                productsList.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--text-muted);"><span class="loading"></span> Memuat produk...</p>';
+
+                const response = await fetch(PRODUCTS_API);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+                products = await response.json();
+                renderProducts(products);
+            } catch (error) {
+                productsList.innerHTML = `<p style="text-align: center; padding: 20px; color: var(--danger);">Gagal memuat produk: ${error.message}</p>`;
+            }
+        }
+
+        // Fungsi untuk menampilkan produk
+        function renderProducts(products) {
+            if (!products || products.length === 0) {
+                productsList.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--text-muted);">Belum ada produk tersedia</p>';
+                return;
+            }
+
+            let html = `
+            <table class="products-table">
+                <thead>
+                    <tr>
+                        <th>Gambar</th>
+                        <th>Nama Produk</th>
+                        <th>Harga</th>
+                        <th>Deskripsi</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+
+            products.forEach((product) => {
+                const truncatedDesc = product.description.length > 50 ? product.description.substring(0, 50) + "..." : product.description;
+
+                html += `
+                <tr>
+                    <td>
+                        <div class="product-image">
+                            ${product.image ? `<img src="${product.image}" alt="${product.name}" width="60" height="60">` : `<i class="fas fa-image"></i>`}
+                        </div>
+                    </td>
+                    <td>${product.name}</td>
+                    <td>Rp${product.price.toLocaleString("id-ID")}</td>
+                    <td>${truncatedDesc}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn edit-btn" data-id="${product.id}">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="action-btn delete-btn" data-id="${product.id}">
+                                <i class="fas fa-trash"></i> Hapus
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                `;
+            });
+
+            html += `
+                </tbody>
+            </table>
+            `;
+
+            productsList.innerHTML = html;
+
+            // Tambahkan event listener untuk tombol edit dan hapus
+            document.querySelectorAll(".edit-btn").forEach((btn) => {
+                btn.addEventListener("click", () => editProduct(btn.dataset.id));
+            });
+
+            document.querySelectorAll(".delete-btn").forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    const product = products.find((p) => p.id === btn.dataset.id);
+                    if (product) showDeleteModal(product);
+                });
+            });
+        }
+
+        // Fungsi untuk memuat daftar testimonial
+        async function loadTestimonials() {
+            try {
+                testimonialsList.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--text-muted);"><span class="loading"></span> Memuat testimonial...</p>';
+
+                const response = await fetch(TESTIMONIALS_API);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+                testimonials = await response.json();
+                renderTestimonials(testimonials);
+            } catch (error) {
+                testimonialsList.innerHTML = `<p style="text-align: center; padding: 20px; color: var(--danger);">Gagal memuat testimonial: ${error.message}</p>`;
+            }
+        }
+
+        // Fungsi untuk menampilkan testimonial
+        function renderTestimonials(testimonials) {
+            if (!testimonials || testimonials.length === 0) {
+                testimonialsList.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--text-muted);">Belum ada testimonial tersedia</p>';
+                return;
+            }
+
+            let html = `
+            <table class="products-table">
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>Rating</th>
+                        <th>Komentar</th>
+                        <th>Tanggal</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+
+            testimonials.forEach((testimonial) => {
+                const truncatedComment = testimonial.comment.length > 50 ? 
+                    testimonial.comment.substring(0, 50) + "..." : 
+                    testimonial.comment;
+                    
+                const stars = '★'.repeat(testimonial.rating) + '☆'.repeat(5 - testimonial.rating);
+
+                html += `
+                <tr>
+                    <td>${testimonial.name}</td>
+                    <td><span class="star-rating">${stars}</span></td>
+                    <td>${truncatedComment}</td>
+                    <td>${testimonial.date}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn edit-btn" data-id="${testimonial.id}">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="action-btn delete-btn" data-id="${testimonial.id}">
+                                <i class="fas fa-trash"></i> Hapus
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                `;
+            });
+
+            html += `
+                </tbody>
+            </table>
+            `;
+
+            testimonialsList.innerHTML = html;
+
+            // Tambahkan event listener
+            document.querySelectorAll(".edit-btn").forEach(btn => {
+                btn.addEventListener("click", () => editTestimonial(btn.dataset.id));
+            });
+
+            document.querySelectorAll(".delete-btn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const testimonial = testimonials.find(t => t.id === btn.dataset.id);
+                    if (testimonial) showDeleteTestimonialModal(testimonial);
+                });
+            });
+        }
+
+        // Fungsi untuk mengisi form dengan data produk
+        function editProduct(productId) {
+            const product = products.find((p) => p.id === productId);
+            if (!product) return;
+
+            // Isi form dengan data produk
+            document.getElementById("productName").value = product.name;
+            document.getElementById("productImage").value = product.image || "";
+            document.getElementById("productPrice").value = product.price;
+            document.getElementById("productDescription").value = product.description;
+            productIdInput.value = product.id;
+
+            // Format paket untuk textarea
+            if (product.packages && product.packages.length > 0) {
+                const packagesText = product.packages.map((pkg) => `${pkg.name} - ${pkg.price}`).join("\n");
+                document.getElementById("productPackages").value = packagesText;
+            } else {
+                document.getElementById("productPackages").value = "";
+            }
+
+            // Ubah teks tombol submit
+            const submitBtn = productForm.querySelector(".btn-submit");
+            submitBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Update Produk';
+            submitBtn.classList.add("btn-edit");
+            submitBtn.classList.remove("btn-submit");
+
+            // Tampilkan tombol batal
+            cancelEditBtn.style.display = "inline-block";
+
+            // Scroll ke form
+            productForm.scrollIntoView({ behavior: "smooth" });
+        }
+
+        // Fungsi untuk mengisi form testimonial
+        function editTestimonial(testimonialId) {
+            const testimonial = testimonials.find(t => t.id === testimonialId);
+            if (!testimonial) return;
+
+            document.getElementById("testimonialName").value = testimonial.name;
+            document.getElementById("testimonialRating").value = testimonial.rating;
+            document.getElementById("testimonialComment").value = testimonial.comment;
+            testimonialIdInput.value = testimonial.id;
+
+            // Ubah tombol submit
+            const submitBtn = testimonialForm.querySelector(".btn-submit");
+            submitBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Update Testimonial';
+            submitBtn.classList.add("btn-edit");
+            submitBtn.classList.remove("btn-submit");
+
+            // Tampilkan tombol batal
+            cancelTestimonialEditBtn.style.display = "inline-block";
+            
+            // Scroll ke form
+            testimonialForm.scrollIntoView({ behavior: "smooth" });
+        }
+
+        // Fungsi untuk membatalkan edit
+        function cancelEdit() {
+            productForm.reset();
+            productIdInput.value = "";
+
+            // Kembalikan tombol submit ke semula
+            const submitBtn = productForm.querySelector(".btn-submit");
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> Simpan Produk';
+            submitBtn.classList.remove("btn-edit");
+            submitBtn.classList.add("btn-submit");
+
+            // Sembunyikan tombol batal
+            cancelEditBtn.style.display = "none";
+        }
+
+        // Fungsi untuk membatalkan edit testimonial
+        function cancelTestimonialEdit() {
+            testimonialForm.reset();
+            testimonialIdInput.value = "";
+
+            const submitBtn = testimonialForm.querySelector(".btn-submit");
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> Simpan Testimonial';
+            submitBtn.classList.remove("btn-edit");
+            submitBtn.classList.add("btn-submit");
+
+            cancelTestimonialEditBtn.style.display = "none";
+        }
+
+        // Fungsi untuk menghapus produk
+        async function deleteProduct() {
+            if (!productToDelete) return;
+
+            const statusElement = document.getElementById("productStatus");
+
+            try {
+                const response = await fetch(`${PRODUCTS_API}?id=${productToDelete.id}`, {
+                    method: "DELETE",
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                }
+
+                // Muat ulang produk
+                await loadProducts();
+                showStatus(statusElement, `Produk "${productToDelete.name}" berhasil dihapus!`);
+                hideDeleteModal();
+            } catch (error) {
+                showStatus(statusElement, `Gagal menghapus produk: ${error.message}`, false);
+            }
+        }
+
+        // Fungsi untuk menghapus testimonial
+        async function deleteTestimonial() {
+            if (!testimonialToDelete) return;
+
+            const statusElement = document.getElementById("testimonialStatus");
+
+            try {
+                const response = await fetch(`${TESTIMONIALS_API}?id=${testimonialToDelete.id}`, {
+                    method: "DELETE",
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                }
+
+                await loadTestimonials();
+                showStatus(statusElement, `Testimonial dari "${testimonialToDelete.name}" berhasil dihapus!`);
+                hideDeleteTestimonialModal();
+            } catch (error) {
+                showStatus(statusElement, `Gagal menghapus testimonial: ${error.message}`, false);
+            }
+        }
+
+        // Fungsi untuk mengirim produk ke API
+        async function saveProduct(e) {
+            e.preventDefault();
+            const statusElement = document.getElementById("productStatus");
+            const isEditMode = !!productIdInput.value;
+
+            const product = {
+                id: productIdInput.value || "prod" + Math.random().toString(36).substr(2, 9),
+                name: document.getElementById("productName").value,
+                image: document.getElementById("productImage").value,
+                price: parseFloat(document.getElementById("productPrice").value),
+                description: document.getElementById("productDescription").value,
+                packages: [],
+            };
+
+            // Parsing paket jika ada
+            const packagesText = document.getElementById("productPackages").value.trim();
+            if (packagesText) {
+                const packageLines = packagesText.split("\n");
+                product.packages = packageLines
+                    .map((line) => {
+                        const [name, price] = line.split("-").map((part) => part.trim());
+                        return {
+                            name,
+                            price: parseFloat(price.replace(/\D/g, "")),
+                        };
+                    })
+                    .filter((pkg) => pkg.name && !isNaN(pkg.price));
+            }
+
+            try {
+                const method = isEditMode ? "PUT" : "POST";
+                const response = await fetch(PRODUCTS_API, {
+                    method: method,
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(product),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                }
+
+                showStatus(statusElement, isEditMode ? "Produk berhasil diperbarui!" : "Produk baru berhasil disimpan!");
+
+                // Muat ulang produk
+                await loadProducts();
+                cancelEdit();
+            } catch (error) {
+                showStatus(statusElement, `Terjadi kesalahan: ${error.message}`, false);
+            }
+        }
+
+        // Fungsi untuk mengirim testimonial ke API
+        async function saveTestimonial(e) {
+            e.preventDefault();
+            const statusElement = document.getElementById("testimonialStatus");
+            const isEditMode = !!testimonialIdInput.value;
+
+            const testimonial = {
+                id: testimonialIdInput.value || Math.random().toString(36).substr(2, 9), // Generate new id
+                name: document.getElementById("testimonialName").value,
+                rating: parseInt(document.getElementById("testimonialRating").value),
+                comment: document.getElementById("testimonialComment").value,
+                date: isEditMode ? testimonials.find(t => t.id === testimonialIdInput.value).date : 
+                      new Date().toISOString().split("T")[0]
+            };
+
+            // Validasi
+            if (isNaN(testimonial.rating)) {
+                showStatus(statusElement, "Rating harus berupa angka", false);
+                return;
+            }
+
+            try {
+                const method = isEditMode ? "PUT" : "POST";
+                const response = await fetch(TESTIMONIALS_API, {
+                    method,
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(testimonial),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                }
+
+                showStatus(statusElement, isEditMode ? "Testimonial berhasil diperbarui!" : "Testimonial baru berhasil disimpan!");
+                testimonialForm.reset();
+                testimonialIdInput.value = "";
+                await loadTestimonials();
+                cancelTestimonialEdit();
+            } catch (error) {
+                showStatus(statusElement, `Terjadi kesalahan: ${error.message}`, false);
+            }
+        }
+
+        // Event Listeners
+        productForm.addEventListener("submit", saveProduct);
+        testimonialForm.addEventListener("submit", saveTestimonial);
+        cancelEditBtn.addEventListener("click", cancelEdit);
+        cancelTestimonialEditBtn.addEventListener("click", cancelTestimonialEdit);
+        logoutBtn.addEventListener("click", () => {
+            localStorage.removeItem("adminLoggedIn");
+            window.location.href = "index.html";
         });
 
         tabBtns.forEach((btn) => {
-          btn.classList.remove("active");
+            btn.addEventListener("click", () => {
+                switchTab(btn.dataset.tab);
+            });
         });
 
-        // Aktifkan tab yang dipilih
-        document.getElementById(`${tabId}Tab`).classList.add("active");
-        document.querySelector(`.tab-btn[data-tab="${tabId}"]`).classList.add("active");
-      }
+        // Event listener untuk modal produk
+        closeModalBtn.addEventListener("click", hideDeleteModal);
+        cancelDeleteBtn.addEventListener("click", hideDeleteModal);
+        confirmDeleteBtn.addEventListener("click", deleteProduct);
 
-      // Fungsi untuk menampilkan modal konfirmasi hapus
-      function showDeleteModal(product) {
-        productToDelete = product;
-        deleteProductName.textContent = product.name;
-        deleteModal.classList.add("active");
-      }
-
-      // Fungsi untuk menyembunyikan modal
-      function hideDeleteModal() {
-        deleteModal.classList.remove("active");
-        productToDelete = null;
-      }
-
-      // Fungsi untuk memuat daftar produk dari API
-      async function loadProducts() {
-        try {
-          productsList.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--text-muted);"><span class="loading"></span> Memuat produk...</p>';
-
-          const response = await fetch(PRODUCTS_API);
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          
-          products = await response.json();
-          renderProducts(products);
-        } catch (error) {
-          productsList.innerHTML = `<p style="text-align: center; padding: 20px; color: var(--danger);">Gagal memuat produk: ${error.message}</p>`;
-        }
-      }
-
-      // Fungsi untuk menampilkan produk
-      function renderProducts(products) {
-        if (!products || products.length === 0) {
-          productsList.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--text-muted);">Belum ada produk tersedia</p>';
-          return;
-        }
-
-        let html = `
-        <table class="products-table">
-          <thead>
-            <tr>
-              <th>Gambar</th>
-              <th>Nama Produk</th>
-              <th>Harga</th>
-              <th>Deskripsi</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-
-        products.forEach((product) => {
-          const truncatedDesc = product.description.length > 50 ? product.description.substring(0, 50) + "..." : product.description;
-
-          html += `
-          <tr>
-            <td>
-              <div class="product-image">
-                ${product.image ? `<img src="${product.image}" alt="${product.name}" width="60" height="60">` : `<i class="fas fa-image"></i>`}
-              </div>
-            </td>
-            <td>${product.name}</td>
-            <td>Rp${product.price.toLocaleString("id-ID")}</td>
-            <td>${truncatedDesc}</td>
-            <td>
-              <div class="action-buttons">
-                <button class="action-btn edit-btn" data-id="${product.id}">
-                  <i class="fas fa-edit"></i> Edit
-                </button>
-                <button class="action-btn delete-btn" data-id="${product.id}">
-                  <i class="fas fa-trash"></i> Hapus
-                </button>
-              </div>
-            </td>
-          </tr>
-        `;
+        // Event listener untuk modal testimonial
+        document.querySelectorAll("#deleteTestimonialModal .close-modal").forEach(btn => {
+            btn.addEventListener("click", hideDeleteTestimonialModal);
         });
+        cancelTestimonialDeleteBtn.addEventListener("click", hideDeleteTestimonialModal);
+        confirmTestimonialDeleteBtn.addEventListener("click", deleteTestimonial);
 
-        html += `
-          </tbody>
-        </table>
-      `;
-
-        productsList.innerHTML = html;
-
-        // Tambahkan event listener untuk tombol edit dan hapus
-        document.querySelectorAll(".edit-btn").forEach((btn) => {
-          btn.addEventListener("click", () => editProduct(btn.dataset.id));
+        // Inisialisasi
+        document.addEventListener("DOMContentLoaded", () => {
+            // Simulasi login untuk demo
+            localStorage.setItem("adminLoggedIn", "true");
+            
+            loadProducts();
+            loadTestimonials();
+            
+            // Tambahkan data testimonial demo
+            testimonials = [
+                { id: "1", name: "Budi Santoso", rating: 5, comment: "Produk sangat bagus dan pengiriman cepat", date: "2023-10-15" },
+                { id: "2", name: "Siti Rahayu", rating: 4, comment: "Kualitas produk sangat memuaskan", date: "2023-10-20" },
+                { id: "3", name: "Ahmad Fauzi", rating: 5, comment: "Pelayanan sangat baik, akan belanja lagi", date: "2023-10-25" }
+            ];
+            renderTestimonials(testimonials);
         });
-
-        document.querySelectorAll(".delete-btn").forEach((btn) => {
-          btn.addEventListener("click", () => {
-            const product = products.find((p) => p.id === btn.dataset.id);
-            if (product) showDeleteModal(product);
-          });
-        });
-      }
-
-      // Fungsi untuk mengisi form dengan data produk
-      function editProduct(productId) {
-        const product = products.find((p) => p.id === productId);
-        if (!product) return;
-
-        // Isi form dengan data produk
-        document.getElementById("productName").value = product.name;
-        document.getElementById("productImage").value = product.image || "";
-        document.getElementById("productPrice").value = product.price;
-        document.getElementById("productDescription").value = product.description;
-        productIdInput.value = product.id;
-
-        // Format paket untuk textarea
-        if (product.packages && product.packages.length > 0) {
-          const packagesText = product.packages.map((pkg) => `${pkg.name} - ${pkg.price}`).join("\n");
-          document.getElementById("productPackages").value = packagesText;
-        } else {
-          document.getElementById("productPackages").value = "";
-        }
-
-        // Ubah teks tombol submit
-        const submitBtn = productForm.querySelector(".btn-submit");
-        submitBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Update Produk';
-        submitBtn.classList.add("btn-edit");
-        submitBtn.classList.remove("btn-submit");
-
-        // Tampilkan tombol batal
-        cancelEditBtn.style.display = "inline-block";
-
-        // Scroll ke form
-        productForm.scrollIntoView({ behavior: "smooth" });
-      }
-
-      // Fungsi untuk membatalkan edit
-      function cancelEdit() {
-        productForm.reset();
-        productIdInput.value = "";
-
-        // Kembalikan tombol submit ke semula
-        const submitBtn = productForm.querySelector(".btn-submit");
-        submitBtn.innerHTML = '<i class="fas fa-save"></i> Simpan Produk';
-        submitBtn.classList.remove("btn-edit");
-        submitBtn.classList.add("btn-submit");
-
-        // Sembunyikan tombol batal
-        cancelEditBtn.style.display = "none";
-      }
-
-      // Fungsi untuk menghapus produk
-      async function deleteProduct() {
-        if (!productToDelete) return;
-
-        const statusElement = document.getElementById("productStatus");
-
-        try {
-          const response = await fetch(`${PRODUCTS_API}?id=${productToDelete.id}`, {
-            method: "DELETE"
-          });
-
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
-          }
-
-          // Muat ulang produk
-          await loadProducts();
-          showStatus(statusElement, `Produk "${productToDelete.name}" berhasil dihapus!`);
-          hideDeleteModal();
-        } catch (error) {
-          showStatus(statusElement, `Gagal menghapus produk: ${error.message}`, false);
-        }
-      }
-
-      // Fungsi untuk mengirim produk ke API
-      async function saveProduct(e) {
-        e.preventDefault();
-        const statusElement = document.getElementById("productStatus");
-        const isEditMode = !!productIdInput.value;
-
-        const product = {
-          id: productIdInput.value || "prod" + Math.random().toString(36).substr(2, 9),
-          name: document.getElementById("productName").value,
-          image: document.getElementById("productImage").value,
-          price: parseFloat(document.getElementById("productPrice").value),
-          description: document.getElementById("productDescription").value,
-          packages: [],
-        };
-
-        // Parsing paket jika ada
-        const packagesText = document.getElementById("productPackages").value.trim();
-        if (packagesText) {
-          const packageLines = packagesText.split("\n");
-          product.packages = packageLines
-            .map((line) => {
-              const [name, price] = line.split("-").map((part) => part.trim());
-              return {
-                name,
-                price: parseFloat(price.replace(/\D/g, "")),
-              };
-            })
-            .filter((pkg) => pkg.name && !isNaN(pkg.price));
-        }
-
-        try {
-          const method = isEditMode ? "PUT" : "POST";
-          const response = await fetch(PRODUCTS_API, {
-            method: method,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(product)
-          });
-
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
-          }
-
-          showStatus(statusElement, isEditMode ? "Produk berhasil diperbarui!" : "Produk baru berhasil disimpan!");
-          
-          // Muat ulang produk
-          await loadProducts();
-          cancelEdit();
-        } catch (error) {
-          showStatus(statusElement, `Terjadi kesalahan: ${error.message}`, false);
-        }
-      }
-
-      // Fungsi untuk mengirim testimoni ke API
-      async function saveTestimonial(e) {
-        e.preventDefault();
-        const statusElement = document.getElementById("testimonialStatus");
-
-        const testimonial = {
-          name: document.getElementById("testimonialName").value,
-          rating: parseInt(document.getElementById("testimonialRating").value),
-          comment: document.getElementById("testimonialComment").value,
-          date: new Date().toISOString().split("T")[0],
-        };
-
-        try {
-          // Simulasi penyimpanan ke API
-          await new Promise((resolve) => setTimeout(resolve, 800));
-          showStatus(statusElement, "Testimoni berhasil disimpan!");
-          testimonialForm.reset();
-        } catch (error) {
-          showStatus(statusElement, "Terjadi kesalahan jaringan", false);
-        }
-      }
-
-      // Event Listeners
-      productForm.addEventListener("submit", saveProduct);
-      testimonialForm.addEventListener("submit", saveTestimonial);
-      cancelEditBtn.addEventListener("click", cancelEdit);
-      logoutBtn.addEventListener("click", () => {
-        localStorage.removeItem("adminLoggedIn");
-        window.location.href = "index.html";
-      });
-
-      tabBtns.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          switchTab(btn.dataset.tab);
-        });
-      });
-
-      // Event listener untuk modal
-      closeModalBtn.addEventListener("click", hideDeleteModal);
-      cancelDeleteBtn.addEventListener("click", hideDeleteModal);
-      confirmDeleteBtn.addEventListener("click", deleteProduct);
-
-      // Inisialisasi
-      document.addEventListener("DOMContentLoaded", () => {
-        loadProducts();
-      });
     </script>
-  </body>
+</body>
 </html>
