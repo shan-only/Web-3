@@ -515,6 +515,24 @@
       .delay-4 {
         animation-delay: 0.4s;
       }
+
+      /* Loading spinner */
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+        margin-right: 8px;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
     </style>
   </head>
   <body>
@@ -535,50 +553,10 @@
     <section class="products-section" id="produk">
       <h2 class="section-title">Produk Kami</h2>
 
-      <div class="products-grid">
-        <!-- Produk 1 -->
-        <div class="product-card fade-in">
-          <span class="product-badge">TERLARIS</span>
-          <img src="https://images.unsplash.com/photo-1550009158-9ebf69173e03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Script Bot" class="product-image" />
-          <div class="product-content">
-            <h3 class="product-title">Script Bot Premium</h3>
-            <p class="product-description">Script bot dengan fitur lengkap untuk otomasi tugas dan meningkatkan produktivitas Anda.</p>
-
-            <div class="product-actions">
-              <button class="action-btn btn-order" data-product="1">Order</button>
-              <button class="action-btn btn-details" data-product="1">Detail</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Produk 2 -->
-        <div class="product-card fade-in delay-1">
-          <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Panel Pterodactyl" class="product-image" />
-          <div class="product-content">
-            <h3 class="product-title">Panel Pterodactyl</h3>
-            <p class="product-description">Solusi manajemen server game dengan performa tinggi dan antarmuka yang intuitif.</p>
-
-            <div class="product-actions">
-              <button class="action-btn btn-order" data-product="2">Order</button>
-              <button class="action-btn btn-details" data-product="2">Detail</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Produk 3 -->
-        <div class="product-card fade-in delay-2">
-          <span class="product-badge">BARU</span>
-          <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Hosting Premium" class="product-image" />
-          <div class="product-content">
-            <h3 class="product-title">Hosting Premium</h3>
-            <p class="product-description">Hosting dengan kecepatan tinggi dan uptime 99.9%, dukungan 24/7, dan keamanan terbaik.</p>
-
-            <div class="product-actions">
-              <button class="action-btn btn-order" data-product="3">Order</button>
-              <button class="action-btn btn-details" data-product="3">Detail</button>
-            </div>
-          </div>
-        </div>
+      <div class="products-grid" id="productsGrid">
+        <p style="text-align: center; padding: 20px; color: var(--text-muted);">
+          <span class="loading"></span> Memuat produk...
+        </p>
       </div>
     </section>
 
@@ -731,46 +709,6 @@
     </footer>
 
     <script>
-      // Data produk dengan paket
-      const products = [
-        {
-          id: 1,
-          name: "Script Bot Premium",
-          price: 100000,
-          description: "Script bot dengan fitur lengkap untuk otomasi tugas dan meningkatkan produktivitas Anda. Cocok untuk berbagai platform dan kebutuhan bisnis.",
-          image: "https://images.unsplash.com/photo-1550009158-9ebf69173e03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-          packages: [
-            { id: 1, name: "Paket Basic", price: 100000, description: "Fitur dasar untuk pemula" },
-            { id: 2, name: "Paket Standard", price: 150000, description: "Fitur lengkap untuk kebutuhan umum" },
-            { id: 3, name: "Paket Pro", price: 250000, description: "Semua fitur termasuk dukungan premium" },
-          ],
-        },
-        {
-          id: 2,
-          name: "Panel Pterodactyl",
-          price: 75000,
-          description: "Solusi manajemen server game dengan performa tinggi dan antarmuka yang intuitif. Cocok untuk game server skala kecil hingga besar.",
-          image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-          packages: [
-            { id: 4, name: "Paket Starter", price: 75000, description: "Untuk server kecil (max 10 pemain)" },
-            { id: 5, name: "Paket Business", price: 125000, description: "Untuk server menengah (max 50 pemain)" },
-            { id: 6, name: "Paket Enterprise", price: 200000, description: "Untuk server besar (unlimited)" },
-          ],
-        },
-        {
-          id: 3,
-          name: "Hosting Premium",
-          price: 150000,
-          description: "Hosting dengan kecepatan tinggi dan uptime 99.9%, dukungan 24/7, dan keamanan terbaik. Cocok untuk website bisnis dan e-commerce.",
-          image: "https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-          packages: [
-            { id: 7, name: "Paket Basic", price: 150000, description: "1 GB Storage, 10 GB Bandwidth" },
-            { id: 8, name: "Paket Pro", price: 250000, description: "5 GB Storage, 50 GB Bandwidth" },
-            { id: 9, name: "Paket Business", price: 400000, description: "Unlimited Storage & Bandwidth" },
-          ],
-        },
-      ];
-
       // Kredensial admin
       const ADMIN_USERNAME = "snayders";
       const ADMIN_PASSWORD = "123";
@@ -795,8 +733,10 @@
       const adminLoginForm = document.getElementById("adminLoginForm");
       const adminUsernameInput = document.getElementById("adminUsername");
       const adminPasswordInput = document.getElementById("adminPassword");
+      const productsGrid = document.getElementById("productsGrid");
 
       // Variabel untuk produk yang dipilih
+      let products = [];
       let selectedProduct = null;
       let selectedPackage = null;
 
@@ -809,6 +749,106 @@
         }).format(price);
       }
 
+      // Fungsi untuk memuat produk dari API
+      async function loadProducts() {
+        try {
+          const response = await fetch('/api/products');
+          if (!response.ok) throw new Error('Gagal memuat produk');
+          return await response.json();
+        } catch (error) {
+          console.error('Error:', error);
+          // Fallback ke data statis jika API gagal
+          return [
+            {
+              id: "1",
+              name: "Script Bot Premium",
+              price: 100000,
+              description: "Script bot dengan fitur lengkap untuk otomasi tugas dan meningkatkan produktivitas Anda. Cocok untuk berbagai platform dan kebutuhan bisnis.",
+              image: "https://images.unsplash.com/photo-1550009158-9ebf69173e03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+              packages: [
+                { id: "1", name: "Paket Basic", price: 100000, description: "Fitur dasar untuk pemula" },
+                { id: "2", name: "Paket Standard", price: 150000, description: "Fitur lengkap untuk kebutuhan umum" },
+                { id: "3", name: "Paket Pro", price: 250000, description: "Semua fitur termasuk dukungan premium" },
+              ],
+              badge: "TERLARIS"
+            },
+            {
+              id: "2",
+              name: "Panel Pterodactyl",
+              price: 75000,
+              description: "Solusi manajemen server game dengan performa tinggi dan antarmuka yang intuitif. Cocok untuk game server skala kecil hingga besar.",
+              image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+              packages: [
+                { id: "4", name: "Paket Starter", price: 75000, description: "Untuk server kecil (max 10 pemain)" },
+                { id: "5", name: "Paket Business", price: 125000, description: "Untuk server menengah (max 50 pemain)" },
+                { id: "6", name: "Paket Enterprise", price: 200000, description: "Untuk server besar (unlimited)" },
+              ]
+            },
+            {
+              id: "3",
+              name: "Hosting Premium",
+              price: 150000,
+              description: "Hosting dengan kecepatan tinggi dan uptime 99.9%, dukungan 24/7, dan keamanan terbaik. Cocok untuk website bisnis dan e-commerce.",
+              image: "https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
+              packages: [
+                { id: "7", name: "Paket Basic", price: 150000, description: "1 GB Storage, 10 GB Bandwidth" },
+                { id: "8", name: "Paket Pro", price: 250000, description: "5 GB Storage, 50 GB Bandwidth" },
+                { id: "9", name: "Paket Business", price: 400000, description: "Unlimited Storage & Bandwidth" },
+              ],
+              badge: "BARU"
+            }
+          ];
+        }
+      }
+
+      // Fungsi untuk merender produk
+      async function renderProducts() {
+        products = await loadProducts();
+        productsGrid.innerHTML = '';
+
+        if (products.length === 0) {
+          productsGrid.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--text-muted);">Belum ada produk tersedia.</p>';
+          return;
+        }
+
+        products.forEach((product, index) => {
+          const card = document.createElement('div');
+          card.className = `product-card fade-in ${index > 0 ? 'delay-' + index : ''}`;
+          
+          // Tambahkan badge jika ada
+          const badge = product.badge ? `<span class="product-badge">${product.badge}</span>` : '';
+          
+          card.innerHTML = `
+            ${badge}
+            <img src="${product.image}" alt="${product.name}" class="product-image" />
+            <div class="product-content">
+              <h3 class="product-title">${product.name}</h3>
+              <p class="product-description">${product.description}</p>
+              <div class="product-actions">
+                <button class="action-btn btn-order" data-product="${product.id}">Order</button>
+                <button class="action-btn btn-details" data-product="${product.id}">Detail</button>
+              </div>
+            </div>
+          `;
+          productsGrid.appendChild(card);
+        });
+
+        // Pasang event listener untuk tombol detail dan order
+        document.querySelectorAll('.btn-details').forEach(button => {
+          button.addEventListener('click', function() {
+            const productId = this.getAttribute('data-product');
+            openDetailModal(productId);
+          });
+        });
+
+        document.querySelectorAll('.btn-order').forEach(button => {
+          button.addEventListener('click', function() {
+            const productId = this.getAttribute('data-product');
+            openOrderModal(productId);
+          });
+        });
+      }
+
       // Fungsi untuk membuka modal detail
       function openDetailModal(productId) {
         selectedProduct = products.find((p) => p.id == productId);
@@ -819,16 +859,20 @@
 
           // Tampilkan paket
           packageList.innerHTML = "";
-          selectedProduct.packages.forEach((pkg) => {
-            const packageItem = document.createElement("div");
-            packageItem.className = "package-item";
-            packageItem.innerHTML = `
-            <div class="package-name">${pkg.name}</div>
-            <div class="package-price">${formatPrice(pkg.price)}</div>
-            <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">${pkg.description}</div>
-          `;
-            packageList.appendChild(packageItem);
-          });
+          if (selectedProduct.packages && selectedProduct.packages.length > 0) {
+            selectedProduct.packages.forEach((pkg) => {
+              const packageItem = document.createElement("div");
+              packageItem.className = "package-item";
+              packageItem.innerHTML = `
+                <div class="package-name">${pkg.name}</div>
+                <div class="package-price">${formatPrice(pkg.price)}</div>
+                <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">${pkg.description || ''}</div>
+              `;
+              packageList.appendChild(packageItem);
+            });
+          } else {
+            packageList.innerHTML = '<p>Tidak ada paket tersedia</p>';
+          }
 
           detailModal.classList.add("active");
         }
@@ -845,26 +889,41 @@
           // Reset dropdown paket
           packageSelect.innerHTML = '<option value="">-- Pilih Paket --</option>';
 
-          // Tambahkan opsi paket
-          selectedProduct.packages.forEach((pkg) => {
-            const option = document.createElement("option");
-            option.value = pkg.id;
-            option.textContent = `${pkg.name} - ${formatPrice(pkg.price)}`;
-            packageSelect.appendChild(option);
+          // Jika produk memiliki paket, tambahkan ke dropdown
+          if (selectedProduct.packages && selectedProduct.packages.length > 0) {
+            selectedProduct.packages.forEach((pkg) => {
+              const option = document.createElement("option");
+              option.value = pkg.id;
+              option.textContent = `${pkg.name} - ${formatPrice(pkg.price)}`;
+              packageSelect.appendChild(option);
 
-            // Jika ada packageId, set sebagai selected
-            if (packageId && pkg.id == packageId) {
-              option.selected = true;
-              productPriceInput.value = formatPrice(pkg.price);
-              selectedPackage = pkg;
+              // Jika ada packageId, set sebagai selected
+              if (packageId && pkg.id == packageId) {
+                option.selected = true;
+                productPriceInput.value = formatPrice(pkg.price);
+                selectedPackage = pkg;
+              }
+            });
+
+            // Set harga default jika tidak ada packageId
+            if (!packageId) {
+              packageSelect.value = selectedProduct.packages[0].id;
+              productPriceInput.value = formatPrice(selectedProduct.packages[0].price);
+              selectedPackage = selectedProduct.packages[0];
             }
-          });
-
-          // Set harga default jika tidak ada packageId
-          if (!packageId && selectedProduct.packages.length > 0) {
-            packageSelect.value = selectedProduct.packages[0].id;
-            productPriceInput.value = formatPrice(selectedProduct.packages[0].price);
-            selectedPackage = selectedProduct.packages[0];
+          } else {
+            // Jika tidak ada paket, gunakan harga produk utama
+            const option = document.createElement("option");
+            option.value = "default";
+            option.textContent = "Paket Standar";
+            packageSelect.appendChild(option);
+            packageSelect.disabled = true;
+            productPriceInput.value = formatPrice(selectedProduct.price);
+            selectedPackage = { 
+              id: "default", 
+              name: "Paket Standar", 
+              price: selectedProduct.price 
+            };
           }
 
           orderModal.classList.add("active");
@@ -874,11 +933,21 @@
       // Update harga saat paket dipilih
       packageSelect.addEventListener("change", function () {
         if (this.value) {
-          const packageId = parseInt(this.value);
-          const pkg = selectedProduct.packages.find((p) => p.id === packageId);
-          if (pkg) {
-            productPriceInput.value = formatPrice(pkg.price);
-            selectedPackage = pkg;
+          if (selectedProduct.packages) {
+            const packageId = this.value;
+            const pkg = selectedProduct.packages.find((p) => p.id === packageId);
+            if (pkg) {
+              productPriceInput.value = formatPrice(pkg.price);
+              selectedPackage = pkg;
+            }
+          } else {
+            // Jika tidak ada paket, gunakan harga produk utama
+            productPriceInput.value = formatPrice(selectedProduct.price);
+            selectedPackage = { 
+              id: "default", 
+              name: "Paket Standar", 
+              price: selectedProduct.price 
+            };
           }
         }
       });
@@ -892,21 +961,9 @@
         selectedPackage = null;
       }
 
-      // Event listener untuk tombol detail
-      document.querySelectorAll(".btn-details").forEach((button) => {
-        button.addEventListener("click", function () {
-          const productId = this.getAttribute("data-product");
-          openDetailModal(productId);
-        });
-      });
+      // Event listener untuk tombol detail (dipasang ulang setelah render)
 
-      // Event listener untuk tombol order
-      document.querySelectorAll(".btn-order").forEach((button) => {
-        button.addEventListener("click", function () {
-          const productId = this.getAttribute("data-product");
-          openOrderModal(productId);
-        });
-      });
+      // Event listener untuk tombol order (dipasang ulang setelah render)
 
       // Event listener untuk tombol order dari detail
       orderFromDetailBtn.addEventListener("click", function () {
@@ -986,11 +1043,8 @@
         const password = adminPasswordInput.value;
 
         if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-          // Simpan status login di localStorage
           localStorage.setItem("adminLoggedIn", "true");
           alert("Login berhasil! Anda akan diarahkan ke panel admin.");
-
-          // Redirect ke panel admin (bisa dibuatkan halaman terpisah)
           window.location.href = "admin-panel.html";
         } else {
           alert("Username atau password salah!");
@@ -1013,6 +1067,11 @@
             });
           }
         });
+      });
+
+      // Panggil saat halaman dimuat
+      document.addEventListener('DOMContentLoaded', () => {
+        renderProducts();
       });
     </script>
   </body>
