@@ -31,6 +31,7 @@ function githubRequest(path, method = "GET", data = null) {
             reject({
               statusCode: res.statusCode,
               message: json.message || `GitHub API error: ${res.statusCode}`,
+              body: json // Tambahkan ini untuk debug
             });
           }
         } catch (e) {
@@ -68,9 +69,12 @@ module.exports = async (req, res) => {
     return res.status(200).end();
   }
 
-  if (!TOKEN) {
+  // Cek GitHub Token (penting untuk debug)
+  if (!TOKEN || TOKEN === "undefined") {
+    console.error("GitHub Token is missing!");
     return res.status(500).json({ 
-      error: "Missing GitHub token. Please set GITHUB_TOKEN environment variable." 
+      error: "Missing GitHub token. Please set GITHUB_TOKEN environment variable.",
+      solution: "Check your Vercel project environment variables"
     });
   }
 
@@ -115,9 +119,9 @@ module.exports = async (req, res) => {
         });
       }
 
-      // Convert rating to number
+      // Convert rating to number - PERBAIKAN ERROR SINTAKS DI SINI
       newTestimonial.rating = parseInt(newTestimonial.rating);
-      if (isNaN(newTestimonial.rating) {
+      if (isNaN(newTestimonial.rating)) { // TAMBAHKAN KURUNG TUTUP DI SINI
         return res.status(400).json({ 
           error: "Rating harus berupa angka" 
         });
@@ -306,10 +310,16 @@ module.exports = async (req, res) => {
       error: "Method not allowed. Only GET, POST, PUT, DELETE are supported." 
     });
   } catch (error) {
-    console.error("Testimonials API Error:", error);
+    console.error("Testimonials API Error:", {
+      message: error.message,
+      statusCode: error.statusCode,
+      details: error.details,
+      githubError: error.body || error
+    });
+    
     return res.status(error.statusCode || 500).json({
       error: error.message || "Internal server error",
-      details: error.details || "No additional details"
+      details: "Check server logs for more information"
     });
   }
 };
