@@ -361,91 +361,128 @@
       async function saveProduct(e) {
         e.preventDefault();
         const statusElement = document.getElementById("productStatus");
+        const submitBtn = productForm.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
 
-        const product = {
-          name: document.getElementById("productName").value,
-          image: document.getElementById("productImage").value,
-          price: parseFloat(document.getElementById("productPrice").value),
-          description: document.getElementById("productDescription").value,
-          packages: [],
-        };
-
-        // Parsing paket jika ada
-        const packagesText = document.getElementById("productPackages").value.trim();
-        if (packagesText) {
-          const packageLines = packagesText.split("\n");
-          product.packages = packageLines
-            .map((line) => {
-              const [name, price] = line.split("-").map((part) => part.trim());
-              return {
-                name,
-                price: parseFloat(price.replace(/\D/g, "")),
-              };
-            })
-            .filter((pkg) => pkg.name && !isNaN(pkg.price));
-        }
+        // Tampilkan loading
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+        submitBtn.disabled = true;
 
         try {
+          const product = {
+            name: document.getElementById("productName").value.trim(),
+            image: document.getElementById("productImage").value.trim(),
+            price: parseFloat(document.getElementById("productPrice").value),
+            description: document.getElementById("productDescription").value.trim(),
+            packages: [],
+          };
+
+          // Validasi dasar
+          if (!product.name || !product.image || isNaN(product.price) || !product.description) {
+            throw new Error("Semua field wajib diisi dengan benar");
+          }
+
+          // Parsing paket
+          const packagesText = document.getElementById("productPackages").value.trim();
+          if (packagesText) {
+            product.packages = packagesText
+              .split("\n")
+              .map((line) => line.trim())
+              .filter((line) => line)
+              .map((line) => {
+                const [name, price] = line.split("-").map((part) => part.trim());
+                return {
+                  name: name || "Paket",
+                  price: parseFloat(price.replace(/\D/g, "")) || 0,
+                };
+              });
+          }
+
           const response = await fetch(PRODUCTS_API, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(product),
           });
+
+          const result = await response.json();
 
           if (response.ok) {
             showStatus(statusElement, "Produk berhasil disimpan!");
             productForm.reset();
           } else {
-            const error = await response.json();
-            showStatus(statusElement, `Gagal menyimpan produk: ${error.message}`, false);
+            throw new Error(result.error || "Gagal menyimpan produk");
           }
         } catch (error) {
-          showStatus(statusElement, "Terjadi kesalahan jaringan", false);
+          showStatus(statusElement, `Error: ${error.message}`, false);
+          console.error("Save product error:", error);
+        } finally {
+          submitBtn.innerHTML = originalBtnText;
+          submitBtn.disabled = false;
         }
       }
 
-      // Fungsi untuk mengirim testimoni ke API
+      // FUNGSI BARU: Untuk menyimpan testimonial
       async function saveTestimonial(e) {
         e.preventDefault();
         const statusElement = document.getElementById("testimonialStatus");
+        const submitBtn = testimonialForm.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
 
-        const testimonial = {
-          name: document.getElementById("testimonialName").value,
-          rating: parseInt(document.getElementById("testimonialRating").value),
-          comment: document.getElementById("testimonialComment").value,
-          date: new Date().toISOString().split("T")[0], // Format YYYY-MM-DD
-        };
+        // Tampilkan loading
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+        submitBtn.disabled = true;
 
         try {
+          const testimonial = {
+            name: document.getElementById("testimonialName").value.trim(),
+            rating: parseInt(document.getElementById("testimonialRating").value),
+            comment: document.getElementById("testimonialComment").value.trim(),
+            date: new Date().toISOString().split("T")[0],
+          };
+
+          // Validasi
+          if (!testimonial.name || isNaN(testimonial.rating) || testimonial.rating < 1 || testimonial.rating > 5 || !testimonial.comment) {
+            throw new Error("Isi semua field dengan benar (rating 1-5)");
+          }
+
           const response = await fetch(TESTIMONIALS_API, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(testimonial),
           });
+
+          const result = await response.json();
 
           if (response.ok) {
             showStatus(statusElement, "Testimoni berhasil disimpan!");
             testimonialForm.reset();
           } else {
-            const error = await response.json();
-            showStatus(statusElement, `Gagal menyimpan testimoni: ${error.message}`, false);
+            throw new Error(result.error || "Gagal menyimpan testimoni");
           }
         } catch (error) {
-          showStatus(statusElement, "Terjadi kesalahan jaringan", false);
+          showStatus(statusElement, `Error: ${error.message}`, false);
+          console.error("Save testimonial error:", error);
+        } finally {
+          submitBtn.innerHTML = originalBtnText;
+          submitBtn.disabled = false;
         }
       }
 
       // Event Listeners
-      productForm.addEventListener("submit", saveProduct);
-      testimonialForm.addEventListener("submit", saveTestimonial);
+      document.addEventListener("DOMContentLoaded", function () {
+        // Perbaikan: Pastikan elemen ada sebelum menambahkan event listener
+        if (productForm) {
+          productForm.addEventListener("submit", saveProduct);
+        }
 
-      tabBtns.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          switchTab(btn.dataset.tab);
+        if (testimonialForm) {
+          testimonialForm.addEventListener("submit", saveTestimonial);
+        }
+
+        tabBtns.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            switchTab(btn.dataset.tab);
+          });
         });
       });
     </script>
