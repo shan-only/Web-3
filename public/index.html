@@ -564,7 +564,7 @@
     <section class="products-section" id="testimoni" style="background: rgba(0, 0, 0, 0.05); padding-bottom: 4rem">
       <h2 class="section-title">Testimoni Pelanggan</h2>
 
-      <div class="testimonial-grid" id="testimonialGrid">
+      <div class="testimonial-grid" id="testimonialsGrid">
         <p style="text-align: center; padding: 20px; color: var(--text-muted);">
           <span class="loading"></span> Memuat testimoni...
         </p>
@@ -678,7 +678,7 @@
       const adminUsernameInput = document.getElementById("adminUsername");
       const adminPasswordInput = document.getElementById("adminPassword");
       const productsGrid = document.getElementById("productsGrid");
-      const testimonialGrid = document.getElementById("testimonialGrid");
+      const testimonialsGrid = document.getElementById("testimonialsGrid");
 
       // Variabel untuk produk yang dipilih
       let products = [];
@@ -746,6 +746,78 @@
         }
       }
 
+      // Fungsi untuk memuat testimoni dari API
+      async function loadTestimonials() {
+        try {
+          const response = await fetch('/api/testimonials');
+          
+          // Handle 404 - File not found
+          if (response.status === 404) {
+            testimonialsGrid.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--text-muted);">Belum ada testimoni.</p>';
+            return;
+          }
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          
+          const testimonials = await response.json();
+
+          // Kosongkan grid
+          testimonialsGrid.innerHTML = '';
+
+          // Jika tidak ada testimoni
+          if (testimonials.length === 0) {
+            testimonialsGrid.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--text-muted);">Belum ada testimoni.</p>';
+            return;
+          }
+
+          // Render setiap testimoni
+          testimonials.forEach((testimonial, index) => {
+            const testimonialCard = document.createElement('div');
+            testimonialCard.className = `testimonial-card fade-in ${index > 0 ? 'delay-' + index : ''}`;
+            
+            // Buat elemen rating bintang
+            let starsHtml = '';
+            const rating = testimonial.rating || 5;
+            
+            for (let i = 1; i <= 5; i++) {
+              if (i <= rating) {
+                starsHtml += '<i class="fas fa-star"></i>';
+              } else if (i - 0.5 === rating) {
+                starsHtml += '<i class="fas fa-star-half-alt"></i>';
+              } else {
+                starsHtml += '<i class="far fa-star"></i>';
+              }
+            }
+
+            testimonialCard.innerHTML = `
+              <div class="testimonial-header">
+                <div class="testimonial-avatar">
+                  <i class="fas fa-user"></i>
+                </div>
+                <div>
+                  <h3>${testimonial.name || 'Pelanggan'}</h3>
+                  <div class="testimonial-rating">
+                    ${starsHtml}
+                  </div>
+                </div>
+              </div>
+              <p class="testimonial-text">"${testimonial.comment || 'Testimoni pelanggan'}"</p>
+              <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;">${testimonial.date || ''}</p>
+            `;
+            testimonialsGrid.appendChild(testimonialCard);
+          });
+        } catch (error) {
+          console.error('Error:', error);
+          testimonialsGrid.innerHTML = `
+            <p style="text-align: center; padding: 20px; color: var(--danger);">
+              Gagal memuat testimoni: ${error.message || 'Internal server error'}
+            </p>
+          `;
+        }
+      }
+
       // Fungsi untuk merender produk
       async function renderProducts() {
         products = await loadProducts();
@@ -791,86 +863,6 @@
             const productId = this.getAttribute('data-product');
             openOrderModal(productId);
           });
-        });
-      }
-
-      // Fungsi untuk memuat testimoni dari GitHub API
-      async function loadTestimonials() {
-        try {
-          // Gunakan URL GitHub raw untuk file JSON
-          const response = await fetch('https://raw.githubusercontent.com/snayders/store/main/testimonials.json');
-          
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          
-          const testimonials = await response.json();
-          
-          // Render testimonial
-          renderTestimonials(testimonials);
-        } catch (error) {
-          console.error('Error loading testimonials:', error);
-          testimonialGrid.innerHTML = `
-            <div style="text-align: center; padding: 20px; color: var(--danger);">
-              <i class="fas fa-exclamation-triangle"></i> Gagal memuat testimoni. 
-              <button onclick="window.loadTestimonials()" class="btn" style="margin-top: 10px; padding: 5px 10px;">
-                <i class="fas fa-redo"></i> Coba Lagi
-              </button>
-            </div>
-          `;
-        }
-      }
-
-      // Fungsi untuk merender testimoni ke dalam grid
-      function renderTestimonials(testimonials) {
-        if (!testimonials || testimonials.length === 0) {
-          testimonialGrid.innerHTML = '<p style="text-align: center; padding: 20px; color: var(--text-muted);">Belum ada testimoni tersedia.</p>';
-          return;
-        }
-
-        testimonialGrid.innerHTML = '';
-        
-        testimonials.forEach((testimonial, index) => {
-          const card = document.createElement('div');
-          card.className = `testimonial-card fade-in ${index > 0 ? 'delay-' + (index % 4) : ''}`;
-          
-          // Buat rating bintang
-          let starsHtml = '';
-          const fullStars = Math.floor(testimonial.rating);
-          const hasHalfStar = testimonial.rating % 1 !== 0;
-          
-          // Bintang penuh
-          for (let i = 0; i < fullStars; i++) {
-            starsHtml += '<i class="fas fa-star"></i>';
-          }
-          
-          // Setengah bintang
-          if (hasHalfStar) {
-            starsHtml += '<i class="fas fa-star-half-alt"></i>';
-          }
-          
-          // Bintang kosong
-          const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-          for (let i = 0; i < emptyStars; i++) {
-            starsHtml += '<i class="far fa-star"></i>';
-          }
-          
-          card.innerHTML = `
-            <div class="testimonial-header">
-              <div class="testimonial-avatar">
-                <i class="fas fa-user"></i>
-              </div>
-              <div>
-                <h3>${testimonial.name}</h3>
-                <div class="testimonial-rating">
-                  ${starsHtml}
-                </div>
-              </div>
-            </div>
-            <p class="testimonial-text">"${testimonial.text}"</p>
-          `;
-          
-          testimonialGrid.appendChild(card);
         });
       }
 
@@ -1093,11 +1085,8 @@
       // Panggil saat halaman dimuat
       document.addEventListener('DOMContentLoaded', () => {
         renderProducts();
-        loadTestimonials(); // Memuat testimoni dari GitHub
+        loadTestimonials(); // Memuat testimoni dari API
       });
-
-      // Ekspos fungsi ke window untuk tombol "Coba Lagi"
-      window.loadTestimonials = loadTestimonials;
     </script>
   </body>
 </html>
