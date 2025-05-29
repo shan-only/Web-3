@@ -61,7 +61,7 @@ function githubRequest(path, method = "GET", data = null) {
 module.exports = async (req, res) => {
   // Handle CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   if (req.method === "OPTIONS") {
@@ -165,8 +165,63 @@ module.exports = async (req, res) => {
       });
     }
 
+    // DELETE: Delete a product by id
+    if (req.method === "DELETE") {
+      const productId = req.query.id; // Get id from query params
+
+      if (!productId) {
+        return res.status(400).json({ error: "Missing product id" });
+      }
+
+      // Get current products
+      let fileData;
+      let products = [];
+      
+      try {
+        fileData = await githubRequest(
+          `/repos/${REPO}/contents/${FILEPATH}?ref=${BRANCH}`
+        );
+        
+        if (fileData.content) {
+          const content = Buffer.from(fileData.content, "base64").toString("utf8");
+          products = JSON.parse(content);
+        }
+      } catch (error) {
+        if (error.statusCode === 404) {
+          return res.status(404).json({ error: "Products file not found" });
+        }
+        throw error;
+      }
+
+      // Find product index by id
+      const productIndex = products.findIndex(p => p.id === productId);
+      if (productIndex === -1) {
+        return res.status(404).json({ error: `Product with id ${productId} not found` });
+      }
+
+      // Remove the product
+      const removedProduct = products.splice(productIndex, 1)[0];
+
+      // Prepare update payload
+      const updatePayload = {
+        message: `Hapus produk: ${removedProduct.name}`,
+        content: Buffer.from(JSON.stringify(products, null, 2)).toString("base64"),
+        branch: BRANCH,
+        sha: fileData.sha // Must have sha to update
+      };
+
+      // Update file on GitHub
+      await githubRequest(`/repos/${REPO}/contents/${FILEPATH}`, "PUT", updatePayload);
+
+      return res.status(200).json({ 
+        success: true,
+        message: "Produk berhasil dihapus",
+        deletedProduct: removedProduct
+      });
+    }
+
     return res.status(405).json({ 
-      error: "Method not allowed. Only GET and POST are supported." 
+      error: "Method not allowed. Only GET, POST, and DELETE are supported." 
     });
   } catch (error) {
     console.error("Products API Error:", error);
