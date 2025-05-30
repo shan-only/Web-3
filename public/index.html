@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SNAYDER'S STORE - Toko Digital Terpercaya</title>
@@ -697,21 +697,41 @@
         font-size: 1.2rem;
       }
 
-      /* Harga yang mengikuti paket */
-      .price-display {
-        margin-top: 0.5rem;
-        font-size: 1.2rem;
+      /* MODIFIKASI TAMBAHAN */
+      .package-description {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin-top: 5px;
+      }
+
+      .package-option {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 8px;
+        background: rgba(51, 153, 255, 0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .package-option:hover {
+        background: rgba(51, 153, 255, 0.2);
+      }
+
+      .package-option.selected {
+        background: rgba(51, 153, 255, 0.25);
+        border-left: 3px solid var(--success);
+      }
+
+      .price-highlight {
         font-weight: bold;
         color: var(--accent2);
-        text-align: center;
-        padding: 0.5rem;
-        background: rgba(51, 153, 255, 0.1);
-        border-radius: 8px;
-        transition: all 0.3s ease;
       }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Header -->
     <header>
       <div class="logo fade-in">
@@ -782,12 +802,15 @@
           </div>
 
           <div class="form-group">
-            <label for="packageSelect">Pilih Paket</label>
-            <select id="packageSelect" required>
-              <option value="">-- Pilih Paket --</option>
-            </select>
-            <!-- Tampilan harga yang mengikuti paket -->
-            <div id="selectedPrice" class="price-display"></div>
+            <label>Pilih Paket Harga</label>
+            <div id="packageOptions">
+              <!-- Paket akan dimuat di sini -->
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="productPrice">Harga</label>
+            <input type="text" id="productPrice" readonly class="price-highlight" style="font-size: 1.2rem; font-weight: bold" />
           </div>
 
           <div class="form-group">
@@ -841,9 +864,10 @@
       // Kredensial admin
       const ADMIN_USERNAME = "snayders";
       const ADMIN_PASSWORD = "123";
-      const API_BASE = "/api";
-        const PRODUCTS_API = `${API_BASE}/products`;
-        const TESTIMONIALS_API = `${API_BASE}/testimonials`;
+
+      // URL GitHub API untuk produk dan testimoni
+      const PRODUCTS_API_URL = "https://raw.githubusercontent.com/shan-only/personalWeb3/main/products.json";
+      const TESTIMONIALS_API_URL = "https://raw.githubusercontent.com/shan-only/personalWeb3/main/testimonials.json";
 
       // Elemen DOM
       const detailModal = document.getElementById("detailModal");
@@ -852,7 +876,8 @@
       const closeOrderModal = document.getElementById("closeOrderModal");
       const orderForm = document.getElementById("orderForm");
       const productNameInput = document.getElementById("productName");
-      const packageSelect = document.getElementById("packageSelect");
+      const productPriceInput = document.getElementById("productPrice");
+      const packageOptionsContainer = document.getElementById("packageOptions");
       const productDescriptionInput = document.getElementById("productDescription");
       const packageList = document.getElementById("packageList");
       const detailProductTitle = document.getElementById("detailProductTitle");
@@ -869,7 +894,6 @@
       const notification = document.getElementById("notification");
       const submitOrderBtn = document.getElementById("submitOrderBtn");
       const loadingOverlay = document.getElementById("loadingOverlay");
-      const selectedPriceDisplay = document.getElementById("selectedPrice");
 
       // Variabel untuk produk yang dipilih
       let products = [];
@@ -895,29 +919,102 @@
         }, 3000);
       }
 
-      // Fungsi untuk mengambil data produk dari API
+      // Fungsi untuk mengambil data produk dari GitHub API
       async function fetchProducts() {
         try {
-          const response = await fetch('/api/products');
-          if (!response.ok) throw new Error('Gagal memuat produk');
+          // Tampilkan loading
+          loadingOverlay.style.display = "flex";
+
+          const response = await fetch(PRODUCTS_API_URL);
+
+          if (!response.ok) {
+            throw new Error(`Gagal memuat produk: ${response.status}`);
+          }
+
           return await response.json();
         } catch (error) {
-          console.error('Error fetching products:', error);
-          showNotification('Gagal memuat data produk', 'error');
-          return [];
+          console.error("Error fetching products:", error);
+          showNotification("Gagal memuat data produk", "error");
+
+          // Kembalikan data dummy jika terjadi kesalahan
+          return [
+            {
+              id: "1",
+              name: "Website Profesional",
+              description: "Website responsif dengan desain modern dan fitur lengkap",
+              price: 2500000,
+              image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+              badge: "BEST SELLER",
+              packages: [
+                {
+                  id: "basic",
+                  name: "Paket Basic",
+                  price: 1500000,
+                  description: "Website 5 halaman, desain responsif, tanpa CMS",
+                },
+                {
+                  id: "pro",
+                  name: "Paket Pro",
+                  price: 2500000,
+                  description: "Website 10 halaman, desain premium, dengan CMS",
+                },
+              ],
+            },
+            {
+              id: "2",
+              name: "Aplikasi Mobile",
+              description: "Aplikasi mobile untuk iOS dan Android dengan fitur terbaik",
+              price: 10000000,
+              image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80",
+              badge: "NEW",
+              packages: [
+                {
+                  id: "basic",
+                  name: "Paket Basic",
+                  price: 7000000,
+                  description: "Aplikasi untuk satu platform (Android atau iOS)",
+                },
+                {
+                  id: "pro",
+                  name: "Paket Pro",
+                  price: 10000000,
+                  description: "Aplikasi untuk kedua platform (Android dan iOS)",
+                },
+              ],
+            },
+          ];
         }
       }
 
-      // Fungsi untuk mengambil data testimoni dari API
+      // Fungsi untuk mengambil data testimoni dari GitHub API
       async function fetchTestimonials() {
         try {
-          const response = await fetch('/api/testimonials');
-          if (!response.ok) throw new Error('Gagal memuat testimoni');
+          const response = await fetch(TESTIMONIALS_API_URL);
+
+          if (!response.ok) {
+            throw new Error(`Gagal memuat testimoni: ${response.status}`);
+          }
+
           return await response.json();
         } catch (error) {
-          console.error('Error fetching testimonials:', error);
-          showNotification('Gagal memuat data testimoni', 'error');
-          return [];
+          console.error("Error fetching testimonials:", error);
+          showNotification("Gagal memuat data testimoni", "error");
+
+          // Kembalikan data dummy jika terjadi kesalahan
+          return [
+            {
+              name: "Budi Santoso",
+              comment: "Pelayanan sangat memuaskan! Website yang dibuat sangat profesional dan sesuai dengan kebutuhan bisnis saya.",
+              rating: 5,
+              date: "15 Mei 2025",
+            },
+            {
+              name: "Siti Rahayu",
+              comment: "Saya puas dengan aplikasi mobile yang dibuat oleh tim Snayder's. Fiturnya lengkap dan performanya bagus.",
+              rating: 4.5,
+              date: "10 April 2025",
+            },
+          ];
         }
       }
 
@@ -1026,7 +1123,7 @@
               packageItem.innerHTML = `
                             <div class="package-name">${pkg.name}</div>
                             <div class="package-price">${formatPrice(pkg.price)}</div>
-                            <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">${pkg.description || ""}</div>
+                            <div class="package-description">${pkg.description || ""}</div>
                         `;
               packageList.appendChild(packageItem);
             });
@@ -1046,76 +1143,59 @@
           productNameInput.value = selectedProduct.name;
           productDescriptionInput.value = selectedProduct.description;
 
-          // Reset dropdown paket
-          packageSelect.innerHTML = '<option value="">-- Pilih Paket --</option>';
+          // Reset pilihan paket
+          packageOptionsContainer.innerHTML = "";
 
-          // Jika produk memiliki paket, tambahkan ke dropdown
+          // Jika produk memiliki paket, tambahkan ke opsi
           if (selectedProduct.packages && selectedProduct.packages.length > 0) {
-            selectedProduct.packages.forEach((pkg) => {
-              const option = document.createElement("option");
-              option.value = pkg.id;
-              option.textContent = `${pkg.name} - ${formatPrice(pkg.price)}`;
-              option.dataset.price = pkg.price; // Simpan harga dalam data atribut
-              packageSelect.appendChild(option);
-            });
+            selectedProduct.packages.forEach((pkg, index) => {
+              const packageOption = document.createElement("div");
+              packageOption.className = "package-option";
+              if (index === 0) packageOption.classList.add("selected");
+              packageOption.innerHTML = `
+                <div>
+                  <div class="package-name">${pkg.name}</div>
+                  <div class="package-description">${pkg.description}</div>
+                </div>
+                <div class="package-price">${formatPrice(pkg.price)}</div>
+              `;
+              packageOption.dataset.packageId = pkg.id;
 
-            // Set paket pertama sebagai default
-            packageSelect.value = selectedProduct.packages[0].id;
-            selectedPackage = selectedProduct.packages[0];
-            // Update tampilan harga
-            updatePriceDisplay(selectedPackage.price);
+              packageOption.addEventListener("click", function () {
+                // Hapus kelas selected dari semua opsi
+                document.querySelectorAll(".package-option").forEach((opt) => {
+                  opt.classList.remove("selected");
+                });
+
+                // Tambahkan kelas selected ke opsi yang dipilih
+                this.classList.add("selected");
+
+                // Perbarui harga sesuai paket yang dipilih
+                productPriceInput.value = formatPrice(pkg.price);
+                selectedPackage = pkg;
+              });
+
+              packageOptionsContainer.appendChild(packageOption);
+
+              // Set paket pertama sebagai default
+              if (index === 0) {
+                productPriceInput.value = formatPrice(pkg.price);
+                selectedPackage = pkg;
+              }
+            });
           } else {
             // Jika tidak ada paket, gunakan harga produk utama
-            const option = document.createElement("option");
-            option.value = "default";
-            option.textContent = "Paket Standar";
-            option.dataset.price = selectedProduct.price; // Simpan harga dalam data atribut
-            packageSelect.appendChild(option);
-            packageSelect.disabled = true;
+            productPriceInput.value = formatPrice(selectedProduct.price);
             selectedPackage = {
               id: "default",
               name: "Paket Standar",
               price: selectedProduct.price,
             };
-            // Update tampilan harga
-            updatePriceDisplay(selectedProduct.price);
           }
 
           orderModal.classList.add("active");
         }
       }
-
-      // Fungsi untuk memperbarui tampilan harga
-      function updatePriceDisplay(price) {
-        selectedPriceDisplay.textContent = formatPrice(price);
-      }
-
-      // Update harga saat paket dipilih
-      packageSelect.addEventListener("change", function () {
-        if (this.value) {
-          if (selectedProduct.packages) {
-            const packageId = this.value;
-            const pkg = selectedProduct.packages.find((p) => p.id === packageId);
-            if (pkg) {
-              selectedPackage = pkg;
-              // Update tampilan harga
-              updatePriceDisplay(pkg.price);
-            }
-          } else {
-            // Jika tidak ada paket, gunakan harga produk utama
-            selectedPackage = {
-              id: "default",
-              name: "Paket Standar",
-              price: selectedProduct.price,
-            };
-            // Update tampilan harga
-            updatePriceDisplay(selectedProduct.price);
-          }
-        } else {
-          selectedPackage = null;
-          selectedPriceDisplay.textContent = "";
-        }
-      });
 
       // Fungsi untuk menutup modal
       function closeModal() {
@@ -1253,24 +1333,24 @@
       // Panggil saat halaman dimuat
       document.addEventListener("DOMContentLoaded", async () => {
         // Tampilkan loading overlay
-        loadingOverlay.style.display = 'flex';
-        
+        loadingOverlay.style.display = "flex";
+
         try {
           // Ambil data dari API
           products = await fetchProducts();
           const testimonials = await fetchTestimonials();
-          
+
           renderProducts(products);
           renderTestimonials(testimonials);
-          
+
           // Sembunyikan loading overlay
           setTimeout(() => {
-            loadingOverlay.style.display = 'none';
+            loadingOverlay.style.display = "none";
           }, 500);
         } catch (error) {
-          console.error('Failed to load data:', error);
-          showNotification('Gagal memuat data, coba lagi nanti', 'error');
-          loadingOverlay.style.display = 'none';
+          console.error("Failed to load data:", error);
+          showNotification("Gagal memuat data, coba lagi nanti", "error");
+          loadingOverlay.style.display = "none";
         }
 
         // Animasi tambahan
@@ -1279,5 +1359,5 @@
         }, 100);
       });
     </script>
-</body>
+  </body>
 </html>
