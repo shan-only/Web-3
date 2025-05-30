@@ -21,6 +21,7 @@
         --danger: #ff4d6d;
         --transition: all 0.3s ease;
         --warning: #ffcc00;
+        --nav-height: 70px;
       }
 
       /* Reset dasar */
@@ -39,9 +40,104 @@
         background-image: linear-gradient(135deg, rgba(13, 27, 42, 0.8) 0%, rgba(27, 38, 59, 0.8) 100%), radial-gradient(circle at top right, rgba(51, 170, 255, 0.1), transparent 25%),
           radial-gradient(circle at bottom left, rgba(0, 102, 255, 0.1), transparent 25%);
         background-attachment: fixed;
+        padding-top: var(--nav-height); /* Tambahkan padding untuk navbar */
       }
 
-      /* Header */
+      /* NAVBAR MODERN */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: var(--nav-height);
+        background: rgba(13, 27, 42, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 2px solid rgba(51, 153, 255, 0.3);
+        display: flex;
+        align-items: center;
+        padding: 0 2rem;
+        z-index: 1000;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+      }
+
+      .navbar-container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        color: var(--text-light);
+      }
+
+      .logo-brand i {
+        font-size: 1.8rem;
+        color: var(--accent);
+        text-shadow: 0 0 10px rgba(51, 153, 255, 0.7);
+      }
+
+      .brand-text {
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: 0.5px;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0.6rem 1.2rem;
+        border-radius: 50px;
+        text-decoration: none;
+        color: var(--text-light);
+        font-weight: 500;
+        transition: var(--transition);
+        background: rgba(51, 153, 255, 0.1);
+      }
+
+      .nav-link:hover {
+        background: rgba(51, 153, 255, 0.25);
+        transform: translateY(-2px);
+      }
+
+      .nav-link i {
+        font-size: 1.1rem;
+      }
+
+      .btn-testimoni-nav {
+        background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+      }
+
+      .btn-admin-nav {
+        background: linear-gradient(45deg, #00cc99, #00b383);
+      }
+
+      /* Responsif navbar */
+      .menu-toggle {
+        display: none;
+        font-size: 1.5rem;
+        color: var(--text-light);
+        cursor: pointer;
+      }
+
+      /* Header (disesuaikan) */
       header {
         text-align: center;
         padding: 2rem 1rem;
@@ -50,6 +146,7 @@
         overflow: hidden;
         border-bottom: 3px solid var(--accent);
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        margin-top: calc(var(--nav-height) - 10px); /* Menyesuaikan margin top */
       }
 
       header::before {
@@ -89,7 +186,7 @@
         text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
       }
 
-      /* Tombol utama */
+      /* Tombol utama (dihapus dari header) */
       .btn {
         display: inline-block;
         background: linear-gradient(45deg, var(--accent2), var(--accent));
@@ -126,14 +223,6 @@
       .btn:hover {
         transform: translateY(-3px);
         box-shadow: 0 8px 20px rgba(51, 153, 255, 0.6);
-      }
-
-      .btn-testimoni {
-        background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
-      }
-
-      .btn-admin {
-        background: linear-gradient(45deg, #00cc99, #00b383);
       }
 
       /* Produk */
@@ -599,6 +688,32 @@
         .testimonial-grid {
           grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         }
+
+        .nav-links {
+          display: none;
+          position: absolute;
+          top: var(--nav-height);
+          left: 0;
+          right: 0;
+          background: rgba(13, 27, 42, 0.98);
+          flex-direction: column;
+          padding: 1rem;
+          gap: 10px;
+          border-bottom: 2px solid rgba(51, 153, 255, 0.3);
+        }
+
+        .nav-links.active {
+          display: flex;
+        }
+
+        .menu-toggle {
+          display: block;
+        }
+
+        .nav-link {
+          width: 100%;
+          justify-content: center;
+        }
       }
 
       @media (max-width: 480px) {
@@ -617,6 +732,14 @@
 
         .product-actions {
           flex-direction: column;
+        }
+
+        .navbar {
+          padding: 0 1rem;
+        }
+
+        .brand-text {
+          font-size: 1.3rem;
         }
       }
 
@@ -699,19 +822,24 @@
     </style>
   </head>
   <body>
-    <!-- Header -->
-    <header>
-      <div class="logo fade-in">
-        <i class="fas fa-store"></i>
-      </div>
-      <h1 class="fade-in delay-1">SNAYDER'S STORE</h1>
-      <p class="subtitle fade-in delay-2">Tempat terbaik untuk mendapatkan produk digital berkualitas tinggi</p>
-      <div>
-        <a href="#testimoni" class="btn btn-testimoni fade-in delay-3"> <i class="fas fa-comment-alt"></i> Lihat Testimoni </a>
-        <button class="btn btn-admin fade-in delay-4" id="adminLoginBtn"><i class="fas fa-lock"></i> Admin Login</button>
-      </div>
-    </header>
+    <!-- Navbar Modern -->
+    <nav class="navbar">
+      <div class="navbar-container">
+        <a href="#" class="logo-brand">
+          <i class="fas fa-store"></i>
+          <span class="brand-text">SNAYDER'S STORE</span>
+        </a>
 
+        <div class="nav-links">
+          <a href="#testimoni" class="nav-link btn-testimoni-nav"> <i class="fas fa-comment-alt"></i> Testimoni </a>
+          <button class="nav-link btn-admin-nav" id="adminLoginBtnNav"><i class="fas fa-lock"></i> Admin Login</button>
+        </div>
+
+        <div class="menu-toggle" id="menuToggle">
+          <i class="fas fa-bars"></i>
+        </div>
+      </div>
+    </nav>
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
       <div class="loading-spinner"></div>
@@ -846,7 +974,7 @@
       const detailProductTitle = document.getElementById("detailProductTitle");
       const detailProductDescription = document.getElementById("detailProductDescription");
       const orderFromDetailBtn = document.getElementById("orderFromDetailBtn");
-      const adminLoginBtn = document.getElementById("adminLoginBtn");
+      const adminLoginBtn = document.getElementById("adminLoginBtnNav"); // Diubah ke navbar
       const adminLoginModal = document.getElementById("adminLoginModal");
       const closeAdminModal = document.getElementById("closeAdminModal");
       const adminLoginForm = document.getElementById("adminLoginForm");
@@ -857,6 +985,8 @@
       const notification = document.getElementById("notification");
       const submitOrderBtn = document.getElementById("submitOrderBtn");
       const loadingOverlay = document.getElementById("loadingOverlay");
+      const menuToggle = document.getElementById("menuToggle");
+      const navLinks = document.querySelector(".nav-links");
 
       // Variabel untuk produk yang dipilih
       let products = [];
@@ -1219,6 +1349,11 @@
             });
           }
         });
+      });
+
+      // Toggle menu responsif
+      menuToggle.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
       });
 
       // Panggil saat halaman dimuat
