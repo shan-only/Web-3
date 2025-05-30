@@ -696,6 +696,19 @@
         margin-top: 20px;
         font-size: 1.2rem;
       }
+
+      /* Harga yang mengikuti paket */
+      .price-display {
+        margin-top: 0.5rem;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: var(--accent2);
+        text-align: center;
+        padding: 0.5rem;
+        background: rgba(51, 153, 255, 0.1);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
     </style>
 </head>
 <body>
@@ -773,11 +786,8 @@
             <select id="packageSelect" required>
               <option value="">-- Pilih Paket --</option>
             </select>
-          </div>
-
-          <div class="form-group">
-            <label for="productPrice">Harga</label>
-            <input type="text" id="productPrice" readonly />
+            <!-- Tampilan harga yang mengikuti paket -->
+            <div id="selectedPrice" class="price-display"></div>
           </div>
 
           <div class="form-group">
@@ -839,7 +849,6 @@
       const closeOrderModal = document.getElementById("closeOrderModal");
       const orderForm = document.getElementById("orderForm");
       const productNameInput = document.getElementById("productName");
-      const productPriceInput = document.getElementById("productPrice");
       const packageSelect = document.getElementById("packageSelect");
       const productDescriptionInput = document.getElementById("productDescription");
       const packageList = document.getElementById("packageList");
@@ -857,6 +866,7 @@
       const notification = document.getElementById("notification");
       const submitOrderBtn = document.getElementById("submitOrderBtn");
       const loadingOverlay = document.getElementById("loadingOverlay");
+      const selectedPriceDisplay = document.getElementById("selectedPrice");
 
       // Variabel untuk produk yang dipilih
       let products = [];
@@ -1042,30 +1052,39 @@
               const option = document.createElement("option");
               option.value = pkg.id;
               option.textContent = `${pkg.name} - ${formatPrice(pkg.price)}`;
+              option.dataset.price = pkg.price; // Simpan harga dalam data atribut
               packageSelect.appendChild(option);
             });
 
             // Set paket pertama sebagai default
             packageSelect.value = selectedProduct.packages[0].id;
-            productPriceInput.value = formatPrice(selectedProduct.packages[0].price);
             selectedPackage = selectedProduct.packages[0];
+            // Update tampilan harga
+            updatePriceDisplay(selectedPackage.price);
           } else {
             // Jika tidak ada paket, gunakan harga produk utama
             const option = document.createElement("option");
             option.value = "default";
             option.textContent = "Paket Standar";
+            option.dataset.price = selectedProduct.price; // Simpan harga dalam data atribut
             packageSelect.appendChild(option);
             packageSelect.disabled = true;
-            productPriceInput.value = formatPrice(selectedProduct.price);
             selectedPackage = {
               id: "default",
               name: "Paket Standar",
               price: selectedProduct.price,
             };
+            // Update tampilan harga
+            updatePriceDisplay(selectedProduct.price);
           }
 
           orderModal.classList.add("active");
         }
+      }
+
+      // Fungsi untuk memperbarui tampilan harga
+      function updatePriceDisplay(price) {
+        selectedPriceDisplay.textContent = formatPrice(price);
       }
 
       // Update harga saat paket dipilih
@@ -1075,20 +1094,23 @@
             const packageId = this.value;
             const pkg = selectedProduct.packages.find((p) => p.id === packageId);
             if (pkg) {
-              productPriceInput.value = formatPrice(pkg.price);
               selectedPackage = pkg;
+              // Update tampilan harga
+              updatePriceDisplay(pkg.price);
             }
           } else {
             // Jika tidak ada paket, gunakan harga produk utama
-            productPriceInput.value = formatPrice(selectedProduct.price);
             selectedPackage = {
               id: "default",
               name: "Paket Standar",
               price: selectedProduct.price,
             };
+            // Update tampilan harga
+            updatePriceDisplay(selectedProduct.price);
           }
         } else {
           selectedPackage = null;
+          selectedPriceDisplay.textContent = "";
         }
       });
 
