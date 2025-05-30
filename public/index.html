@@ -1,790 +1,815 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SNAYDER'S STORE - Toko Digital Terpercaya</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/1170/1170678.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/1170/1170678.png" type="image/png" />
     <style>
-        /* Variabel warna - tema modern gelap */
-        :root {
-            --bg-dark: #121212;
-            --card-bg: #1d1f25;
-            --accent: #33aaff;
-            --accent2: #0066ff;
-            --text-light: #e0f0ff;
-            --text-muted: #88bbff;
-            --input-bg: #2a2a3a;
-            --border-color: #3399ff;
-            --success: #00cc99;
-            --danger: #ff4d6d;
-            --transition: all 0.3s ease;
-            --warning: #ffcc00;
-        }
+      /* Variabel warna - tema modern gelap */
+      :root {
+        --bg-dark: #121212;
+        --card-bg: #1d1f25;
+        --accent: #33aaff;
+        --accent2: #0066ff;
+        --text-light: #e0f0ff;
+        --text-muted: #88bbff;
+        --input-bg: #2a2a3a;
+        --border-color: #3399ff;
+        --success: #00cc99;
+        --danger: #ff4d6d;
+        --transition: all 0.3s ease;
+        --warning: #ffcc00;
+      }
 
-        /* Reset dasar */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+      /* Reset dasar */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            overflow-x: hidden;
-            background-image: linear-gradient(135deg, rgba(13, 27, 42, 0.8) 0%, rgba(27, 38, 59, 0.8) 100%), 
-                              radial-gradient(circle at top right, rgba(51, 170, 255, 0.1), transparent 25%),
-                              radial-gradient(circle at bottom left, rgba(0, 102, 255, 0.1), transparent 25%);
-            background-attachment: fixed;
-        }
+      body {
+        background-color: var(--bg-dark);
+        color: var(--text-light);
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        overflow-x: hidden;
+        background-image: linear-gradient(135deg, rgba(13, 27, 42, 0.8) 0%, rgba(27, 38, 59, 0.8) 100%), radial-gradient(circle at top right, rgba(51, 170, 255, 0.1), transparent 25%),
+          radial-gradient(circle at bottom left, rgba(0, 102, 255, 0.1), transparent 25%);
+        background-attachment: fixed;
+      }
 
-        /* Header */
-        header {
-            text-align: center;
-            padding: 2rem 1rem;
-            background: linear-gradient(135deg, #0d1b2a, #1b263b);
-            position: relative;
-            overflow: hidden;
-            border-bottom: 3px solid var(--accent);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-        }
+      /* Header */
+      header {
+        text-align: center;
+        padding: 2rem 1rem;
+        background: linear-gradient(135deg, #0d1b2a, #1b263b);
+        position: relative;
+        overflow: hidden;
+        border-bottom: 3px solid var(--accent);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+      }
 
-        header::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent2), var(--accent));
-            box-shadow: 0 0 15px var(--accent);
-        }
+      header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--accent2), var(--accent));
+        box-shadow: 0 0 15px var(--accent);
+      }
 
+      .logo {
+        font-size: 2.8rem;
+        margin-bottom: 1rem;
+        color: var(--text-light);
+        text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent2);
+      }
+
+      h1 {
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .subtitle {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        max-width: 600px;
+        margin: 0 auto 1.5rem;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Tombol utama */
+      .btn {
+        display: inline-block;
+        background: linear-gradient(45deg, var(--accent2), var(--accent));
+        color: white;
+        padding: 0.8rem 1.8rem;
+        border-radius: 50px;
+        font-weight: 600;
+        text-decoration: none;
+        margin: 0.5rem;
+        transition: var(--transition);
+        box-shadow: 0 4px 15px rgba(51, 153, 255, 0.4);
+        border: none;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -60%;
+        width: 20px;
+        height: 200%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: rotate(25deg);
+        transition: all 0.6s;
+      }
+
+      .btn:hover::after {
+        left: 120%;
+      }
+
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(51, 153, 255, 0.6);
+      }
+
+      .btn-testimoni {
+        background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+      }
+
+      .btn-admin {
+        background: linear-gradient(45deg, #00cc99, #00b383);
+      }
+
+      /* Produk */
+      .products-section {
+        padding: 3rem 1rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .section-title {
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 1.8rem;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        position: relative;
+        display: inline-block;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 0 1rem;
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        border-radius: 10px;
+      }
+
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.8rem;
+      }
+
+      .product-card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        overflow: hidden;
+        transition: var(--transition);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        position: relative;
+        border: 1px solid rgba(51, 153, 255, 0.2);
+        transform-style: preserve-3d;
+        perspective: 1000px;
+      }
+
+      .product-card:hover {
+        transform: translateY(-10px) rotateY(5deg);
+        box-shadow: 0 15px 30px rgba(51, 153, 255, 0.25);
+      }
+
+      .product-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: var(--success);
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        z-index: 10;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .product-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-bottom: 2px solid rgba(51, 153, 255, 0.3);
+      }
+
+      .product-content {
+        padding: 1.5rem;
+      }
+
+      .product-title {
+        font-size: 1.3rem;
+        margin-bottom: 0.8rem;
+        color: var(--accent);
+      }
+
+      .product-description {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        margin-bottom: 1.2rem;
+        min-height: 60px;
+      }
+
+      .product-price {
+        font-size: 1.1rem;
+        color: var(--accent2);
+        margin-bottom: 1rem;
+        font-weight: 700;
+      }
+
+      .product-actions {
+        display: flex;
+        gap: 0.8rem;
+      }
+
+      .action-btn {
+        flex: 1;
+        padding: 0.7rem;
+        border-radius: 10px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .btn-order {
+        background: linear-gradient(45deg, var(--accent2), var(--accent));
+        color: white;
+      }
+
+      .btn-details {
+        background: rgba(51, 153, 255, 0.15);
+        color: var(--accent);
+      }
+
+      /* Modal */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        backdrop-filter: blur(5px);
+      }
+
+      .modal-overlay.active {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .modal-content {
+        background: var(--card-bg);
+        border-radius: 16px;
+        width: 90%;
+        max-width: 500px;
+        padding: 2rem;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        transform: translateY(20px);
+        transition: transform 0.4s ease;
+        border: 1px solid rgba(51, 153, 255, 0.3);
+      }
+
+      .modal-overlay.active .modal-content {
+        transform: translateY(0);
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: color 0.3s ease;
+        z-index: 10;
+      }
+
+      .modal-close:hover {
+        color: var(--accent);
+        transform: rotate(90deg);
+      }
+
+      .modal-title {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        color: var(--accent);
+      }
+
+      .modal-subtitle {
+        color: var(--text-muted);
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+
+      /* Detail Paket */
+      .package-list {
+        margin-bottom: 1.5rem;
+      }
+
+      .package-item {
+        background: rgba(51, 153, 255, 0.1);
+        padding: 0.8rem;
+        border-radius: 10px;
+        margin-bottom: 0.8rem;
+        border-left: 3px solid var(--accent);
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .package-item:hover {
+        background: rgba(51, 153, 255, 0.2);
+        transform: translateX(5px);
+      }
+
+      .package-item.selected {
+        background: rgba(51, 153, 255, 0.25);
+        border-left: 3px solid var(--success);
+      }
+
+      .package-name {
+        font-weight: 600;
+        color: var(--accent);
+        margin-bottom: 0.3rem;
+      }
+
+      .package-price {
+        color: var(--accent2);
+        font-weight: 700;
+      }
+
+      /* Form */
+      .form-group {
+        margin-bottom: 1.2rem;
+        position: relative;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 0.8rem;
+        border-radius: 10px;
+        border: 1px solid rgba(51, 153, 255, 0.3);
+        background: var(--input-bg);
+        color: var(--text-light);
+        font-size: 1rem;
+        transition: var(--transition);
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px rgba(51, 153, 255, 0.2);
+      }
+
+      .btn-submit {
+        width: 100%;
+        padding: 1rem;
+        background: linear-gradient(45deg, var(--success), #00b383);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-top: 1rem;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .btn-submit:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 204, 153, 0.4);
+      }
+
+      .btn-submit:disabled {
+        background: #555;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      /* Testimoni */
+      .testimonial-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.8rem;
+        margin-top: 2rem;
+      }
+
+      .testimonial-card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 1.5rem;
+        position: relative;
+        border: 1px solid rgba(51, 153, 255, 0.2);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .testimonial-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .testimonial-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+        color: white;
+        box-shadow: 0 0 10px rgba(51, 153, 255, 0.5);
+      }
+
+      .testimonial-rating {
+        color: gold;
+        margin-bottom: 0.5rem;
+      }
+
+      .testimonial-text {
+        color: var(--text-muted);
+        font-style: italic;
+        line-height: 1.7;
+      }
+
+      /* Admin Login Modal */
+      .admin-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+
+      .admin-modal.active {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .admin-modal-content {
+        background: var(--card-bg);
+        border-radius: 16px;
+        width: 90%;
+        max-width: 400px;
+        padding: 2rem;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(51, 153, 255, 0.3);
+      }
+
+      .admin-modal-title {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        color: var(--accent);
+      }
+
+      /* Footer */
+      footer {
+        text-align: center;
+        padding: 2rem 1rem;
+        margin-top: 3rem;
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--text-muted);
+        border-top: 1px solid rgba(51, 153, 255, 0.1);
+      }
+
+      .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin: 1.5rem 0;
+      }
+
+      .social-links a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(51, 153, 255, 0.1);
+        color: var(--text-light);
+        transition: var(--transition);
+      }
+
+      .social-links a:hover {
+        background: var(--accent);
+        transform: translateY(-3px);
+      }
+
+      /* Notifikasi */
+      .notification {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 15px 25px;
+        border-radius: 10px;
+        color: white;
+        font-weight: 600;
+        z-index: 3000;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.4s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .notification.success {
+        background: var(--success);
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .notification.error {
+        background: var(--danger);
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .notification.warning {
+        background: var(--warning);
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Responsif */
+      @media (max-width: 768px) {
+        .products-grid,
+        .testimonial-grid {
+          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        }
+      }
+
+      @media (max-width: 480px) {
         .logo {
-            font-size: 2.8rem;
-            margin-bottom: 1rem;
-            color: var(--text-light);
-            text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent2);
+          font-size: 2.2rem;
         }
 
         h1 {
-            font-size: 2.2rem;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+          font-size: 1.8rem;
         }
 
-        .subtitle {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto 1.5rem;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Tombol utama */
-        .btn {
-            display: inline-block;
-            background: linear-gradient(45deg, var(--accent2), var(--accent));
-            color: white;
-            padding: 0.8rem 1.8rem;
-            border-radius: 50px;
-            font-weight: 600;
-            text-decoration: none;
-            margin: 0.5rem;
-            transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(51, 153, 255, 0.4);
-            border: none;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -60%;
-            width: 20px;
-            height: 200%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: rotate(25deg);
-            transition: all 0.6s;
-        }
-
-        .btn:hover::after {
-            left: 120%;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(51, 153, 255, 0.6);
-        }
-
-        .btn-testimoni {
-            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
-        }
-
-        .btn-admin {
-            background: linear-gradient(45deg, #00cc99, #00b383);
-        }
-
-        /* Produk */
-        .products-section {
-            padding: 3rem 1rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 2rem;
-            font-size: 1.8rem;
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            position: relative;
-            display: inline-block;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 0 1rem;
-        }
-
-        .section-title::after {
-            content: "";
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
-            border-radius: 10px;
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.8rem;
-        }
-
-        .product-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            overflow: hidden;
-            transition: var(--transition);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            position: relative;
-            border: 1px solid rgba(51, 153, 255, 0.2);
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-
-        .product-card:hover {
-            transform: translateY(-10px) rotateY(5deg);
-            box-shadow: 0 15px 30px rgba(51, 153, 255, 0.25);
-        }
-
-        .product-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: var(--success);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            z-index: 10;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .product-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-bottom: 2px solid rgba(51, 153, 255, 0.3);
-        }
-
-        .product-content {
-            padding: 1.5rem;
-        }
-
-        .product-title {
-            font-size: 1.3rem;
-            margin-bottom: 0.8rem;
-            color: var(--accent);
-        }
-
-        .product-description {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 1.2rem;
-            min-height: 60px;
-        }
-
-        .product-price {
-            font-size: 1.1rem;
-            color: var(--accent2);
-            margin-bottom: 1rem;
-            font-weight: 700;
+        .products-grid,
+        .testimonial-grid {
+          grid-template-columns: 1fr;
         }
 
         .product-actions {
-            display: flex;
-            gap: 0.8rem;
+          flex-direction: column;
         }
+      }
 
-        .action-btn {
-            flex: 1;
-            padding: 0.7rem;
-            border-radius: 10px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+      /* Animasi */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
         }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-        .btn-order {
-            background: linear-gradient(45deg, var(--accent2), var(--accent));
-            color: white;
-        }
+      .fade-in {
+        animation: fadeIn 0.6s ease forwards;
+      }
 
-        .btn-details {
-            background: rgba(51, 153, 255, 0.15);
-            color: var(--accent);
-        }
+      .delay-1 {
+        animation-delay: 0.1s;
+      }
+      .delay-2 {
+        animation-delay: 0.2s;
+      }
+      .delay-3 {
+        animation-delay: 0.3s;
+      }
+      .delay-4 {
+        animation-delay: 0.4s;
+      }
 
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            backdrop-filter: blur(5px);
-        }
+      /* Loading spinner */
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+        margin-right: 8px;
+      }
 
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
         }
+      }
 
-        .modal-content {
-            background: var(--card-bg);
-            border-radius: 16px;
-            width: 90%;
-            max-width: 500px;
-            padding: 2rem;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            transform: translateY(20px);
-            transition: transform 0.4s ease;
-            border: 1px solid rgba(51, 153, 255, 0.3);
-        }
+      /* Loading state */
+      .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 4000;
+        flex-direction: column;
+      }
 
-        .modal-overlay.active .modal-content {
-            transform: translateY(0);
-        }
+      .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 5px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: var(--accent);
+        animation: spin 1s ease-in-out infinite;
+      }
 
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: color 0.3s ease;
-            z-index: 10;
-        }
-
-        .modal-close:hover {
-            color: var(--accent);
-            transform: rotate(90deg);
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            color: var(--accent);
-        }
-
-        .modal-subtitle {
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        /* Detail Paket */
-        .package-list {
-            margin-bottom: 1.5rem;
-        }
-
-        .package-item {
-            background: rgba(51, 153, 255, 0.1);
-            padding: 0.8rem;
-            border-radius: 10px;
-            margin-bottom: 0.8rem;
-            border-left: 3px solid var(--accent);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .package-item:hover {
-            background: rgba(51, 153, 255, 0.2);
-            transform: translateX(5px);
-        }
-
-        .package-item.selected {
-            background: rgba(51, 153, 255, 0.25);
-            border-left: 3px solid var(--success);
-        }
-
-        .package-name {
-            font-weight: 600;
-            color: var(--accent);
-            margin-bottom: 0.3rem;
-        }
-
-        .package-price {
-            color: var(--accent2);
-            font-weight: 700;
-        }
-
-        /* Form */
-        .form-group {
-            margin-bottom: 1.2rem;
-            position: relative;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        input,
-        select,
-        textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border-radius: 10px;
-            border: 1px solid rgba(51, 153, 255, 0.3);
-            background: var(--input-bg);
-            color: var(--text-light);
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-
-        input:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 2px rgba(51, 153, 255, 0.2);
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(45deg, var(--success), #00b383);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-top: 1rem;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .btn-submit:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 204, 153, 0.4);
-        }
-
-        .btn-submit:disabled {
-            background: #555;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Testimoni */
-        .testimonial-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.8rem;
-            margin-top: 2rem;
-        }
-
-        .testimonial-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 1.5rem;
-            position: relative;
-            border: 1px solid rgba(51, 153, 255, 0.2);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .testimonial-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .testimonial-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1rem;
-            font-size: 1.2rem;
-            color: white;
-            box-shadow: 0 0 10px rgba(51, 153, 255, 0.5);
-        }
-
-        .testimonial-rating {
-            color: gold;
-            margin-bottom: 0.5rem;
-        }
-
-        .testimonial-text {
-            color: var(--text-muted);
-            font-style: italic;
-            line-height: 1.7;
-        }
-
-        /* Admin Login Modal */
-        .admin-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .admin-modal.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .admin-modal-content {
-            background: var(--card-bg);
-            border-radius: 16px;
-            width: 90%;
-            max-width: 400px;
-            padding: 2rem;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(51, 153, 255, 0.3);
-        }
-
-        .admin-modal-title {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            color: var(--accent);
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 2rem 1rem;
-            margin-top: 3rem;
-            background: rgba(0, 0, 0, 0.3);
-            color: var(--text-muted);
-            border-top: 1px solid rgba(51, 153, 255, 0.1);
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 1.5rem 0;
-        }
-
-        .social-links a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(51, 153, 255, 0.1);
-            color: var(--text-light);
-            transition: var(--transition);
-        }
-
-        .social-links a:hover {
-            background: var(--accent);
-            transform: translateY(-3px);
-        }
-
-        /* Notifikasi */
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 10px;
-            color: white;
-            font-weight: 600;
-            z-index: 3000;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.4s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .notification.success {
-            background: var(--success);
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .notification.error {
-            background: var(--danger);
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .notification.warning {
-            background: var(--warning);
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Responsif */
-        @media (max-width: 768px) {
-            .products-grid,
-            .testimonial-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo {
-                font-size: 2.2rem;
-            }
-
-            h1 {
-                font-size: 1.8rem;
-            }
-
-            .products-grid,
-            .testimonial-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .product-actions {
-                flex-direction: column;
-            }
-        }
-
-        /* Animasi */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.6s ease forwards;
-        }
-
-        .delay-1 {
-            animation-delay: 0.1s;
-        }
-        .delay-2 {
-            animation-delay: 0.2s;
-        }
-        .delay-3 {
-            animation-delay: 0.3s;
-        }
-        .delay-4 {
-            animation-delay: 0.4s;
-        }
-
-        /* Loading spinner */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 8px;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+      .loading-text {
+        color: var(--text-light);
+        margin-top: 20px;
+        font-size: 1.2rem;
+      }
     </style>
 </head>
 <body>
     <!-- Header -->
     <header>
-        <div class="logo fade-in">
-            <i class="fas fa-store"></i>
-        </div>
-        <h1 class="fade-in delay-1">SNAYDER'S STORE</h1>
-        <p class="subtitle fade-in delay-2">Tempat terbaik untuk mendapatkan produk digital berkualitas tinggi</p>
-        <div>
-            <a href="#testimoni" class="btn btn-testimoni fade-in delay-3"> 
-                <i class="fas fa-comment-alt"></i> Lihat Testimoni 
-            </a>
-            <button class="btn btn-admin fade-in delay-4" id="adminLoginBtn">
-                <i class="fas fa-lock"></i> Admin Login
-            </button>
-        </div>
+      <div class="logo fade-in">
+        <i class="fas fa-store"></i>
+      </div>
+      <h1 class="fade-in delay-1">SNAYDER'S STORE</h1>
+      <p class="subtitle fade-in delay-2">Tempat terbaik untuk mendapatkan produk digital berkualitas tinggi</p>
+      <div>
+        <a href="#testimoni" class="btn btn-testimoni fade-in delay-3"> <i class="fas fa-comment-alt"></i> Lihat Testimoni </a>
+        <button class="btn btn-admin fade-in delay-4" id="adminLoginBtn"><i class="fas fa-lock"></i> Admin Login</button>
+      </div>
     </header>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Memuat data...</p>
+    </div>
 
     <!-- Produk Section -->
     <section class="products-section" id="produk">
-        <h2 class="section-title">Produk Kami</h2>
+      <h2 class="section-title">Produk Kami</h2>
 
-        <div class="products-grid" id="productsGrid">
-            <!-- Produk akan dimuat melalui JavaScript -->
-        </div>
+      <div class="products-grid" id="productsGrid">
+        <!-- Produk akan dimuat melalui JavaScript -->
+      </div>
     </section>
 
     <!-- Testimoni Section -->
     <section class="products-section" id="testimoni" style="background: rgba(0, 0, 0, 0.05); padding-bottom: 4rem">
-        <h2 class="section-title">Testimoni Pelanggan</h2>
+      <h2 class="section-title">Testimoni Pelanggan</h2>
 
-        <div class="testimonial-grid" id="testimonialsGrid">
-            <!-- Testimoni akan dimuat melalui JavaScript -->
-        </div>
+      <div class="testimonial-grid" id="testimonialsGrid">
+        <!-- Testimoni akan dimuat melalui JavaScript -->
+      </div>
     </section>
 
     <!-- Modal Detail Produk -->
     <div class="modal-overlay" id="detailModal">
-        <div class="modal-content">
-            <button class="modal-close" id="closeDetailModal">&times;</button>
-            <h3 class="modal-title" id="detailProductTitle"></h3>
-            <p class="modal-subtitle" id="detailProductDescription"></p>
+      <div class="modal-content">
+        <button class="modal-close" id="closeDetailModal">&times;</button>
+        <h3 class="modal-title" id="detailProductTitle"></h3>
+        <p class="modal-subtitle" id="detailProductDescription"></p>
 
-            <div class="package-list" id="packageList">
-                <!-- Paket produk akan ditampilkan di sini -->
-            </div>
-
-            <button class="btn-submit" id="orderFromDetailBtn">
-                <i class="fas fa-shopping-cart"></i> ORDER SEKARANG
-            </button>
+        <div class="package-list" id="packageList">
+          <!-- Paket produk akan ditampilkan di sini -->
         </div>
+
+        <button class="btn-submit" id="orderFromDetailBtn"><i class="fas fa-shopping-cart"></i> ORDER SEKARANG</button>
+      </div>
     </div>
 
     <!-- Modal Order -->
     <div class="modal-overlay" id="orderModal">
-        <div class="modal-content">
-            <button class="modal-close" id="closeOrderModal">&times;</button>
-            <h3 class="modal-title">Form Order</h3>
+      <div class="modal-content">
+        <button class="modal-close" id="closeOrderModal">&times;</button>
+        <h3 class="modal-title">Form Order</h3>
 
-            <form id="orderForm">
-                <div class="form-group">
-                    <label for="customerName">Nama Lengkap</label>
-                    <input type="text" id="customerName" required placeholder="Masukkan nama Anda">
-                </div>
+        <form id="orderForm">
+          <div class="form-group">
+            <label for="customerName">Nama Lengkap</label>
+            <input type="text" id="customerName" required placeholder="Masukkan nama Anda" />
+          </div>
 
-                <div class="form-group">
-                    <label for="productName">Produk</label>
-                    <input type="text" id="productName" readonly>
-                </div>
+          <div class="form-group">
+            <label for="productName">Produk</label>
+            <input type="text" id="productName" readonly />
+          </div>
 
-                <div class="form-group">
-                    <label for="packageSelect">Pilih Paket</label>
-                    <select id="packageSelect" required>
-                        <option value="">-- Pilih Paket --</option>
-                    </select>
-                </div>
+          <div class="form-group">
+            <label for="packageSelect">Pilih Paket</label>
+            <select id="packageSelect" required>
+              <option value="">-- Pilih Paket --</option>
+            </select>
+          </div>
 
-                <div class="form-group">
-                    <label for="productPrice">Harga</label>
-                    <input type="text" id="productPrice" readonly>
-                </div>
+          <div class="form-group">
+            <label for="productPrice">Harga</label>
+            <input type="text" id="productPrice" readonly />
+          </div>
 
-                <div class="form-group">
-                    <label for="productDescription">Deskripsi Produk</label>
-                    <textarea id="productDescription" rows="3" readonly></textarea>
-                </div>
+          <div class="form-group">
+            <label for="productDescription">Deskripsi Produk</label>
+            <textarea id="productDescription" rows="3" readonly></textarea>
+          </div>
 
-                <button type="submit" class="btn-submit" id="submitOrderBtn">
-                    <i class="fab fa-whatsapp"></i> Order via WhatsApp
-                </button>
-            </form>
-        </div>
+          <button type="submit" class="btn-submit" id="submitOrderBtn"><i class="fab fa-whatsapp"></i> Order via WhatsApp</button>
+        </form>
+      </div>
     </div>
 
     <!-- Admin Login Modal -->
     <div class="admin-modal" id="adminLoginModal">
-        <div class="admin-modal-content">
-            <button class="modal-close" id="closeAdminModal">&times;</button>
-            <h3 class="admin-modal-title">Admin Login</h3>
+      <div class="admin-modal-content">
+        <button class="modal-close" id="closeAdminModal">&times;</button>
+        <h3 class="admin-modal-title">Admin Login</h3>
 
-            <form id="adminLoginForm">
-                <div class="form-group">
-                    <label for="adminUsername">Username</label>
-                    <input type="text" id="adminUsername" required>
-                </div>
+        <form id="adminLoginForm">
+          <div class="form-group">
+            <label for="adminUsername">Username</label>
+            <input type="text" id="adminUsername" required />
+          </div>
 
-                <div class="form-group">
-                    <label for="adminPassword">Password</label>
-                    <input type="password" id="adminPassword" required>
-                </div>
+          <div class="form-group">
+            <label for="adminPassword">Password</label>
+            <input type="password" id="adminPassword" required />
+          </div>
 
-                <button type="submit" class="btn-submit">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </button>
-            </form>
-        </div>
+          <button type="submit" class="btn-submit"><i class="fas fa-sign-in-alt"></i> Login</button>
+        </form>
+      </div>
     </div>
 
     <!-- Notifikasi -->
@@ -792,166 +817,109 @@
 
     <!-- Footer -->
     <footer>
-        <div class="social-links">
-            <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
-            <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-        </div>
-        <p>&copy; 2025 <strong>SNAYDER'S STORE</strong> &mdash; Made with <i class="fas fa-heart" style="color: var(--accent)"></i></p>
-        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Jl. Digital No. 123, Kota Virtual, Indonesia</p>
+      <div class="social-links">
+        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      </div>
+      <p>&copy; 2025 <strong>SNAYDER'S STORE</strong> &mdash; Made with <i class="fas fa-heart" style="color: var(--accent)"></i></p>
+      <p style="margin-top: 0.5rem; font-size: 0.9rem">Jl. Digital No. 123, Kota Virtual, Indonesia</p>
     </footer>
 
     <script>
-        // Kredensial admin
-        const ADMIN_USERNAME = "snayders";
-        const ADMIN_PASSWORD = "123";
+      // Kredensial admin
+      const ADMIN_USERNAME = "snayders";
+      const ADMIN_PASSWORD = "123";
 
-        // Elemen DOM
-        const detailModal = document.getElementById("detailModal");
-        const closeDetailModal = document.getElementById("closeDetailModal");
-        const orderModal = document.getElementById("orderModal");
-        const closeOrderModal = document.getElementById("closeOrderModal");
-        const orderForm = document.getElementById("orderForm");
-        const productNameInput = document.getElementById("productName");
-        const productPriceInput = document.getElementById("productPrice");
-        const packageSelect = document.getElementById("packageSelect");
-        const productDescriptionInput = document.getElementById("productDescription");
-        const packageList = document.getElementById("packageList");
-        const detailProductTitle = document.getElementById("detailProductTitle");
-        const detailProductDescription = document.getElementById("detailProductDescription");
-        const orderFromDetailBtn = document.getElementById("orderFromDetailBtn");
-        const adminLoginBtn = document.getElementById("adminLoginBtn");
-        const adminLoginModal = document.getElementById("adminLoginModal");
-        const closeAdminModal = document.getElementById("closeAdminModal");
-        const adminLoginForm = document.getElementById("adminLoginForm");
-        const adminUsernameInput = document.getElementById("adminUsername");
-        const adminPasswordInput = document.getElementById("adminPassword");
-        const productsGrid = document.getElementById("productsGrid");
-        const testimonialsGrid = document.getElementById("testimonialsGrid");
-        const notification = document.getElementById("notification");
-        const submitOrderBtn = document.getElementById("submitOrderBtn");
+      // Elemen DOM
+      const detailModal = document.getElementById("detailModal");
+      const closeDetailModal = document.getElementById("closeDetailModal");
+      const orderModal = document.getElementById("orderModal");
+      const closeOrderModal = document.getElementById("closeOrderModal");
+      const orderForm = document.getElementById("orderForm");
+      const productNameInput = document.getElementById("productName");
+      const productPriceInput = document.getElementById("productPrice");
+      const packageSelect = document.getElementById("packageSelect");
+      const productDescriptionInput = document.getElementById("productDescription");
+      const packageList = document.getElementById("packageList");
+      const detailProductTitle = document.getElementById("detailProductTitle");
+      const detailProductDescription = document.getElementById("detailProductDescription");
+      const orderFromDetailBtn = document.getElementById("orderFromDetailBtn");
+      const adminLoginBtn = document.getElementById("adminLoginBtn");
+      const adminLoginModal = document.getElementById("adminLoginModal");
+      const closeAdminModal = document.getElementById("closeAdminModal");
+      const adminLoginForm = document.getElementById("adminLoginForm");
+      const adminUsernameInput = document.getElementById("adminUsername");
+      const adminPasswordInput = document.getElementById("adminPassword");
+      const productsGrid = document.getElementById("productsGrid");
+      const testimonialsGrid = document.getElementById("testimonialsGrid");
+      const notification = document.getElementById("notification");
+      const submitOrderBtn = document.getElementById("submitOrderBtn");
+      const loadingOverlay = document.getElementById("loadingOverlay");
 
-        // Variabel untuk produk yang dipilih
-        let products = [];
-        let selectedProduct = null;
-        let selectedPackage = null;
+      // Variabel untuk produk yang dipilih
+      let products = [];
+      let selectedProduct = null;
+      let selectedPackage = null;
 
-        // Format harga ke Rupiah
-        function formatPrice(price) {
-            return new Intl.NumberFormat("id-ID", {
-                style: "currency",
-                currency: "IDR",
-                maximumFractionDigits: 0,
-            }).format(price);
+      // Format harga ke Rupiah
+      function formatPrice(price) {
+        return new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR",
+          maximumFractionDigits: 0,
+        }).format(price);
+      }
+
+      // Tampilkan notifikasi
+      function showNotification(message, type) {
+        notification.textContent = message;
+        notification.className = `notification ${type}`;
+
+        setTimeout(() => {
+          notification.className = "notification";
+        }, 3000);
+      }
+
+      // Fungsi untuk mengambil data produk dari API
+      async function fetchProducts() {
+        try {
+          const response = await fetch('/api/products');
+          if (!response.ok) throw new Error('Gagal memuat produk');
+          return await response.json();
+        } catch (error) {
+          console.error('Error fetching products:', error);
+          showNotification('Gagal memuat data produk', 'error');
+          return [];
         }
+      }
 
-        // Tampilkan notifikasi
-        function showNotification(message, type) {
-            notification.textContent = message;
-            notification.className = `notification ${type}`;
-            
-            setTimeout(() => {
-                notification.className = 'notification';
-            }, 3000);
+      // Fungsi untuk mengambil data testimoni dari API
+      async function fetchTestimonials() {
+        try {
+          const response = await fetch('/api/testimonials');
+          if (!response.ok) throw new Error('Gagal memuat testimoni');
+          return await response.json();
+        } catch (error) {
+          console.error('Error fetching testimonials:', error);
+          showNotification('Gagal memuat data testimoni', 'error');
+          return [];
         }
+      }
 
-        // Data produk
-        const productData = [
-            {
-                id: "1",
-                name: "Script Bot Premium",
-                price: 100000,
-                description: "Script bot dengan fitur lengkap untuk otomasi tugas dan meningkatkan produktivitas Anda. Cocok untuk berbagai platform dan kebutuhan bisnis.",
-                image: "https://images.unsplash.com/photo-1550009158-9ebf69173e03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-                packages: [
-                    { id: "1", name: "Paket Basic", price: 100000, description: "Fitur dasar untuk pemula" },
-                    { id: "2", name: "Paket Standard", price: 150000, description: "Fitur lengkap untuk kebutuhan umum" },
-                    { id: "3", name: "Paket Pro", price: 250000, description: "Semua fitur termasuk dukungan premium" },
-                ],
-                badge: "TERLARIS"
-            },
-            {
-                id: "2",
-                name: "Panel Pterodactyl",
-                price: 75000,
-                description: "Solusi manajemen server game dengan performa tinggi dan antarmuka yang intuitif. Cocok untuk game server skala kecil hingga besar.",
-                image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-                packages: [
-                    { id: "4", name: "Paket Starter", price: 75000, description: "Untuk server kecil (max 10 pemain)" },
-                    { id: "5", name: "Paket Business", price: 125000, description: "Untuk server menengah (max 50 pemain)" },
-                    { id: "6", name: "Paket Enterprise", price: 200000, description: "Untuk server besar (unlimited)" },
-                ]
-            },
-            {
-                id: "3",
-                name: "Hosting Premium",
-                price: 150000,
-                description: "Hosting dengan kecepatan tinggi dan uptime 99.9%, dukungan 24/7, dan keamanan terbaik. Cocok untuk website bisnis dan e-commerce.",
-                image: "https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-                packages: [
-                    { id: "7", name: "Paket Basic", price: 150000, description: "1 GB Storage, 10 GB Bandwidth" },
-                    { id: "8", name: "Paket Pro", price: 250000, description: "5 GB Storage, 50 GB Bandwidth" },
-                    { id: "9", name: "Paket Business", price: 400000, description: "Unlimited Storage & Bandwidth" },
-                ],
-                badge: "BARU"
-            },
-            {
-                id: "4",
-                name: "VPN Premium",
-                price: 50000,
-                description: "Layanan VPN premium dengan kecepatan tinggi, tanpa batas bandwidth, dan server di 30+ negara. Keamanan terjamin dengan enkripsi AES-256.",
-                image: "https://images.unsplash.com/photo-1560732488-6b0df240254a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80",
-                packages: [
-                    { id: "10", name: "1 Bulan", price: 50000, description: "Akses 1 bulan penuh" },
-                    { id: "11", name: "3 Bulan", price: 120000, description: "Akses 3 bulan (hemat 20%)" },
-                    { id: "12", name: "1 Tahun", price: 400000, description: "Akses 1 tahun (hemat 33%)" },
-                ],
-                badge: "PROMO"
-            }
-        ];
+      // Fungsi untuk merender produk
+      function renderProducts(products) {
+        productsGrid.innerHTML = "";
 
-        // Data testimoni
-        const testimonialData = [
-            {
-                name: "Budi Santoso",
-                comment: "Produknya sangat bagus dan berkualitas. Proses pengiriman cepat dan adminnya ramah. Saya puas dengan layanan SNAYDER'S STORE!",
-                date: "15 Mei 2025",
-                rating: 5
-            },
-            {
-                name: "Siti Rahayu",
-                comment: "Script bot premiumnya sangat membantu pekerjaan saya. Fiturnya lengkap dan mudah digunakan. Sangat direkomendasikan!",
-                date: "8 April 2025",
-                rating: 4.5
-            },
-            {
-                name: "Ahmad Fauzi",
-                comment: "Hostingnya kencang dan jarang down. Support 24 jam sangat membantu ketika ada masalah teknis. Harga juga sangat bersaing.",
-                date: "22 Maret 2025",
-                rating: 5
-            },
-            {
-                name: "Dewi Lestari",
-                comment: "Panel Pterodactylnya mudah diatur dan stabil. Server game saya sekarang lebih lancar dan jarang lag. Terima kasih SNAYDER'S STORE!",
-                date: "3 Maret 2025",
-                rating: 4
-            }
-        ];
+        products.forEach((product, index) => {
+          const card = document.createElement("div");
+          card.className = `product-card fade-in ${index > 0 ? "delay-" + index : ""}`;
 
-        // Fungsi untuk merender produk
-        function renderProducts() {
-            products = productData;
-            productsGrid.innerHTML = '';
+          // Tambahkan badge jika ada
+          const badge = product.badge ? `<span class="product-badge">${product.badge}</span>` : "";
 
-            products.forEach((product, index) => {
-                const card = document.createElement('div');
-                card.className = `product-card fade-in ${index > 0 ? 'delay-' + index : ''}`;
-                
-                // Tambahkan badge jika ada
-                const badge = product.badge ? `<span class="product-badge">${product.badge}</span>` : '';
-                
-                card.innerHTML = `
+          card.innerHTML = `
                     ${badge}
                     <img src="${product.image}" alt="${product.name}" class="product-image">
                     <div class="product-content">
@@ -968,305 +936,323 @@
                         </div>
                     </div>
                 `;
-                productsGrid.appendChild(card);
-            });
+          productsGrid.appendChild(card);
+        });
 
-            // Pasang event listener untuk tombol detail dan order
-            document.querySelectorAll('.btn-details').forEach(button => {
-                button.addEventListener('click', function() {
-                    const productId = this.getAttribute('data-product');
-                    openDetailModal(productId);
-                });
-            });
+        // Pasang event listener untuk tombol detail dan order
+        document.querySelectorAll(".btn-details").forEach((button) => {
+          button.addEventListener("click", function () {
+            const productId = this.getAttribute("data-product");
+            openDetailModal(productId);
+          });
+        });
 
-            document.querySelectorAll('.btn-order').forEach(button => {
-                button.addEventListener('click', function() {
-                    const productId = this.getAttribute('data-product');
-                    openOrderModal(productId);
-                });
-            });
-        }
+        document.querySelectorAll(".btn-order").forEach((button) => {
+          button.addEventListener("click", function () {
+            const productId = this.getAttribute("data-product");
+            openOrderModal(productId);
+          });
+        });
+      }
 
-        // Fungsi untuk merender testimoni
-        function renderTestimonials() {
-            testimonialsGrid.innerHTML = '';
+      // Fungsi untuk merender testimoni
+      function renderTestimonials(testimonials) {
+        testimonialsGrid.innerHTML = "";
 
-            testimonialData.forEach((testimonial, index) => {
-                const testimonialCard = document.createElement('div');
-                testimonialCard.className = `testimonial-card fade-in ${index > 0 ? 'delay-' + index : ''}`;
-                
-                // Buat elemen rating bintang
-                let starsHtml = '';
-                const rating = testimonial.rating || 5;
-                
-                for (let i = 1; i <= 5; i++) {
-                    if (i <= Math.floor(rating)) {
-                        starsHtml += '<i class="fas fa-star"></i>';
-                    } else if (i - 0.5 === rating) {
-                        starsHtml += '<i class="fas fa-star-half-alt"></i>';
-                    } else {
-                        starsHtml += '<i class="far fa-star"></i>';
-                    }
-                }
+        testimonials.forEach((testimonial, index) => {
+          const testimonialCard = document.createElement("div");
+          testimonialCard.className = `testimonial-card fade-in ${index > 0 ? "delay-" + index : ""}`;
 
-                testimonialCard.innerHTML = `
+          // Buat elemen rating bintang
+          let starsHtml = "";
+          const rating = testimonial.rating || 5;
+
+          for (let i = 1; i <= 5; i++) {
+            if (i <= Math.floor(rating)) {
+              starsHtml += '<i class="fas fa-star"></i>';
+            } else if (i - 0.5 === rating) {
+              starsHtml += '<i class="fas fa-star-half-alt"></i>';
+            } else {
+              starsHtml += '<i class="far fa-star"></i>';
+            }
+          }
+
+          testimonialCard.innerHTML = `
                     <div class="testimonial-header">
                         <div class="testimonial-avatar">
                             <i class="fas fa-user"></i>
                         </div>
                         <div>
-                            <h3>${testimonial.name || 'Pelanggan'}</h3>
+                            <h3>${testimonial.name || "Pelanggan"}</h3>
                             <div class="testimonial-rating">
                                 ${starsHtml}
                             </div>
                         </div>
                     </div>
-                    <p class="testimonial-text">"${testimonial.comment || 'Testimoni pelanggan'}"</p>
-                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;">${testimonial.date || ''}</p>
+                    <p class="testimonial-text">"${testimonial.comment || "Testimoni pelanggan"}"</p>
+                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;">${testimonial.date || ""}</p>
                 `;
-                testimonialsGrid.appendChild(testimonialCard);
-            });
-        }
+          testimonialsGrid.appendChild(testimonialCard);
+        });
+      }
 
-        // Fungsi untuk membuka modal detail
-        function openDetailModal(productId) {
-            selectedProduct = products.find((p) => p.id == productId);
+      // Fungsi untuk membuka modal detail
+      function openDetailModal(productId) {
+        selectedProduct = products.find((p) => p.id == productId);
 
-            if (selectedProduct) {
-                detailProductTitle.textContent = selectedProduct.name;
-                detailProductDescription.textContent = selectedProduct.description;
+        if (selectedProduct) {
+          detailProductTitle.textContent = selectedProduct.name;
+          detailProductDescription.textContent = selectedProduct.description;
 
-                // Tampilkan paket
-                packageList.innerHTML = "";
-                if (selectedProduct.packages && selectedProduct.packages.length > 0) {
-                    selectedProduct.packages.forEach((pkg) => {
-                        const packageItem = document.createElement("div");
-                        packageItem.className = "package-item";
-                        packageItem.innerHTML = `
+          // Tampilkan paket
+          packageList.innerHTML = "";
+          if (selectedProduct.packages && selectedProduct.packages.length > 0) {
+            selectedProduct.packages.forEach((pkg) => {
+              const packageItem = document.createElement("div");
+              packageItem.className = "package-item";
+              packageItem.innerHTML = `
                             <div class="package-name">${pkg.name}</div>
                             <div class="package-price">${formatPrice(pkg.price)}</div>
-                            <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">${pkg.description || ''}</div>
+                            <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">${pkg.description || ""}</div>
                         `;
-                        packageList.appendChild(packageItem);
-                    });
-                } else {
-                    packageList.innerHTML = '<p>Tidak ada paket tersedia</p>';
-                }
-
-                detailModal.classList.add("active");
-            }
-        }
-
-        // Fungsi untuk membuka modal order
-        function openOrderModal(productId) {
-            selectedProduct = products.find((p) => p.id == productId);
-
-            if (selectedProduct) {
-                productNameInput.value = selectedProduct.name;
-                productDescriptionInput.value = selectedProduct.description;
-
-                // Reset dropdown paket
-                packageSelect.innerHTML = '<option value="">-- Pilih Paket --</option>';
-
-                // Jika produk memiliki paket, tambahkan ke dropdown
-                if (selectedProduct.packages && selectedProduct.packages.length > 0) {
-                    selectedProduct.packages.forEach((pkg) => {
-                        const option = document.createElement("option");
-                        option.value = pkg.id;
-                        option.textContent = `${pkg.name} - ${formatPrice(pkg.price)}`;
-                        packageSelect.appendChild(option);
-                    });
-
-                    // Set paket pertama sebagai default
-                    packageSelect.value = selectedProduct.packages[0].id;
-                    productPriceInput.value = formatPrice(selectedProduct.packages[0].price);
-                    selectedPackage = selectedProduct.packages[0];
-                } else {
-                    // Jika tidak ada paket, gunakan harga produk utama
-                    const option = document.createElement("option");
-                    option.value = "default";
-                    option.textContent = "Paket Standar";
-                    packageSelect.appendChild(option);
-                    packageSelect.disabled = true;
-                    productPriceInput.value = formatPrice(selectedProduct.price);
-                    selectedPackage = { 
-                        id: "default", 
-                        name: "Paket Standar", 
-                        price: selectedProduct.price 
-                    };
-                }
-
-                orderModal.classList.add("active");
-            }
-        }
-
-        // Update harga saat paket dipilih
-        packageSelect.addEventListener("change", function () {
-            if (this.value) {
-                if (selectedProduct.packages) {
-                    const packageId = this.value;
-                    const pkg = selectedProduct.packages.find((p) => p.id === packageId);
-                    if (pkg) {
-                        productPriceInput.value = formatPrice(pkg.price);
-                        selectedPackage = pkg;
-                    }
-                } else {
-                    // Jika tidak ada paket, gunakan harga produk utama
-                    productPriceInput.value = formatPrice(selectedProduct.price);
-                    selectedPackage = { 
-                        id: "default", 
-                        name: "Paket Standar", 
-                        price: selectedProduct.price 
-                    };
-                }
-            } else {
-                selectedPackage = null;
-            }
-        });
-
-        // Fungsi untuk menutup modal
-        function closeModal() {
-            detailModal.classList.remove("active");
-            orderModal.classList.remove("active");
-            adminLoginModal.classList.remove("active");
-            selectedProduct = null;
-            selectedPackage = null;
-        }
-
-        // Event listener untuk tombol order dari detail
-        orderFromDetailBtn.addEventListener("click", function () {
-            if (selectedProduct) {
-                closeModal();
-                setTimeout(() => {
-                    openOrderModal(selectedProduct.id);
-                }, 300);
-            }
-        });
-
-        // Event listener untuk menutup modal
-        closeDetailModal.addEventListener("click", closeModal);
-        closeOrderModal.addEventListener("click", closeModal);
-        closeAdminModal.addEventListener("click", closeModal);
-
-        // Event listener untuk klik di luar modal
-        detailModal.addEventListener("click", function (e) {
-            if (e.target === detailModal) {
-                closeModal();
-            }
-        });
-
-        orderModal.addEventListener("click", function (e) {
-            if (e.target === orderModal) {
-                closeModal();
-            }
-        });
-
-        adminLoginModal.addEventListener("click", function (e) {
-            if (e.target === adminLoginModal) {
-                closeModal();
-            }
-        });
-
-        // Submit form order
-        orderForm.addEventListener("submit", function (e) {
-            e.preventDefault();
-
-            const customerName = document.getElementById("customerName").value.trim();
-
-            // Validasi
-            if (!customerName) {
-                showNotification("Silakan isi nama lengkap Anda", "warning");
-                return;
-            }
-
-            if (!selectedPackage) {
-                showNotification("Silakan pilih paket terlebih dahulu", "warning");
-                return;
-            }
-
-            // Tampilkan loading
-            submitOrderBtn.innerHTML = '<span class="loading"></span> Mengirim pesan...';
-            submitOrderBtn.disabled = true;
-
-            // Format pesan WhatsApp
-            let message = `Halo Admin SNAYDER'S STORE, saya ingin melakukan pemesanan:\n\n`;
-            message += `Nama: ${customerName}\n`;
-            message += `Produk: ${selectedProduct.name}\n`;
-            message += `Paket: ${selectedPackage.name}\n`;
-            message += `Harga: ${formatPrice(selectedPackage.price)}\n\n`;
-            message += `Deskripsi Produk:\n${selectedProduct.description}\n\n`;
-            message += `Terima kasih, saya tunggu konfirmasinya.`;
-
-            // Simulasikan delay untuk loading
-            setTimeout(() => {
-                // Encode pesan untuk URL
-                const encodedMessage = encodeURIComponent(message);
-
-                // Buka WhatsApp
-                window.open(`https://wa.me/6287866361260?text=${encodedMessage}`, "_blank");
-
-                // Reset form dan tutup modal
-                orderForm.reset();
-                submitOrderBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Order via WhatsApp';
-                submitOrderBtn.disabled = false;
-                closeModal();
-                
-                showNotification("Pesanan berhasil dikirim ke WhatsApp!", "success");
-            }, 1500);
-        });
-
-        // Buka modal login admin
-        adminLoginBtn.addEventListener("click", () => {
-            adminLoginModal.classList.add("active");
-        });
-
-        // Login admin
-        adminLoginForm.addEventListener("submit", function (e) {
-            e.preventDefault();
-
-            const username = adminUsernameInput.value;
-            const password = adminPasswordInput.value;
-
-            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-                localStorage.setItem("adminLoggedIn", "true");
-                showNotification("Login berhasil! Mengarahkan ke panel admin...", "success");
-                
-                setTimeout(() => {
-                    window.location.href = "admin-panel.html";
-                }, 2000);
-            } else {
-                showNotification("Username atau password salah!", "error");
-            }
-        });
-
-        // Animasi scroll halus untuk link
-        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-            anchor.addEventListener("click", function (e) {
-                e.preventDefault();
-
-                const targetId = this.getAttribute("href");
-                if (targetId === "#") return;
-
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: "smooth",
-                    });
-                }
+              packageList.appendChild(packageItem);
             });
-        });
+          } else {
+            packageList.innerHTML = "<p>Tidak ada paket tersedia</p>";
+          }
 
-        // Panggil saat halaman dimuat
-        document.addEventListener('DOMContentLoaded', () => {
-            renderProducts();
-            renderTestimonials();
-            
-            // Animasi tambahan
-            setTimeout(() => {
-                document.querySelector('header').classList.add('fade-in');
-            }, 100);
+          detailModal.classList.add("active");
+        }
+      }
+
+      // Fungsi untuk membuka modal order
+      function openOrderModal(productId) {
+        selectedProduct = products.find((p) => p.id == productId);
+
+        if (selectedProduct) {
+          productNameInput.value = selectedProduct.name;
+          productDescriptionInput.value = selectedProduct.description;
+
+          // Reset dropdown paket
+          packageSelect.innerHTML = '<option value="">-- Pilih Paket --</option>';
+
+          // Jika produk memiliki paket, tambahkan ke dropdown
+          if (selectedProduct.packages && selectedProduct.packages.length > 0) {
+            selectedProduct.packages.forEach((pkg) => {
+              const option = document.createElement("option");
+              option.value = pkg.id;
+              option.textContent = `${pkg.name} - ${formatPrice(pkg.price)}`;
+              packageSelect.appendChild(option);
+            });
+
+            // Set paket pertama sebagai default
+            packageSelect.value = selectedProduct.packages[0].id;
+            productPriceInput.value = formatPrice(selectedProduct.packages[0].price);
+            selectedPackage = selectedProduct.packages[0];
+          } else {
+            // Jika tidak ada paket, gunakan harga produk utama
+            const option = document.createElement("option");
+            option.value = "default";
+            option.textContent = "Paket Standar";
+            packageSelect.appendChild(option);
+            packageSelect.disabled = true;
+            productPriceInput.value = formatPrice(selectedProduct.price);
+            selectedPackage = {
+              id: "default",
+              name: "Paket Standar",
+              price: selectedProduct.price,
+            };
+          }
+
+          orderModal.classList.add("active");
+        }
+      }
+
+      // Update harga saat paket dipilih
+      packageSelect.addEventListener("change", function () {
+        if (this.value) {
+          if (selectedProduct.packages) {
+            const packageId = this.value;
+            const pkg = selectedProduct.packages.find((p) => p.id === packageId);
+            if (pkg) {
+              productPriceInput.value = formatPrice(pkg.price);
+              selectedPackage = pkg;
+            }
+          } else {
+            // Jika tidak ada paket, gunakan harga produk utama
+            productPriceInput.value = formatPrice(selectedProduct.price);
+            selectedPackage = {
+              id: "default",
+              name: "Paket Standar",
+              price: selectedProduct.price,
+            };
+          }
+        } else {
+          selectedPackage = null;
+        }
+      });
+
+      // Fungsi untuk menutup modal
+      function closeModal() {
+        detailModal.classList.remove("active");
+        orderModal.classList.remove("active");
+        adminLoginModal.classList.remove("active");
+        selectedProduct = null;
+        selectedPackage = null;
+      }
+
+      // Event listener untuk tombol order dari detail
+      orderFromDetailBtn.addEventListener("click", function () {
+        if (selectedProduct) {
+          closeModal();
+          setTimeout(() => {
+            openOrderModal(selectedProduct.id);
+          }, 300);
+        }
+      });
+
+      // Event listener untuk menutup modal
+      closeDetailModal.addEventListener("click", closeModal);
+      closeOrderModal.addEventListener("click", closeModal);
+      closeAdminModal.addEventListener("click", closeModal);
+
+      // Event listener untuk klik di luar modal
+      detailModal.addEventListener("click", function (e) {
+        if (e.target === detailModal) {
+          closeModal();
+        }
+      });
+
+      orderModal.addEventListener("click", function (e) {
+        if (e.target === orderModal) {
+          closeModal();
+        }
+      });
+
+      adminLoginModal.addEventListener("click", function (e) {
+        if (e.target === adminLoginModal) {
+          closeModal();
+        }
+      });
+
+      // Submit form order
+      orderForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const customerName = document.getElementById("customerName").value.trim();
+
+        // Validasi
+        if (!customerName) {
+          showNotification("Silakan isi nama lengkap Anda", "warning");
+          return;
+        }
+
+        if (!selectedPackage) {
+          showNotification("Silakan pilih paket terlebih dahulu", "warning");
+          return;
+        }
+
+        // Tampilkan loading
+        submitOrderBtn.innerHTML = '<span class="loading"></span> Mengirim pesan...';
+        submitOrderBtn.disabled = true;
+
+        // Format pesan WhatsApp
+        let message = `Halo Admin SNAYDER'S STORE, saya ingin melakukan pemesanan:\n\n`;
+        message += `Nama: ${customerName}\n`;
+        message += `Produk: ${selectedProduct.name}\n`;
+        message += `Paket: ${selectedPackage.name}\n`;
+        message += `Harga: ${formatPrice(selectedPackage.price)}\n\n`;
+        message += `Deskripsi Produk:\n${selectedProduct.description}\n\n`;
+        message += `Terima kasih, saya tunggu konfirmasinya.`;
+
+        // Simulasikan delay untuk loading
+        setTimeout(() => {
+          // Encode pesan untuk URL
+          const encodedMessage = encodeURIComponent(message);
+
+          // Buka WhatsApp
+          window.open(`https://wa.me/6287866361260?text=${encodedMessage}`, "_blank");
+
+          // Reset form dan tutup modal
+          orderForm.reset();
+          submitOrderBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Order via WhatsApp';
+          submitOrderBtn.disabled = false;
+          closeModal();
+
+          showNotification("Pesanan berhasil dikirim ke WhatsApp!", "success");
+        }, 1500);
+      });
+
+      // Buka modal login admin
+      adminLoginBtn.addEventListener("click", () => {
+        adminLoginModal.classList.add("active");
+      });
+
+      // Login admin
+      adminLoginForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const username = adminUsernameInput.value;
+        const password = adminPasswordInput.value;
+
+        if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+          localStorage.setItem("adminLoggedIn", "true");
+          showNotification("Login berhasil! Mengarahkan ke panel admin...", "success");
+
+          setTimeout(() => {
+            window.location.href = "admin-panel.html";
+          }, 2000);
+        } else {
+          showNotification("Username atau password salah!", "error");
+        }
+      });
+
+      // Animasi scroll halus untuk link
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          const targetId = this.getAttribute("href");
+          if (targetId === "#") return;
+
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: "smooth",
+            });
+          }
         });
+      });
+
+      // Panggil saat halaman dimuat
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Tampilkan loading overlay
+        loadingOverlay.style.display = 'flex';
+        
+        try {
+          // Ambil data dari API
+          products = await fetchProducts();
+          const testimonials = await fetchTestimonials();
+          
+          renderProducts(products);
+          renderTestimonials(testimonials);
+          
+          // Sembunyikan loading overlay
+          setTimeout(() => {
+            loadingOverlay.style.display = 'none';
+          }, 500);
+        } catch (error) {
+          console.error('Failed to load data:', error);
+          showNotification('Gagal memuat data, coba lagi nanti', 'error');
+          loadingOverlay.style.display = 'none';
+        }
+
+        // Animasi tambahan
+        setTimeout(() => {
+          document.querySelector("header").classList.add("fade-in");
+        }, 100);
+      });
     </script>
 </body>
 </html>
