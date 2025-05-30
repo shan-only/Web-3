@@ -729,14 +729,6 @@
         font-weight: bold;
         color: var(--accent2);
       }
-      
-      .no-data-message {
-        text-align: center;
-        padding: 2rem;
-        color: var(--text-muted);
-        font-style: italic;
-        grid-column: 1 / -1;
-      }
     </style>
   </head>
   <body>
@@ -930,25 +922,78 @@
       // Fungsi untuk mengambil data produk dari GitHub API
       async function fetchProducts() {
         try {
-          // Tampilkan loading
-          loadingOverlay.style.display = "flex";
-
           const response = await fetch(PRODUCTS_API);
 
           if (!response.ok) {
-            throw new Error(`Gagal memuat produk: ${response.status}`);
+            // Coba dengan cache-busting jika terjadi error
+            const cacheBustUrl = `${PRODUCTS_API}?t=${Date.now()}`;
+            const retryResponse = await fetch(cacheBustUrl);
+
+            if (!retryResponse.ok) {
+              throw new Error(`Gagal memuat produk: ${retryResponse.status}`);
+            }
+            return await retryResponse.json();
           }
 
           return await response.json();
         } catch (error) {
           console.error("Error fetching products:", error);
           showNotification("Gagal memuat data produk", "error");
-          
-          // Sembunyikan section produk jika tidak ada data
-          document.getElementById("produk").style.display = "none";
-          
-          // Kembalikan array kosong
-          return [];
+
+          // Kembalikan data dummy jika terjadi kesalahan
+          return [
+            {
+              id: "1",
+              name: "Website Profesional",
+              description: "Website responsif dengan desain modern dan fitur lengkap",
+              price: 2500000,
+              image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+              badge: "BEST SELLER",
+              packages: [
+                {
+                  id: "basic",
+                  name: "Paket Basic",
+                  price: 1500000,
+                  description: "Website 5 halaman, desain responsif, tanpa CMS",
+                },
+                {
+                  id: "pro",
+                  name: "Paket Pro",
+                  price: 2500000,
+                  description: "Website 10 halaman, desain premium, dengan CMS",
+                },
+              ],
+            },
+            {
+              id: "2",
+              name: "Aplikasi Mobile",
+              description: "Aplikasi mobile untuk iOS dan Android dengan performa tinggi",
+              price: 5000000,
+              image: "https://images.unsplash.com/photo-1607252650355-f7fd0460ccdb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+              packages: [
+                {
+                  id: "starter",
+                  name: "Paket Starter",
+                  price: 3500000,
+                  description: "Aplikasi single platform (pilih iOS atau Android)",
+                },
+                {
+                  id: "premium",
+                  name: "Paket Premium",
+                  price: 5000000,
+                  description: "Aplikasi untuk iOS dan Android, termasuk update 1 tahun",
+                },
+              ],
+            },
+            {
+              id: "3",
+              name: "Desain Logo",
+              description: "Desain logo profesional untuk merek Anda",
+              price: 500000,
+              image: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80",
+              badge: "TERBARU",
+            },
+          ];
         }
       }
 
@@ -965,24 +1010,23 @@
         } catch (error) {
           console.error("Error fetching testimonials:", error);
           showNotification("Gagal memuat data testimoni", "error");
-          
-          // Sembunyikan section testimoni jika tidak ada data
-          document.getElementById("testimoni").style.display = "none";
-          
-          // Kembalikan array kosong
-          return [];
+
+          // Kembalikan data dummy jika terjadi kesalahan
+          return [
+            {
+              name: "Budi Santoso",
+              comment: "Pelayanan sangat memuaskan! Website yang dibuat sangat profesional dan sesuai dengan kebutuhan bisnis saya.",
+              rating: 5,
+              date: "15 Mei 2025",
+            },
+            // ... [data dummy lainnya]
+          ];
         }
       }
 
       // Fungsi untuk merender produk
       function renderProducts(products) {
         productsGrid.innerHTML = "";
-        
-        // Cek jika ada produk
-        if (products.length === 0) {
-          productsGrid.innerHTML = '<div class="no-data-message fade-in">Tidak ada produk tersedia saat ini</div>';
-          return;
-        }
 
         products.forEach((product, index) => {
           const card = document.createElement("div");
@@ -991,23 +1035,26 @@
           // Tambahkan badge jika ada
           const badge = product.badge ? `<span class="product-badge">${product.badge}</span>` : "";
 
+          // Tampilkan harga mulai jika ada paket, atau harga langsung jika tidak
+          const priceDisplay = product.packages && product.packages.length > 0 ? `Mulai ${formatPrice(product.price)}` : formatPrice(product.price);
+
           card.innerHTML = `
-                    ${badge}
-                    <img src="${product.image}" alt="${product.name}" class="product-image">
-                    <div class="product-content">
-                        <h3 class="product-title">${product.name}</h3>
-                        <p class="product-description">${product.description}</p>
-                        <p class="product-price">Mulai ${formatPrice(product.price)}</p>
-                        <div class="product-actions">
-                            <button class="action-btn btn-order" data-product="${product.id}">
-                                <i class="fas fa-shopping-cart"></i> Order
-                            </button>
-                            <button class="action-btn btn-details" data-product="${product.id}">
-                                <i class="fas fa-info-circle"></i> Detail
-                            </button>
-                        </div>
-                    </div>
-                `;
+      ${badge}
+      <img src="${product.image}" alt="${product.name}" class="product-image">
+      <div class="product-content">
+        <h3 class="product-title">${product.name}</h3>
+        <p class="product-description">${product.description}</p>
+        <p class="product-price">${priceDisplay}</p>
+        <div class="product-actions">
+          <button class="action-btn btn-order" data-product="${product.id}">
+            <i class="fas fa-shopping-cart"></i> Order
+          </button>
+          <button class="action-btn btn-details" data-product="${product.id}">
+            <i class="fas fa-info-circle"></i> Detail
+          </button>
+        </div>
+      </div>
+    `;
           productsGrid.appendChild(card);
         });
 
@@ -1030,12 +1077,6 @@
       // Fungsi untuk merender testimoni
       function renderTestimonials(testimonials) {
         testimonialsGrid.innerHTML = "";
-        
-        // Cek jika ada testimoni
-        if (testimonials.length === 0) {
-          testimonialsGrid.innerHTML = '<div class="no-data-message fade-in">Belum ada testimoni pelanggan</div>';
-          return;
-        }
 
         testimonials.forEach((testimonial, index) => {
           const testimonialCard = document.createElement("div");
@@ -1107,9 +1148,9 @@
       function openOrderModal(productId) {
         selectedProduct = products.find((p) => p.id == productId);
 
-        if (selectedProduct) {
-          productNameInput.value = selectedProduct.name;
-          productDescriptionInput.value = selectedProduct.description;
+        if (!selectedProduct) {
+          showNotification("Produk tidak ditemukan", "error");
+          return;
 
           // Reset pilihan paket
           packageOptionsContainer.innerHTML = "";
