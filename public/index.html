@@ -1069,28 +1069,22 @@
       }
 
 packageSelect.addEventListener("change", function () {
-  if (this.value) {
-    if (selectedProduct.packages) {
-      const packageId = this.value;
-      const pkg = selectedProduct.packages.find((p) => p.id === packageId); // 🔴 BUG
-      if (pkg) {
-        productPriceInput.value = formatPrice(pkg.price);
-        selectedPackage = pkg;
-      }
-    } else {
-      // fallback jika tidak ada paket
-      productPriceInput.value = formatPrice(selectedProduct.price);
-      selectedPackage = {
-        id: "default",
-        name: "Paket Standar",
-        price: selectedProduct.price,
-      };
+  const packageId = this.value;
+  if (packageId && selectedProduct.packages) {
+    const pkg = selectedProduct.packages.find((p) => String(p.id) === packageId);
+    if (pkg) {
+      productPriceInput.value = formatPrice(pkg.price);
+      selectedPackage = pkg;
     }
   } else {
-    selectedPackage = null;
+    productPriceInput.value = formatPrice(selectedProduct.price);
+    selectedPackage = {
+      id: "default",
+      name: "Paket Standar",
+      price: selectedProduct.price,
+    };
   }
 });
-
 
       // Fungsi untuk menutup modal
       function closeModal() {
