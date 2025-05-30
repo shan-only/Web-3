@@ -283,6 +283,10 @@
         border: 1px solid rgba(51, 153, 255, 0.2);
         transform-style: preserve-3d;
         perspective: 1000px;
+        /* MODIFIKASI: Tinggi tetap untuk card produk */
+        height: 460px;
+        display: flex;
+        flex-direction: column;
       }
 
       .product-card:hover {
@@ -313,6 +317,10 @@
 
       .product-content {
         padding: 1.5rem;
+        /* MODIFIKASI: Gunakan seluruh tinggi yang tersedia */
+        display: flex;
+        flex-direction: column;
+        height: 100%;
       }
 
       .product-title {
@@ -325,7 +333,9 @@
         color: var(--text-muted);
         font-size: 0.95rem;
         margin-bottom: 1.2rem;
-        min-height: 60px;
+        /* MODIFIKASI: Tinggi tetap untuk deskripsi */
+        height: 90px;
+        overflow: auto;
       }
 
       .product-price {
@@ -338,6 +348,8 @@
       .product-actions {
         display: flex;
         gap: 0.8rem;
+        /* MODIFIKASI: Pastikan tombol selalu di bawah */
+        margin-top: auto;
       }
 
       .action-btn {
@@ -725,6 +737,15 @@
           width: 100%;
           justify-content: center;
         }
+
+        /* MODIFIKASI: Tinggi card lebih rendah di mobile */
+        .product-card {
+          height: 420px;
+        }
+        
+        .product-description {
+          height: 70px;
+        }
       }
 
       @media (max-width: 480px) {
@@ -751,6 +772,15 @@
 
         .brand-text {
           font-size: 1.3rem;
+        }
+
+        /* MODIFIKASI: Tinggi card lebih rendah di layar kecil */
+        .product-card {
+          height: 400px;
+        }
+        
+        .product-description {
+          height: 60px;
         }
       }
 
