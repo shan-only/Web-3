@@ -41,6 +41,15 @@
           radial-gradient(circle at bottom left, rgba(0, 102, 255, 0.1), transparent 25%);
         background-attachment: fixed;
         padding-top: var(--nav-height); /* Tambahkan padding untuk navbar */
+        display: flex; /* Baru: gunakan flexbox */
+        flex-direction: column; /* Baru: arah kolom */
+        min-height: 100vh; /* Baru: minimal tinggi viewport */
+      }
+
+      /* Baru: wrapper untuk konten utama */
+      #content-wrapper {
+        flex: 1; /* Mengisi sisa ruang vertikal */
+        width: 100%;
       }
 
       /* NAVBAR MODERN */
@@ -618,10 +627,12 @@
       footer {
         text-align: center;
         padding: 2rem 1rem;
-        margin-top: 3rem;
         background: rgba(0, 0, 0, 0.3);
         color: var(--text-muted);
         border-top: 1px solid rgba(51, 153, 255, 0.1);
+        /* Baru: untuk sticky footer */
+        margin-top: auto;
+        width: 100%;
       }
 
       .social-links {
@@ -846,23 +857,26 @@
       <p class="loading-text">Memuat data...</p>
     </div>
 
-    <!-- Produk Section -->
-    <section class="products-section" id="produk">
-      <h2 class="section-title">Produk Kami</h2>
+    <!-- Wrapper untuk konten utama -->
+    <div id="content-wrapper">
+      <!-- Produk Section -->
+      <section class="products-section" id="produk">
+        <h2 class="section-title">Produk Kami</h2>
 
-      <div class="products-grid" id="productsGrid">
-        <!-- Produk akan dimuat melalui JavaScript -->
-      </div>
-    </section>
+        <div class="products-grid" id="productsGrid">
+          <!-- Produk akan dimuat melalui JavaScript -->
+        </div>
+      </section>
 
-    <!-- Testimoni Section -->
-    <section class="products-section" id="testimoni" style="background: rgba(0, 0, 0, 0.05); padding-bottom: 4rem">
-      <h2 class="section-title">Testimoni Pelanggan</h2>
+      <!-- Testimoni Section -->
+      <section class="products-section" id="testimoni" style="background: rgba(0, 0, 0, 0.05); padding-bottom: 4rem">
+        <h2 class="section-title">Testimoni Pelanggan</h2>
 
-      <div class="testimonial-grid" id="testimonialsGrid">
-        <!-- Testimoni akan dimuat melalui JavaScript -->
-      </div>
-    </section>
+        <div class="testimonial-grid" id="testimonialsGrid">
+          <!-- Testimoni akan dimuat melalui JavaScript -->
+        </div>
+      </section>
+    </div>
 
     <!-- Modal Detail Produk -->
     <div class="modal-overlay" id="detailModal">
@@ -946,10 +960,20 @@
     <!-- Footer -->
     <footer>
       <div class="social-links">
-        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
-        <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/snayderstore.2025" title="Facebook" target="_blank">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+
+        <!-- WhatsApp -->
+        <a href="https://wa.me/6287866361260" title="WhatsApp" target="_blank">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+
+        <!-- Email Baru -->
+        <a href="mailto:snaydersonly@gmail.com" title="Email" target="_blank">
+          <i class="fas fa-envelope"></i>
+        </a>
       </div>
       <p>&copy; 2025 <strong>SNAYDER'S STORE</strong> &mdash; Made with <i class="fas fa-heart" style="color: var(--accent)"></i></p>
       <p style="margin-top: 0.5rem; font-size: 0.9rem">Jl. Digital No. 123, Kota Virtual, Indonesia</p>
