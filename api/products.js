@@ -31,6 +31,7 @@ function githubRequest(path, method = "GET", data = null) {
             reject({
               statusCode: res.statusCode,
               message: json.message || `GitHub API error: ${res.statusCode}`,
+              errors: json.errors,
             });
           }
         } catch (e) {
@@ -58,10 +59,35 @@ function githubRequest(path, method = "GET", data = null) {
   });
 }
 
+// Helper function to fetch current products
+async function getCurrentProducts() {
+  try {
+    const fileData = await githubRequest(
+      `/repos/${REPO}/contents/${FILEPATH}?ref=${BRANCH}`
+    );
+    
+    if (!fileData.content) return [];
+    
+    const content = Buffer.from(fileData.content, "base64").toString("utf8");
+    return {
+      products: JSON.parse(content),
+      sha: fileData.sha
+    };
+  } catch (error) {
+    if (error.statusCode === 404) return { products: [], sha: null };
+    throw error;
+  }
+}
+
+// Generate unique ID for new products
+function generateProductId() {
+  return 'prod_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
 module.exports = async (req, res) => {
   // Handle CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS"); // Tambah DELETE
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   if (req.method === "OPTIONS") {
@@ -70,39 +96,33 @@ module.exports = async (req, res) => {
 
   if (!TOKEN) {
     return res.status(500).json({ 
-      error: "Missing GitHub token. Please set GITHUB_TOKEN environment variable." 
+      error: "Missing GitHub token. Set GITHUB_TOKEN environment variable." 
     });
   }
 
   try {
     // GET: Return product list
     if (req.method === "GET") {
-      let fileData;
-      try {
-        fileData = await githubRequest(
-          `/repos/${REPO}/contents/${FILEPATH}?ref=${BRANCH}`
-        );
-      } catch (error) {
-        // Handle 404 - File not found
-        if (error.statusCode === 404) {
-          return res.status(200).json([]);
-        }
-        throw error;
-      }
-      
-      if (fileData.content) {
-        const content = Buffer.from(fileData.content, "base64").toString("utf8");
-        try {
-          return res.status(200).json(JSON.parse(content));
-        } catch (e) {
-          return res.status(500).json({ 
-            error: "Invalid JSON format in products file",
-            details: e.message
-          });
-        }
-      }
-      return res.status(200).json([]);
+      const { products } = await getCurrentProducts();
+      return res.status(200).json(products || []);
     }
+
+    // Helper function for updating GitHub file
+    const updateGitHubFile = async (products, message, sha) => {
+      const updatePayload = {
+        message,
+        content: Buffer.from(JSON.stringify(products, null, 2)).toString("base64"),
+        branch: BRANCH,
+      };
+
+      if (sha) updatePayload.sha = sha;
+
+      return githubRequest(
+        `/repos/${REPO}/contents/${FILEPATH}`,
+        "PUT",
+        updatePayload
+      );
+    };
 
     // POST: Add new product
     if (req.method === "POST") {
@@ -123,99 +143,106 @@ module.exports = async (req, res) => {
         });
       }
 
+      // Generate unique ID
+      newProduct.id = generateProductId();
+
       // Get current products
-      let fileData;
-      let products = [];
-      
-      try {
-        fileData = await githubRequest(
-          `/repos/${REPO}/contents/${FILEPATH}?ref=${BRANCH}`
-        );
-        
-        if (fileData.content) {
-          const content = Buffer.from(fileData.content, "base64").toString("utf8");
-          products = JSON.parse(content);
-        }
-      } catch (error) {
-        // If file doesn't exist, create new one
-        if (error.statusCode !== 404) throw error;
-      }
-
-      // Add new product
-      products.push(newProduct);
-
-      // Prepare update payload
-      const updatePayload = {
-        message: `Tambah produk: ${newProduct.name}`,
-        content: Buffer.from(JSON.stringify(products, null, 2)).toString("base64"),
-        branch: BRANCH,
-      };
-
-      // Add SHA if file exists
-      if (fileData && fileData.sha) {
-        updatePayload.sha = fileData.sha;
-      }
+      const { products, sha } = await getCurrentProducts();
+      const updatedProducts = [...products, newProduct];
 
       // Update file on GitHub
-      await githubRequest(`/repos/${REPO}/contents/${FILEPATH}`, "PUT", updatePayload);
+      await updateGitHubFile(
+        updatedProducts,
+        `Tambah produk: ${newProduct.name}`,
+        sha
+      );
 
       return res.status(201).json({ 
         success: true,
-        message: "Produk berhasil ditambahkan" 
+        message: "Produk berhasil ditambahkan",
+        product: newProduct
       });
     }
 
-    // DELETE: Delete product - TAMBAHAN FITUR BARU
+    // PUT: Update existing product
+    if (req.method === "PUT") {
+      const updatedProduct = req.body;
+      
+      // Validate data
+      if (!updatedProduct.id) {
+        return res.status(400).json({ error: "ID produk wajib diisi" });
+      }
+      
+      if (!updatedProduct.name || !updatedProduct.image || !updatedProduct.price) {
+        return res.status(400).json({ 
+          error: "Nama, gambar, dan harga wajib diisi" 
+        });
+      }
+
+      // Convert price to number
+      updatedProduct.price = parseFloat(updatedProduct.price);
+      if (isNaN(updatedProduct.price)) {
+        return res.status(400).json({ 
+          error: "Harga harus berupa angka" 
+        });
+      }
+
+      // Get current products
+      const { products, sha } = await getCurrentProducts();
+      
+      // Find product index
+      const productIndex = products.findIndex(p => p.id === updatedProduct.id);
+      if (productIndex === -1) {
+        return res.status(404).json({ error: "Produk tidak ditemukan" });
+      }
+
+      // Update product
+      const originalProduct = products[productIndex];
+      products[productIndex] = {
+        ...originalProduct,
+        ...updatedProduct
+      };
+
+      // Update file on GitHub
+      await updateGitHubFile(
+        products,
+        `Update produk: ${updatedProduct.name}`,
+        sha
+      );
+
+      return res.status(200).json({ 
+        success: true,
+        message: "Produk berhasil diperbarui",
+        product: products[productIndex]
+      });
+    }
+
+    // DELETE: Delete product
     if (req.method === "DELETE") {
-      const { id } = req.query; // Mengambil id dari query string
+      const { id } = req.query;
 
       if (!id) {
         return res.status(400).json({ error: "ID produk wajib diisi" });
       }
 
       // Get current products
-      let fileData;
-      try {
-        fileData = await githubRequest(
-          `/repos/${REPO}/contents/${FILEPATH}?ref=${BRANCH}`
-        );
-      } catch (error) {
-        if (error.statusCode === 404) {
-          return res.status(404).json({ error: "File produk tidak ditemukan" });
-        }
-        throw error;
-      }
-
-      const content = Buffer.from(fileData.content, "base64").toString("utf8");
-      let products = [];
-      try {
-        products = JSON.parse(content);
-      } catch (e) {
-        return res.status(500).json({ 
-          error: "Invalid JSON format in products file",
-          details: e.message
-        });
-      }
-
-      // Find product by id
-      const index = products.findIndex(p => p.id === id);
-      if (index === -1) {
+      const { products, sha } = await getCurrentProducts();
+      
+      // Find product index
+      const productIndex = products.findIndex(p => p.id === id);
+      if (productIndex === -1) {
         return res.status(404).json({ error: "Produk tidak ditemukan" });
       }
 
-      const deletedProduct = products[index];
-      products.splice(index, 1);
-
-      // Prepare update payload
-      const updatePayload = {
-        message: `Hapus produk: ${deletedProduct.name}`,
-        content: Buffer.from(JSON.stringify(products, null, 2)).toString("base64"),
-        branch: BRANCH,
-        sha: fileData.sha
-      };
+      // Remove product
+      const [deletedProduct] = products.splice(productIndex, 1);
 
       // Update file on GitHub
-      await githubRequest(`/repos/${REPO}/contents/${FILEPATH}`, "PUT", updatePayload);
+      await updateGitHubFile(
+        products,
+        `Hapus produk: ${deletedProduct.name}`,
+        sha
+      );
 
       return res.status(200).json({ 
         success: true,
@@ -225,13 +252,13 @@ module.exports = async (req, res) => {
     }
 
     return res.status(405).json({ 
-      error: "Method not allowed. Only GET, POST and DELETE are supported." 
+      error: "Method not allowed. Supported methods: GET, POST, PUT, DELETE" 
     });
   } catch (error) {
-    console.error("Products API Error:", error);
+    console.error("API Error:", error);
     return res.status(error.statusCode || 500).json({
       error: error.message || "Internal server error",
-      details: error.details || "No additional details"
+      details: error.details || error.errors || "No additional details"
     });
   }
 };
