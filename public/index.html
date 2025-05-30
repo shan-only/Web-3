@@ -771,12 +771,12 @@
           <div class="form-group">
             <label for="packageSelect">Pilih Paket</label>
             <select id="packageSelect" required>
-              <option value="harga">-- Pilih Paket --</option>
+              <option value="">-- Pilih Paket --</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label for="harga">Harga</label>
+            <label for="">Harga</label>
             <input type="text" id="productPrice" readonly />
           </div>
 
@@ -1068,29 +1068,29 @@
         }
       }
 
-      // Update harga saat paket dipilih
-      packageSelect.addEventListener("change", function () {
-        if (this.value) {
-          if (selectedProduct.packages) {
-            const packageId = this.value;
-            const pkg = selectedProduct.packages.find((p) => p.id === packageId);
-            if (pkg) {
-              productPriceInput.value = formatPrice(pkg.price);
-              selectedPackage = pkg;
-            }
-          } else {
-            // Jika tidak ada paket, gunakan harga produk utama
-            productPriceInput.value = formatPrice(selectedProduct.price);
-            selectedPackage = {
-              id: "default",
-              name: "Paket Standar",
-              price: selectedProduct.price,
-            };
-          }
-        } else {
-          selectedPackage = null;
-        }
-      });
+packageSelect.addEventListener("change", function () {
+  if (this.value) {
+    if (selectedProduct.packages) {
+      const packageId = this.value;
+      const pkg = selectedProduct.packages.find((p) => p.id === packageId); // 🔴 BUG
+      if (pkg) {
+        productPriceInput.value = formatPrice(pkg.price);
+        selectedPackage = pkg;
+      }
+    } else {
+      // fallback jika tidak ada paket
+      productPriceInput.value = formatPrice(selectedProduct.price);
+      selectedPackage = {
+        id: "default",
+        name: "Paket Standar",
+        price: selectedProduct.price,
+      };
+    }
+  } else {
+    selectedPackage = null;
+  }
+});
+
 
       // Fungsi untuk menutup modal
       function closeModal() {
