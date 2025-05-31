@@ -1053,6 +1053,12 @@
     </footer>
 
     <script>
+      // Tutup menu mobile saat klik di luar nav-links dan tombol toggle
+document.addEventListener("click", function (e) {
+  if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+    navLinks.classList.remove("active");
+  }
+});
       // Kredensial admin
       const ADMIN_USERNAME = "@snayders16";
       const ADMIN_PASSWORD = "163209";
