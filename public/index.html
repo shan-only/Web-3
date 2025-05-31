@@ -859,6 +859,37 @@
         margin-top: 20px;
         font-size: 1.2rem;
       }
+
+      /* MODAL DETAIL SCROLLABLE AREAS */
+      .modal-description-container {
+        max-height: 120px;
+        overflow-y: auto;
+        padding-right: 8px;
+        margin-bottom: 1.5rem;
+      }
+
+      .modal-packages-container {
+        max-height: 250px;
+        overflow-y: auto;
+        padding-right: 8px;
+      }
+
+      .modal-description-container::-webkit-scrollbar,
+      .modal-packages-container::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .modal-description-container::-webkit-scrollbar-track,
+      .modal-packages-container::-webkit-scrollbar-track {
+        background: rgba(51, 153, 255, 0.1);
+        border-radius: 3px;
+      }
+
+      .modal-description-container::-webkit-scrollbar-thumb,
+      .modal-packages-container::-webkit-scrollbar-thumb {
+        background-color: var(--accent);
+        border-radius: 3px;
+      }
     </style>
   </head>
   <body>
@@ -912,10 +943,17 @@
       <div class="modal-content">
         <button class="modal-close" id="closeDetailModal">&times;</button>
         <h3 class="modal-title" id="detailProductTitle"></h3>
-        <p class="modal-subtitle" id="detailProductDescription"></p>
-
-        <div class="package-list" id="packageList">
-          <!-- Paket produk akan ditampilkan di sini -->
+        
+        <!-- Container untuk deskripsi dengan scroll -->
+        <div class="modal-description-container">
+          <p class="modal-subtitle" id="detailProductDescription"></p>
+        </div>
+        
+        <!-- Container untuk paket dengan scroll -->
+        <div class="modal-packages-container">
+          <div class="package-list" id="packageList">
+            <!-- Paket produk akan ditampilkan di sini -->
+          </div>
         </div>
 
         <button class="btn-submit" id="orderFromDetailBtn"><i class="fas fa-shopping-cart"></i> ORDER SEKARANG</button>
