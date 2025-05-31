@@ -644,29 +644,7 @@
         </form>
       </div>
     </div>
-    <div class="admin-modal" id="adminLoginModal">
-      <div class="admin-modal-content">
-        <button class="modal-close" id="closeAdminModal">&times;</button>
-        <h3 class="admin-modal-title">Admin Login</h3>
 
-        <form id="adminLoginForm">
-          <div class="form-group">
-            <label for="adminUsername">Username</label>
-            <input type="text" id="adminUsername" required />
-          </div>
-
-          <div class="form-group">
-            <label for="adminPassword">Password</label>
-            <input type="password" id="adminPassword" required />
-          </div>
-
-          <button type="submit" class="btn-submit"><i class="fas fa-sign-in-alt"></i> Login</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Notifikasi -->
-    <div class="notification" id="notification"></div>
     <!-- Notifikasi -->
     <div class="notification" id="notification"></div>
 
@@ -992,64 +970,87 @@
     </footer>
 
     <script>
-      const ADMIN_USERNAME = "@snayders16";
-      const ADMIN_PASSWORD = "163209";
+      // Perbaikan script login admin dan navbar
+      document.addEventListener("DOMContentLoaded", function () {
+        const ADMIN_USERNAME = "@snayders16";
+        const ADMIN_PASSWORD = "163209";
 
-      // Elemen DOM untuk modal admin
-      const adminLoginModal = document.getElementById("adminLoginModal");
-      const closeAdminModal = document.getElementById("closeAdminModal");
-      const adminLoginForm = document.getElementById("adminLoginForm");
-      const adminUsernameInput = document.getElementById("adminUsername");
-      const adminPasswordInput = document.getElementById("adminPassword");
-      const notification = document.getElementById("notification");
-      const adminLoginBtn = document.getElementById("adminLoginBtnNav");
-      const menuToggle = document.getElementById("menuToggle");
-      const navLinks = document.querySelector(".nav-links");
+        // Elemen DOM untuk modal admin
+        const adminLoginModal = document.getElementById("adminLoginModal");
+        const closeAdminModal = document.getElementById("closeAdminModal");
+        const adminLoginForm = document.getElementById("adminLoginForm");
+        const adminUsernameInput = document.getElementById("adminUsername");
+        const adminPasswordInput = document.getElementById("adminPassword");
+        const notification = document.getElementById("notification");
+        const adminLoginBtn = document.getElementById("adminLoginBtnNav");
+        const menuToggle = document.getElementById("menuToggle");
+        const navLinks = document.querySelector(".nav-links");
 
-      // Tampilkan notifikasi
-      function showNotification(message, type) {
-        notification.textContent = message;
-        notification.className = `notification ${type}`;
-
-        setTimeout(() => {
-          notification.className = "notification";
-        }, 3000);
-      }
-
-      // Event listener untuk tombol admin login di navbar
-      adminLoginBtn.addEventListener("click", () => {
-        adminLoginModal.classList.add("active");
-      });
-
-      // Tutup modal admin
-      closeAdminModal.addEventListener("click", () => {
-        adminLoginModal.classList.remove("active");
-      });
-
-      // Tutup modal jika klik di luar
-      adminLoginModal.addEventListener("click", function (e) {
-        if (e.target === adminLoginModal) {
-          adminLoginModal.classList.remove("active");
-        }
-      });
-
-      // Login admin
-      adminLoginForm.addEventListener("submit", function (e) {
-        e.preventDefault();
-
-        const username = adminUsernameInput.value;
-        const password = adminPasswordInput.value;
-
-        if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-          localStorage.setItem("adminLoggedIn", "true");
-          showNotification("Login berhasil! Mengarahkan ke panel admin...", "success");
+        // Tampilkan notifikasi
+        function showNotification(message, type) {
+          notification.textContent = message;
+          notification.className = `notification ${type}`;
 
           setTimeout(() => {
-            window.location.href = "admin-panel.html";
-          }, 2000);
-        } else {
-          showNotification("Username atau password salah!", "error");
+            notification.className = "notification";
+          }, 3000);
         }
+
+        // Event listener untuk tombol admin login di navbar
+        if (adminLoginBtn) {
+          adminLoginBtn.addEventListener("click", () => {
+            adminLoginModal.classList.add("active");
+          });
+        }
+
+        // Tutup modal admin
+        if (closeAdminModal) {
+          closeAdminModal.addEventListener("click", () => {
+            adminLoginModal.classList.remove("active");
+          });
+        }
+
+        // Tutup modal jika klik di luar
+        adminLoginModal.addEventListener("click", function (e) {
+          if (e.target === adminLoginModal) {
+            adminLoginModal.classList.remove("active");
+          }
+        });
+
+        // Login admin
+        if (adminLoginForm) {
+          adminLoginForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const username = adminUsernameInput.value;
+            const password = adminPasswordInput.value;
+
+            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+              localStorage.setItem("adminLoggedIn", "true");
+              showNotification("Login berhasil! Mengarahkan ke panel admin...", "success");
+
+              setTimeout(() => {
+                window.location.href = "admin-panel.html";
+              }, 2000);
+            } else {
+              showNotification("Username atau password salah!", "error");
+            }
+          });
+        }
+
+        // Toggle menu mobile
+        if (menuToggle) {
+          menuToggle.addEventListener("click", () => {
+            navLinks.classList.toggle("active");
+          });
+        }
+
+        // Tutup menu mobile saat klik di luar
+        document.addEventListener("click", function (e) {
+          if (!navLinks.contains(e.target)) {
+            navLinks.classList.remove("active");
+          }
+        });
       });
     </script>
   </body>
