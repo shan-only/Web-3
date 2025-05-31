@@ -1045,9 +1045,8 @@
           });
         }
 
-        // Tutup menu mobile saat klik di luar
         document.addEventListener("click", function (e) {
-          if (!navLinks.contains(e.target)) {
+          if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
             navLinks.classList.remove("active");
           }
         });
