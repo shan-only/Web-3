@@ -444,6 +444,161 @@
           font-size: 1.3rem;
         }
       }
+      /* Admin Login Modal */
+      .admin-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+
+      .admin-modal.active {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .admin-modal-content {
+        background: var(--card-bg);
+        border-radius: 16px;
+        width: 90%;
+        max-width: 400px;
+        padding: 2rem;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(51, 153, 255, 0.3);
+      }
+
+      .admin-modal-title {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        color: var(--accent);
+      }
+
+      /* Notifikasi */
+      .notification {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 15px 25px;
+        border-radius: 10px;
+        color: white;
+        font-weight: 600;
+        z-index: 3000;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.4s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .notification.success {
+        background: var(--success);
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .notification.error {
+        background: var(--danger);
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .notification.warning {
+        background: var(--warning);
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Form */
+      .form-group {
+        margin-bottom: 1.2rem;
+        position: relative;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 0.8rem;
+        border-radius: 10px;
+        border: 1px solid rgba(51, 153, 255, 0.3);
+        background: var(--input-bg);
+        color: var(--text-light);
+        font-size: 1rem;
+        transition: var(--transition);
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px rgba(51, 153, 255, 0.2);
+      }
+
+      .btn-submit {
+        width: 100%;
+        padding: 1rem;
+        background: linear-gradient(45deg, var(--success), #00b383);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-top: 1rem;
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .btn-submit:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 204, 153, 0.4);
+      }
+
+      .btn-submit:disabled {
+        background: #555;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: color 0.3s ease;
+        z-index: 10;
+      }
+
+      .modal-close:hover {
+        color: var(--accent);
+        transform: rotate(90deg);
+      }
     </style>
   </head>
   <body>
@@ -468,6 +623,52 @@
         </div>
       </div>
     </nav>
+    <!-- Admin Login Modal -->
+    <div class="admin-modal" id="adminLoginModal">
+      <div class="admin-modal-content">
+        <button class="modal-close" id="closeAdminModal">&times;</button>
+        <h3 class="admin-modal-title">Admin Login</h3>
+
+        <form id="adminLoginForm">
+          <div class="form-group">
+            <label for="adminUsername">Username</label>
+            <input type="text" id="adminUsername" required />
+          </div>
+
+          <div class="form-group">
+            <label for="adminPassword">Password</label>
+            <input type="password" id="adminPassword" required />
+          </div>
+
+          <button type="submit" class="btn-submit"><i class="fas fa-sign-in-alt"></i> Login</button>
+        </form>
+      </div>
+    </div>
+    <div class="admin-modal" id="adminLoginModal">
+      <div class="admin-modal-content">
+        <button class="modal-close" id="closeAdminModal">&times;</button>
+        <h3 class="admin-modal-title">Admin Login</h3>
+
+        <form id="adminLoginForm">
+          <div class="form-group">
+            <label for="adminUsername">Username</label>
+            <input type="text" id="adminUsername" required />
+          </div>
+
+          <div class="form-group">
+            <label for="adminPassword">Password</label>
+            <input type="password" id="adminPassword" required />
+          </div>
+
+          <button type="submit" class="btn-submit"><i class="fas fa-sign-in-alt"></i> Login</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Notifikasi -->
+    <div class="notification" id="notification"></div>
+    <!-- Notifikasi -->
+    <div class="notification" id="notification"></div>
 
     <!-- Wrapper untuk konten utama -->
     <div id="content-wrapper">
@@ -791,38 +992,64 @@
     </footer>
 
     <script>
-      // Elemen DOM
+      const ADMIN_USERNAME = "@snayders16";
+      const ADMIN_PASSWORD = "163209";
+
+      // Elemen DOM untuk modal admin
+      const adminLoginModal = document.getElementById("adminLoginModal");
+      const closeAdminModal = document.getElementById("closeAdminModal");
+      const adminLoginForm = document.getElementById("adminLoginForm");
+      const adminUsernameInput = document.getElementById("adminUsername");
+      const adminPasswordInput = document.getElementById("adminPassword");
+      const notification = document.getElementById("notification");
+      const adminLoginBtn = document.getElementById("adminLoginBtnNav");
       const menuToggle = document.getElementById("menuToggle");
       const navLinks = document.querySelector(".nav-links");
-      const adminLoginBtn = document.getElementById("adminLoginBtnNav");
 
-      // Toggle menu responsif
-      menuToggle.addEventListener("click", () => {
-        navLinks.classList.toggle("active");
-      });
+      // Tampilkan notifikasi
+      function showNotification(message, type) {
+        notification.textContent = message;
+        notification.className = `notification ${type}`;
 
-      // Buka modal login admin
+        setTimeout(() => {
+          notification.className = "notification";
+        }, 3000);
+      }
+
+      // Event listener untuk tombol admin login di navbar
       adminLoginBtn.addEventListener("click", () => {
-        alert("Fitur login admin akan membuka panel admin");
+        adminLoginModal.classList.add("active");
       });
 
-      // Animasi tambahan
-      document.addEventListener("DOMContentLoaded", () => {
-        // Animasi untuk header
-        document.querySelector("header").classList.add("fade-in");
+      // Tutup modal admin
+      closeAdminModal.addEventListener("click", () => {
+        adminLoginModal.classList.remove("active");
+      });
 
-        // Animasi untuk card
-        const cards = document.querySelectorAll(".category-card");
-        cards.forEach((card, index) => {
-          card.style.opacity = "0";
-          card.style.transform = "translateY(20px)";
-          card.style.transition = "opacity 0.5s, transform 0.5s";
+      // Tutup modal jika klik di luar
+      adminLoginModal.addEventListener("click", function (e) {
+        if (e.target === adminLoginModal) {
+          adminLoginModal.classList.remove("active");
+        }
+      });
+
+      // Login admin
+      adminLoginForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const username = adminUsernameInput.value;
+        const password = adminPasswordInput.value;
+
+        if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+          localStorage.setItem("adminLoggedIn", "true");
+          showNotification("Login berhasil! Mengarahkan ke panel admin...", "success");
 
           setTimeout(() => {
-            card.style.opacity = "1";
-            card.style.transform = "translateY(0)";
-          }, 200 + index * 100);
-        });
+            window.location.href = "admin-panel.html";
+          }, 2000);
+        } else {
+          showNotification("Username atau password salah!", "error");
+        }
       });
     </script>
   </body>
