@@ -306,12 +306,10 @@
         box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
       }
 
-      .product-image {
-        /* Hapus height: 200px !important; */
-        object-fit: contain !important; /* Ubah dari cover ke contain */
-        background-color: var(--card-bg); /* Tambahkan background */
-      }
-
+     .product-image {
+    height: 200px !important; /* Memaksa tinggi tetap 200px di mobile */
+  }
+}
       .product-content {
         padding: 1.5rem;
         display: flex; /* Ditambahkan */
@@ -779,11 +777,6 @@
 
         .brand-text {
           font-size: 1.3rem;
-        }
-
-        /* Tambahkan ini untuk menjaga tinggi gambar di mobile */
-        .product-image {
-          height: 200px !important;
         }
       }
 
