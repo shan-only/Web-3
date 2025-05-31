@@ -586,11 +586,29 @@
         margin-bottom: 0.5rem;
       }
 
-      .testimonial-text {
-        color: var(--text-muted);
-        font-style: italic;
-        line-height: 1.7;
-      }
+     .testimonial-text {
+    color: var(--text-muted);
+    font-style: italic;
+    line-height: 1.7;
+    max-height: 120px; /* Batasi tinggi maksimal */
+    overflow-y: auto; /* Aktifkan scroll vertikal */
+    padding-right: 5px; /* Beri ruang untuk scrollbar */
+    scrollbar-width: thin; /* Ukuran scrollbar */
+    scrollbar-color: var(--accent) rgba(51, 153, 255, 0.1); /* Warna scrollbar */
+  }
+.testimonial-text::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .testimonial-text::-webkit-scrollbar-track {
+    background: rgba(51, 153, 255, 0.1);
+    border-radius: 3px;
+  }
+
+  .testimonial-text::-webkit-scrollbar-thumb {
+    background-color: var(--accent);
+    border-radius: 3px;
+  }
 
       /* Admin Login Modal */
       .admin-modal {
