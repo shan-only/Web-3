@@ -7,21 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="icon" href="https://raw.githubusercontent.com/Yudzxml/UploaderV2/main/tmp/1f856a75.png" />
     <style>
-      /* PERBAIKAN SCROLLING */
-      html, body {
-        scroll-behavior: smooth;
-        overflow-x: hidden;
-      }
-      
-      body {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        backface-visibility: hidden;
-        transform: translateZ(0);
-        will-change: transform;
-        perspective: 1000px;
-      }
-
       /* Variabel warna - tema modern gelap */
       :root {
         --bg-dark: #121212;
@@ -1461,30 +1446,10 @@ document.addEventListener("click", function (e) {
 
           const targetElement = document.querySelector(targetId);
           if (targetElement) {
-            // Gunakan requestAnimationFrame untuk animasi yang lebih halus
-            const startPosition = window.pageYOffset;
-            const targetPosition = targetElement.offsetTop - 80;
-            const distance = targetPosition - startPosition;
-            const duration = 800;
-            let startTime = null;
-
-            function animation(currentTime) {
-              if (startTime === null) startTime = currentTime;
-              const timeElapsed = currentTime - startTime;
-              const run = ease(timeElapsed, startPosition, distance, duration);
-              window.scrollTo(0, run);
-              if (timeElapsed < duration) requestAnimationFrame(animation);
-            }
-
-            // Fungsi easing untuk transisi lebih natural
-            function ease(t, b, c, d) {
-              t /= d / 2;
-              if (t < 1) return c / 2 * t * t + b;
-              t--;
-              return -c / 2 * (t * (t - 2) - 1) + b;
-            }
-
-            requestAnimationFrame(animation);
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: "smooth",
+            });
           }
         });
       });
