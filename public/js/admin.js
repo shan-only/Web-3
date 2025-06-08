@@ -33,18 +33,18 @@ function handleLogin(e) {
 
   const user = document.getElementById("username").value;
   const pass = document.getElementById("password").value;
-  
+
   fetch(`/api/login?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`)
-    .then(response => {
+    .then((response) => {
       if (response.status === 200) {
         return response.json();
       } else if (response.status === 401) {
-        throw new Error('Unauthorized');
+        throw new Error("Unauthorized");
       } else {
-        throw new Error('Request failed');
+        throw new Error("Request failed");
       }
     })
-    .then(data => {
+    .then((data) => {
       if (data.success) {
         setCookie("adminLogin", "true", 1);
         checkLogin();
@@ -52,8 +52,8 @@ function handleLogin(e) {
         alert(data.message || "Username atau password salah!");
       }
     })
-    .catch(err => {
-      if (err.message === 'Unauthorized') {
+    .catch((err) => {
+      if (err.message === "Unauthorized") {
         alert("Username atau password salah!");
       } else {
         console.error(err);
@@ -61,8 +61,6 @@ function handleLogin(e) {
       }
     });
 }
-
-
 
 function logout() {
   setCookie("adminLogin", "false", -1);
@@ -169,9 +167,36 @@ async function hapusProduk(index) {
   }
 }
 
-async function handleFormSubmit(e) {
+async function handleLogin(e) {
   e.preventDefault();
-  const index = document.getElementById("editIndex").value;
+
+  const user = document.getElementById("username").value;
+  const pass = document.getElementById("password").value;
+
+  try {
+    const response = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: user,
+        password: pass,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      setCookie("adminLogin", "true", 1);
+      checkLogin();
+    } else {
+      alert(data.message || "Username atau password salah!");
+    }
+  } catch (err) {
+    console.error("Login error:", err);
+    alert("Terjadi kesalahan saat melakukan request. Silakan coba lagi.");
+  }
 
   const paketRaw = document.getElementById("paket").value.trim();
   const paketArr = paketRaw
