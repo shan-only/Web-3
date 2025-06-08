@@ -1015,26 +1015,48 @@
           }
         });
 
-        // Login admin
-        if (adminLoginForm) {
-          adminLoginForm.addEventListener("submit", function (e) {
-            e.preventDefault();
+// Login admin
+  adminLoginForm.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-            const username = adminUsernameInput.value;
-            const password = adminPasswordInput.value;
+    const username = adminUsernameInput.value;
+    const password = adminPasswordInput.value;
 
-            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-              localStorage.setItem("adminLoggedIn", "true");
-              showNotification("Login berhasil! Mengarahkan ke panel admin...", "success");
+    // Kirim permintaan login ke server
+    fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username, password })
+    })
+    .then(response => {
+      if (response.status === 401) {
+        throw new Error('Unauthorized');
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data.success) {
+        localStorage.setItem("adminLoggedIn", "true");
+        showNotification("Login berhasil! Mengarahkan ke panel admin...", "success");
 
-              setTimeout(() => {
-                window.location.href = "admin-panel.html";
-              }, 2000);
-            } else {
-              showNotification("Username atau password salah!", "error");
-            }
-          });
-        }
+        setTimeout(() => {
+          window.location.href = "admin-panel.html";
+        }, 2000);
+      } else {
+        showNotification(data.message || "Username atau password salah!", "error");
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      if (error.message === 'Unauthorized') {
+        showNotification("Username atau password salah!", "error");
+      } else {
+        showNotification("Terjadi kesalahan. Silakan coba lagi.", "error");
+      }
+    });
+  });
 
         // Toggle menu mobile
         if (menuToggle) {
