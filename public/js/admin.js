@@ -5,8 +5,6 @@ window.addEventListener("click", function () {
 });
 
 // LOGIN ADMIN
-const adminUsername = "snayders";
-const adminPassword = "2005";
 
 function setCookie(name, value, days) {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
@@ -32,16 +30,39 @@ function checkLogin() {
 
 function handleLogin(e) {
   e.preventDefault();
+
   const user = document.getElementById("username").value;
   const pass = document.getElementById("password").value;
-
-  if (user === adminUsername && pass === adminPassword) {
-    setCookie("adminLogin", "true", 1);
-    checkLogin();
-  } else {
-    alert("Username atau password salah!");
-  }
+  
+  fetch(`/api/login?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`)
+    .then(response => {
+      if (response.status === 200) {
+        return response.json();
+      } else if (response.status === 401) {
+        throw new Error('Unauthorized');
+      } else {
+        throw new Error('Request failed');
+      }
+    })
+    .then(data => {
+      if (data.success) {
+        setCookie("adminLogin", "true", 1);
+        checkLogin();
+      } else {
+        alert(data.message || "Username atau password salah!");
+      }
+    })
+    .catch(err => {
+      if (err.message === 'Unauthorized') {
+        alert("Username atau password salah!");
+      } else {
+        console.error(err);
+        alert("Terjadi kesalahan saat melakukan request. Silakan coba lagi.");
+      }
+    });
 }
+
+
 
 function logout() {
   setCookie("adminLogin", "false", -1);
