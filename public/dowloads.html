@@ -422,9 +422,11 @@
         }
 
         .nav-link {
-          width: 100%;
-          justify-content: center;
-        }
+  width: 100%;
+  justify-content: flex-start; /* agar teks rata kiri */
+  text-align: left;            /* memastikan teks tidak tengah */
+  padding-left: 1.5rem;        /* beri jarak dari sisi kiri */
+}
       }
 
       @media (max-width: 480px) {
