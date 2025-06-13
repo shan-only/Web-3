@@ -737,6 +737,8 @@
           padding: 1rem;
           gap: 10px;
           border-bottom: 2px solid rgba(51, 153, 255, 0.3);
+          /* Perubahan: align items ke kiri */
+          align-items: flex-start;
         }
 
         .nav-links.active {
@@ -749,7 +751,10 @@
 
         .nav-link {
           width: 100%;
-          justify-content: center;
+          /* Perubahan: justify content ke kiri */
+          justify-content: flex-start;
+          /* Perubahan: tambahkan padding kiri */
+          padding-left: 25px;
         }
       }
 
