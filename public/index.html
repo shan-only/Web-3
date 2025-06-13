@@ -748,6 +748,22 @@
         .menu-toggle {
           display: block;
         }
+        /* Tambahan untuk animasi hamburger */
+        .menu-toggle {
+          transition: transform 0.3s ease;
+        }
+
+        .menu-toggle.active i.fa-bars {
+          display: none;
+        }
+
+        .menu-toggle i.fa-times {
+          display: none;
+        }
+
+        .menu-toggle.active i.fa-times {
+          display: block;
+        }
 
         .nav-link {
           width: 100%;
@@ -1479,11 +1495,29 @@
         });
       });
 
+      // Fungsi untuk mengganti ikon menu toggle
+      function toggleMenuIcon() {
+        const menuIcon = menuToggle.querySelector("i");
+        if (navLinks.classList.contains("active")) {
+          menuToggle.classList.add("active");
+        } else {
+          menuToggle.classList.remove("active");
+        }
+      }
+
       // Toggle menu responsif
       menuToggle.addEventListener("click", () => {
         navLinks.classList.toggle("active");
+        toggleMenuIcon();
       });
 
+      // Tutup menu mobile saat klik di luar nav-links dan tombol toggle
+      document.addEventListener("click", function (e) {
+        if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+          navLinks.classList.remove("active");
+          toggleMenuIcon();
+        }
+      });
       // Panggil saat halaman dimuat
       document.addEventListener("DOMContentLoaded", async () => {
         // Tampilkan loading overlay
