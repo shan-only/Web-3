@@ -1,1226 +1,987 @@
 <!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Download Center - SNAYDER'S STORE</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link rel="icon" href="https://raw.githubusercontent.com/Yudzxml/UploaderV2/main/tmp/1f856a75.png" />
-    <style>
-      /* Gunakan style yang sama dari index.html */
-      /* Variabel warna - tema modern gelap */
-      :root {
-        --bg-dark: #121212;
-        --card-bg: #1d1f25;
-        --accent: #33aaff;
-        --accent2: #0066ff;
-        --text-light: #e0f0ff;
-        --text-muted: #88bbff;
-        --input-bg: #2a2a3a;
-        --border-color: #3399ff;
-        --success: #00cc99;
-        --danger: #ff4d6d;
-        --transition: all 0.3s ease;
-        --warning: #ffcc00;
-        --nav-height: 70px;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Download Center - SNAYDER'S STORE</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="icon" href="https://raw.githubusercontent.com/Yudzxml/UploaderV2/main/tmp/1f856a75.png" />
+  <style>
+    /* Variabel warna - tema modern gelap */
+    :root {
+      --bg-dark: #121212;
+      --card-bg: #1d1f25;
+      --accent: #33aaff;
+      --accent2: #0066ff;
+      --text-light: #e0f0ff;
+      --text-muted: #88bbff;
+      --input-bg: #2a2a3a;
+      --border-color: #3399ff;
+      --success: #00cc99;
+      --danger: #ff4d6d;
+      --transition: all 0.3s ease;
+      --warning: #ffcc00;
+      --nav-height: 70px;
+    }
 
-      /* Reset dasar */
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
+    /* Reset dasar */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-      body {
-        background-color: var(--bg-dark);
-        color: var(--text-light);
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        line-height: 1.6;
-        overflow-x: hidden;
-        background-image: linear-gradient(135deg, rgba(13, 27, 42, 0.8) 0%, rgba(27, 38, 59, 0.8) 100%), radial-gradient(circle at top right, rgba(51, 170, 255, 0.1), transparent 25%),
-          radial-gradient(circle at bottom left, rgba(0, 102, 255, 0.1), transparent 25%);
-        background-attachment: fixed;
-        padding-top: var(--nav-height); /* Tambahkan padding untuk navbar */
-        display: flex; /* Baru: gunakan flexbox */
-        flex-direction: column; /* Baru: arah kolom */
-        min-height: 100vh; /* Baru: minimal tinggi viewport */
-      }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image: linear-gradient(135deg, rgba(13, 27, 42, 0.8) 0%, rgba(27, 38, 59, 0.8) 100%), radial-gradient(circle at top right, rgba(51, 170, 255, 0.1), transparent 25%),
+        radial-gradient(circle at bottom left, rgba(0, 102, 255, 0.1), transparent 25%);
+      background-attachment: fixed;
+      padding-top: var(--nav-height);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
 
-      /* Baru: wrapper untuk konten utama */
-      #content-wrapper {
-        flex: 1; /* Mengisi sisa ruang vertikal */
-        width: 100%;
-      }
+    #content-wrapper {
+      flex: 1;
+      width: 100%;
+    }
 
-      /* NAVBAR MODERN */
-      .navbar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: var(--nav-height);
-        background: rgba(13, 27, 42, 0.95);
-        backdrop-filter: blur(10px);
-        border-bottom: 2px solid rgba(51, 153, 255, 0.3);
-        display: flex;
-        align-items: center;
-        padding: 0 2rem;
-        z-index: 1000;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-      }
+    /* NAVBAR MODERN */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: var(--nav-height);
+      background: rgba(13, 27, 42, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid rgba(51, 153, 255, 0.3);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      z-index: 1000;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    }
 
-      .navbar-container {
-        width: 100%;
-        max-width: 1200px;
-        margin: 0 auto;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
+    .navbar-container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-      .logo-brand {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        text-decoration: none;
-        color: var(--text-light);
-      }
+    .logo-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-light);
+    }
 
-      .logo-brand i {
-        font-size: 1.8rem;
-        color: var(--accent);
-        text-shadow: 0 0 10px rgba(51, 153, 255, 0.7);
-      }
+    .logo-brand i {
+      font-size: 1.8rem;
+      color: var(--accent);
+      text-shadow: 0 0 10px rgba(51, 153, 255, 0.7);
+    }
 
-      .brand-text {
-        font-size: 1.5rem;
-        font-weight: 700;
-        background: linear-gradient(90deg, var(--accent), var(--accent2));
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        letter-spacing: 0.5px;
+    .brand-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.6rem 1.2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      color: var(--text-light);
+      font-weight: 500;
+      transition: var(--transition);
+      background: rgba(51, 153, 255, 0.1);
+    }
+
+    .nav-link:hover {
+      background: rgba(51, 153, 255, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .nav-link i {
+      font-size: 1.1rem;
+    }
+
+    .btn-testimoni-nav {
+      background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+    }
+
+    .btn-admin-nav {
+      background: linear-gradient(45deg, #00cc99, #00b383);
+    }
+
+    /* Responsif navbar */
+    .menu-toggle {
+      display: none;
+      font-size: 1.5rem;
+      color: var(--text-light);
+      cursor: pointer;
+      z-index: 1001;
+      width: 30px;
+      height: 30px;
+      position: relative;
+    }
+
+    .menu-toggle .fa-bars {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: var(--transition);
+    }
+
+    .menu-toggle .fa-times {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .menu-toggle.active .fa-bars {
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+    }
+
+    .menu-toggle.active .fa-times {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .category-grid {
+        grid-template-columns: 1fr;
       }
 
       .nav-links {
+        display: none;
+        position: absolute;
+        top: var(--nav-height);
+        left: 0;
+        right: 0;
+        background: rgba(13, 27, 42, 0.98);
+        flex-direction: column;
+        padding: 1rem;
+        gap: 10px;
+        border-bottom: 2px solid rgba(51, 153, 255, 0.3);
+      }
+
+      .nav-links.active {
         display: flex;
-        align-items: center;
-        gap: 20px;
+      }
+
+      .menu-toggle {
+        display: block;
       }
 
       .nav-link {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 0.6rem 1.2rem;
-        border-radius: 50px;
-        text-decoration: none;
-        color: var(--text-light);
-        font-weight: 500;
-        transition: var(--transition);
-        background: rgba(51, 153, 255, 0.1);
+        width: 100%;
+        justify-content: flex-start;
+        text-align: left;
+        padding-left: 1.5rem;
       }
+    }
 
-      .nav-link:hover {
-        background: rgba(51, 153, 255, 0.25);
-        transform: translateY(-2px);
+    /* Header */
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: linear-gradient(135deg, #0d1b2a, #1b263b);
+      position: relative;
+      overflow: hidden;
+      border-bottom: 3px solid var(--accent);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+      margin-top: calc(var(--nav-height) - 10px);
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      box-shadow: 0 0 15px var(--accent);
+    }
+
+    .logo {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+      color: var(--text-light);
+      text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent2);
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 1.5rem;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Download Section */
+    .downloads-section {
+      padding: 3rem 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 1.8rem;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 0 1rem;
+    }
+
+    .section-title::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 10px;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .category-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: var(--transition);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(51, 153, 255, 0.2);
+    }
+
+    .category-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(51, 153, 255, 0.25);
+    }
+
+    .category-header {
+      padding: 1.5rem;
+      background: rgba(51, 153, 255, 0.1);
+      border-bottom: 1px solid rgba(51, 153, 255, 0.2);
+    }
+
+    .category-title {
+      font-size: 1.4rem;
+      margin: 0;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .category-title i {
+      font-size: 1.6rem;
+    }
+
+    .download-list {
+      padding: 1.5rem;
+    }
+
+    .download-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem 0;
+      border-bottom: 1px dashed rgba(136, 187, 255, 0.2);
+    }
+
+    .download-item:last-child {
+      border-bottom: none;
+    }
+
+    .download-name {
+      flex: 1;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .download-btn {
+      background: linear-gradient(45deg, var(--accent2), var(--accent));
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 3px 8px rgba(51, 153, 255, 0.3);
+    }
+
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(51, 153, 255, 0.4);
+    }
+
+    .download-btn i {
+      font-size: 0.9rem;
+    }
+
+    .download-info {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+      display: flex;
+      gap: 15px;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: rgba(0, 0, 0, 0.3);
+      color: var(--text-muted);
+      border-top: 1px solid rgba(51, 153, 255, 0.1);
+      margin-top: auto;
+      width: 100%;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 1.5rem 0;
+    }
+
+    .social-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(51, 153, 255, 0.1);
+      color: var(--text-light);
+      transition: var(--transition);
+    }
+
+    .social-links a:hover {
+      background: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    /* Animasi */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
       }
-
-      .nav-link i {
-        font-size: 1.1rem;
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
+    }
 
-      .btn-testimoni-nav {
-        background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
-      }
+    .fade-in {
+      animation: fadeIn 0.6s ease forwards;
+    }
 
-      .btn-admin-nav {
-        background: linear-gradient(45deg, #00cc99, #00b383);
-      }
+    .delay-1 {
+      animation-delay: 0.1s;
+    }
+    .delay-2 {
+      animation-delay: 0.2s;
+    }
+    .delay-3 {
+      animation-delay: 0.3s;
+    }
+    .delay-4 {
+      animation-delay: 0.4s;
+    }
 
-      /* Responsif navbar */
-      .menu-toggle {
-        display: none;
-        font-size: 1.5rem;
-        color: var(--text-light);
-        cursor: pointer;
-      }
+    /* Admin Login Modal */
+    .admin-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
 
-      /* Header (disesuaikan) */
-      header {
-        text-align: center;
-        padding: 2rem 1rem;
-        background: linear-gradient(135deg, #0d1b2a, #1b263b);
-        position: relative;
-        overflow: hidden;
-        border-bottom: 3px solid var(--accent);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-        margin-top: calc(var(--nav-height) - 10px); /* Menyesuaikan margin top */
-      }
+    .admin-modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
 
-      header::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, var(--accent2), var(--accent));
-        box-shadow: 0 0 15px var(--accent);
-      }
+    .admin-modal-content {
+      background: var(--card-bg);
+      border-radius: 16px;
+      width: 90%;
+      max-width: 400px;
+      padding: 2rem;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(51, 153, 255, 0.3);
+    }
 
+    .admin-modal-title {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: var(--accent);
+    }
+
+    /* Notifikasi */
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      z-index: 3000;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.4s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .notification.success {
+      background: var(--success);
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .notification.error {
+      background: var(--danger);
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .notification.warning {
+      background: var(--warning);
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Form */
+    .form-group {
+      margin-bottom: 1.2rem;
+      position: relative;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 10px;
+      border: 1px solid rgba(51, 153, 255, 0.3);
+      background: var(--input-bg);
+      color: var(--text-light);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(51, 153, 255, 0.2);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(45deg, var(--success), #00b383);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-top: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 204, 153, 0.4);
+    }
+
+    .btn-submit:disabled {
+      background: #555;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 0.3s ease;
+      z-index: 10;
+    }
+
+    .modal-close:hover {
+      color: var(--accent);
+      transform: rotate(90deg);
+    }
+    
+    /* Responsif */
+    @media (max-width: 480px) {
       .logo {
-        font-size: 2.8rem;
-        margin-bottom: 1rem;
-        color: var(--text-light);
-        text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent2);
+        font-size: 2.2rem;
       }
 
       h1 {
-        font-size: 2.2rem;
-        margin-bottom: 0.5rem;
-        background: linear-gradient(90deg, var(--accent), var(--accent2));
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-      }
-
-      .subtitle {
-        font-size: 1.1rem;
-        color: var(--text-muted);
-        max-width: 600px;
-        margin: 0 auto 1.5rem;
-        text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      }
-
-      /* Download Section */
-      .downloads-section {
-        padding: 3rem 1rem;
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-
-      .section-title {
-        text-align: center;
-        margin-bottom: 2rem;
         font-size: 1.8rem;
-        background: linear-gradient(90deg, var(--accent), var(--accent2));
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        position: relative;
-        display: inline-block;
-        left: 50%;
-        transform: translateX(-50%);
+      }
+
+      .navbar {
         padding: 0 1rem;
       }
 
-      .section-title::after {
-        content: "";
-        position: absolute;
-        bottom: -10px;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, var(--accent), var(--accent2));
-        border-radius: 10px;
+      .brand-text {
+        font-size: 1.3rem;
       }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar Modern -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="index.html" class="logo-brand">
+        <i class="fas fa-store"></i>
+        <span class="brand-text">SNAYDER'S STORE</span>
+      </a>
 
-      .category-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 2rem;
-        margin-bottom: 3rem;
-      }
-
-      .category-card {
-        background: var(--card-bg);
-        border-radius: 16px;
-        overflow: hidden;
-        transition: var(--transition);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(51, 153, 255, 0.2);
-      }
-
-      .category-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(51, 153, 255, 0.25);
-      }
-
-      .category-header {
-        padding: 1.5rem;
-        background: rgba(51, 153, 255, 0.1);
-        border-bottom: 1px solid rgba(51, 153, 255, 0.2);
-      }
-
-      .category-title {
-        font-size: 1.4rem;
-        margin: 0;
-        color: var(--accent);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .category-title i {
-        font-size: 1.6rem;
-      }
-
-      .download-list {
-        padding: 1.5rem;
-      }
-
-      .download-item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0.8rem 0;
-        border-bottom: 1px dashed rgba(136, 187, 255, 0.2);
-      }
-
-      .download-item:last-child {
-        border-bottom: none;
-      }
-
-      .download-name {
-        flex: 1;
-        font-size: 0.95rem;
-        color: var(--text-muted);
-      }
-
-      .download-btn {
-        background: linear-gradient(45deg, var(--accent2), var(--accent));
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        text-decoration: none;
-        transition: var(--transition);
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        box-shadow: 0 3px 8px rgba(51, 153, 255, 0.3);
-      }
-
-      .download-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(51, 153, 255, 0.4);
-      }
-
-      .download-btn i {
-        font-size: 0.9rem;
-      }
-
-      .download-info {
-        font-size: 0.85rem;
-        color: var(--text-muted);
-        margin-top: 0.3rem;
-        display: flex;
-        gap: 15px;
-      }
-
-      .info-item {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-      }
-
-      /* Footer */
-      footer {
-        text-align: center;
-        padding: 2rem 1rem;
-        background: rgba(0, 0, 0, 0.3);
-        color: var(--text-muted);
-        border-top: 1px solid rgba(51, 153, 255, 0.1);
-        /* Baru: untuk sticky footer */
-        margin-top: auto;
-        width: 100%;
-      }
-
-      .social-links {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-        margin: 1.5rem 0;
-      }
-
-      .social-links a {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: rgba(51, 153, 255, 0.1);
-        color: var(--text-light);
-        transition: var(--transition);
-      }
-
-      .social-links a:hover {
-        background: var(--accent);
-        transform: translateY(-3px);
-      }
-
-      /* Animasi */
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .fade-in {
-        animation: fadeIn 0.6s ease forwards;
-      }
-
-      .delay-1 {
-        animation-delay: 0.1s;
-      }
-      .delay-2 {
-        animation-delay: 0.2s;
-      }
-      .delay-3 {
-        animation-delay: 0.3s;
-      }
-      .delay-4 {
-        animation-delay: 0.4s;
-      }
-
-      /* Responsif */
-      @media (max-width: 768px) {
-        .category-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .nav-links {
-          display: none;
-          position: absolute;
-          top: var(--nav-height);
-          left: 0;
-          right: 0;
-          background: rgba(13, 27, 42, 0.98);
-          flex-direction: column;
-          padding: 1rem;
-          gap: 10px;
-          border-bottom: 2px solid rgba(51, 153, 255, 0.3);
-        }
-
-        .nav-links.active {
-          display: flex;
-        }
-
-        .menu-toggle {
-          display: block;
-        }
-
-        .nav-link {
-  width: 100%;
-  justify-content: flex-start; /* agar teks rata kiri */
-  text-align: left;            /* memastikan teks tidak tengah */
-  padding-left: 1.5rem;        /* beri jarak dari sisi kiri */
-}
-      }
-
-      @media (max-width: 480px) {
-        .logo {
-          font-size: 2.2rem;
-        }
-
-        h1 {
-          font-size: 1.8rem;
-        }
-
-        .navbar {
-          padding: 0 1rem;
-        }
-
-        .brand-text {
-          font-size: 1.3rem;
-        }
-      }
-      /* Admin Login Modal */
-      .admin-modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.7);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 2000;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.3s ease;
-      }
-
-      .admin-modal.active {
-        opacity: 1;
-        pointer-events: all;
-      }
-
-      .admin-modal-content {
-        background: var(--card-bg);
-        border-radius: 16px;
-        width: 90%;
-        max-width: 400px;
-        padding: 2rem;
-        position: relative;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        border: 1px solid rgba(51, 153, 255, 0.3);
-      }
-
-      .admin-modal-title {
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
-        text-align: center;
-        color: var(--accent);
-      }
-
-      /* Notifikasi */
-      .notification {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        padding: 15px 25px;
-        border-radius: 10px;
-        color: white;
-        font-weight: 600;
-        z-index: 3000;
-        opacity: 0;
-        transform: translateY(20px);
-        transition: all 0.4s ease;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-      }
-
-      .notification.success {
-        background: var(--success);
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      .notification.error {
-        background: var(--danger);
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      .notification.warning {
-        background: var(--warning);
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      /* Form */
-      .form-group {
-        margin-bottom: 1.2rem;
-        position: relative;
-      }
-
-      label {
-        display: block;
-        margin-bottom: 0.5rem;
-        color: var(--text-muted);
-        font-weight: 500;
-      }
-
-      input,
-      select,
-      textarea {
-        width: 100%;
-        padding: 0.8rem;
-        border-radius: 10px;
-        border: 1px solid rgba(51, 153, 255, 0.3);
-        background: var(--input-bg);
-        color: var(--text-light);
-        font-size: 1rem;
-        transition: var(--transition);
-      }
-
-      input:focus,
-      select:focus,
-      textarea:focus {
-        outline: none;
-        border-color: var(--accent);
-        box-shadow: 0 0 0 2px rgba(51, 153, 255, 0.2);
-      }
-
-      .btn-submit {
-        width: 100%;
-        padding: 1rem;
-        background: linear-gradient(45deg, var(--success), #00b383);
-        color: white;
-        border: none;
-        border-radius: 10px;
-        font-weight: 600;
-        font-size: 1.1rem;
-        margin-top: 1rem;
-        cursor: pointer;
-        transition: var(--transition);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-      }
-
-      .btn-submit:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(0, 204, 153, 0.4);
-      }
-
-      .btn-submit:disabled {
-        background: #555;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
-      }
-
-      .modal-close {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        color: var(--text-muted);
-        cursor: pointer;
-        transition: color 0.3s ease;
-        z-index: 10;
-      }
-
-      .modal-close:hover {
-        color: var(--accent);
-        transform: rotate(90deg);
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Navbar Modern -->
-    <nav class="navbar">
-      <div class="navbar-container">
-        <a href="index.html" class="logo-brand">
-          <i class="fas fa-store"></i>
-          <span class="brand-text">SNAYDER'S STORE</span>
-        </a>
-
-        <div class="nav-links">
-          <a href="index.html" class="nav-link"> <i class="fas fa-home"></i> Beranda </a>
-          <a href="dowloads.html" class="nav-link"> <i class="fas fa-download"></i> Download </a>
-
-          <a href="index.html#testimoni" class="nav-link btn-testimoni-nav"> <i class="fas fa-comment-alt"></i> Testimoni </a>
-          <button class="nav-link btn-admin-nav" id="adminLoginBtnNav"><i class="fas fa-lock"></i> Admin Login</button>
-        </div>
-
-        <div class="menu-toggle" id="menuToggle">
-          <i class="fas fa-bars"></i>
-        </div>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link"> <i class="fas fa-home"></i> Beranda </a>
+        <a href="dowloads.html" class="nav-link"> <i class="fas fa-download"></i> Download </a>
+        <a href="index.html#testimoni" class="nav-link btn-testimoni-nav"> <i class="fas fa-comment-alt"></i> Testimoni </a>
+        <button class="nav-link btn-admin-nav" id="adminLoginBtnNav"><i class="fas fa-lock"></i> Admin Login</button>
       </div>
-    </nav>
-    <!-- Admin Login Modal -->
-    <div class="admin-modal" id="adminLoginModal">
-      <div class="admin-modal-content">
-        <button class="modal-close" id="closeAdminModal">&times;</button>
-        <h3 class="admin-modal-title">Admin Login</h3>
 
-        <form id="adminLoginForm">
-          <div class="form-group">
-            <label for="adminUsername">Username</label>
-            <input type="text" id="adminUsername" required />
-          </div>
-
-          <div class="form-group">
-            <label for="adminPassword">Password</label>
-            <input type="password" id="adminPassword" required />
-          </div>
-
-          <button type="submit" class="btn-submit"><i class="fas fa-sign-in-alt"></i> Login</button>
-        </form>
+      <div class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+        <i class="fas fa-times"></i>
       </div>
     </div>
-
-    <!-- Notifikasi -->
-    <div class="notification" id="notification"></div>
-
-    <!-- Wrapper untuk konten utama -->
-    <div id="content-wrapper">
-      <header>
-        <div class="logo">
-          <i class="fas fa-cloud-download-alt"></i>
+  </nav>
+  
+  <!-- Admin Login Modal -->
+  <div class="admin-modal" id="adminLoginModal">
+    <div class="admin-modal-content">
+      <button class="modal-close" id="closeAdminModal">&times;</button>
+      <h3 class="admin-modal-title">Admin Login</h3>
+      <form id="adminLoginForm">
+        <div class="form-group">
+          <label for="adminUsername">Username</label>
+          <input type="text" id="adminUsername" required />
         </div>
-        <h1>Download Center</h1>
-        <p class="subtitle">Temukan semua konfigurasi terbaru, tools, dan panduan untuk kebutuhan digital Anda</p>
-      </header>
-
-       <!-- Download Section -->
-<section class="downloads-section">
-  <h2 class="section-title">List Config Terbaru</h2>
-
-  <div class="category-grid">
-    <!-- Kategori 1: Config XL -->
-    <div class="category-card fade-in">
-      <div class="category-header">
-        <h3 class="category-title"><i class="fas fa-download"></i> Config XL</h3>
-      </div>
-      <div class="download-list">
-        <div class="download-item">
-          <div>
-            <div class="download-name">XL XCS XUTP SUPER PREMIUM</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 983.09 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 0.5K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/obfpdu3tox/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
+        <div class="form-group">
+          <label for="adminPassword">Password</label>
+          <input type="password" id="adminPassword" required />
         </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">XL CONFERENCE</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 717.36 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 0.2K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/ejnvyng8au/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">XL UNLI TURBO VIDIO</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 952.76 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 0.3K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/bxiwvn0k5l/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">XL OPOK ALL TKP</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 488.19 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 0.5K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/vf8zm4dywt/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">XL EDUKASI</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 726.96 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 0.5K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/lcq1conczi/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-          <div class="download-item">
-          <div>
-            <div class="download-name">XL GAME</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 717.04 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 0.7K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/malamc1w1d/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">XL IFLIX</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 723.38 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 0.2K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/x7chbyzamv/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">XL MUSIC, VIU, VISION DAN YT</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 723.38 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 0.2K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/eniglpaicd/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">XL NETFLIX</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 728.75 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 0.4K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/limoi5ai5q/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Kategori 2: Config Telkomsel -->
-    <div class="category-card fade-in delay-1">
-      <div class="category-header">
-        <h3 class="category-title"><i class="fas fa-download"></i> Config Telkomsel</h3>
-      </div>
-      <div class="download-list">
-        <div class="download-item">
-          <div>
-            <div class="download-name">TSEL OPOK</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 717.55 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 0.8K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/otockpmmuh/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-                <div class="download-item">
-          <div>
-            <div class="download-name">TSEL ILMUPEDIA</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 975.78 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 0.7K</span>
-            </div>
-          </div>
-            <a href="https://simfile.co/j2ydnbultf/"class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">TSEL GAMEMAX</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 718.09 KB</span>
-               <span class="info-item"><i class="fas fa-download"></i> 0.9K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/qhxsdpsndp/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">TSEL SOSMED</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 477.10 KB</span>
-               <span class="info-item"><i class="fas fa-download"></i> 0.1K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/ppv2bjxrdh/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-                <div class="download-item">
-          <div>
-            <div class="download-name">TSEL RUANGGURU</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 718.59 KB</span>
-               <span class="info-item"><i class="fas fa-download"></i> 0.2K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/fe29vcdpm4/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">TSEL OMG</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 478.16 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 0.5K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/auz0drxynn/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Kategori 3: Config Axis -->
-    <div class="category-card fade-in delay-2">
-      <div class="category-header">
-        <h3 class="category-title"><i class="fas fa-download"></i> Config Axis</h3>
-      </div>
-      <div class="download-list">
-        <div class="download-item">
-          <div>
-            <div class="download-name">AXIS OPOK ALL TKP</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 475.81 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 1.3K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/lmgkaccb15/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">AXIS SUSHIROLL DAN GENFLIX</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 3.17 MB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 0.8K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/xsfjy6b8iu/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">AXIS GAME BOOSTER</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 725.94 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 1.2K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/awuxsjhvtt/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">AXIS BOOSTER EDUKASI</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 725.24 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 0.2K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/zxyzeizjzv/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">AXIS BOOSTER CONFERENCE</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 727.68 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 0.5K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/6mjcddglvh/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">AXIS SOSMED</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 711.25 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 1.2K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/budho9i7hh/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">AXIS BOOSTER VIDIO</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 715.58 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 3.2K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/wfjv2bae8l/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">AXIS NETFLIX</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 728.10 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 0.2K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/p4j6mw38ln/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">AXIS MUSIC</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 478.58 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 1.1K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/lbgwzwobeu/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Kategori 4: Config By U -->
-    <div class="category-card fade-in delay-3">
-      <div class="category-header">
-        <h3 class="category-title"><i class="fas fa-download"></i> Config By U</h3>
-      </div>
-      <div class="download-list">
-        <div class="download-item">
-          <div>
-            <div class="download-name">BY U OPOK ALL TKP</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 720.17 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 1.5K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/bbfkdhzc0p/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">BY U ILMUPEDIA</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 975.83 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 1.5K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/0smgwpaorw/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">BY U GAME/ GGWP</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 477.41 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 2.9K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/bxxjuoegzz/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">BY U RUANGGURU</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 957.97 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 0.9K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/jlpjpvu4wf/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Kategori 5: Config Isat -->
-    <div class="category-card fade-in delay-4">
-      <div class="category-header">
-        <h3 class="category-title"><i class="fas fa-download"></i> Config Isat</h3>
-      </div>
-      <div class="download-list">
-        <div class="download-item">
-          <div>
-            <div class="download-name">ISAT APPS FUN</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 726.84 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 1.5K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/vuxo39pqwf/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">ISAT APPS EDUKASI</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 980.38 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 0.8K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/awavvpjvup/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">ISAT APPS GAME</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 728.98 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 4.2K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/iaqpiycdm8/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-      </div>
- </div>
-
-<!-- !-- Kategori 6: Config Smartfren -->
-<div class="category-card fade-in delay-5">
-  <div class="category-header">
-    <h3 class="category-title"><i class="fas fa-download"></i> Config Smartfren</h3>
-  </div>
-  <div class="download-list">
-    <div class="download-item">
-      <div>
-        <div class="download-name">SMARTFREN OPOK NEW</div>
-        <div class="download-info">
-          <span class="info-item"><i class="fas fa-database"></i> 242.34 KB</span>
-          <span class="info-item"><i class="fas fa-download"></i> 0.5K</span>
-        </div>
-      </div>
-      <a href="https://simfile.co/c4ecwuztg3/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-    </div>
-    <div class="download-item">
-          <div>
-            <div class="download-name">SMARTFREN CHAT WHATSAPP</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 241.00 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 2.2K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/5bmgh3niy0/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-      </div>
- </div>
-</div>
-
-  <!-- Popular Downloads Section -->
-  <div class="section-title" style="margin-top: 2rem; margin-bottom: 1rem">Download Terpopuler</div>
-  <div class="popular-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem">
-    <div class="category-card fade-in" style="grid-column: span 2; background: linear-gradient(135deg, rgba(51, 170, 255, 0.1), rgba(0, 102, 255, 0.1))">
-      <div class="category-header" style="background: transparent">
-        <h3 class="category-title"><i class="fas fa-fire"></i> Rekomendasi Spesial</h3>
-      </div>
-      <div class="download-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem">
-        <div class="download-item">
-          <div>
-            <div class="download-name">UDP ALL SIM CARD v5.0</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 481.76 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 5.2K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/wvdvopzhzs/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">TSEL OPOK NEW</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 717.55 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 3.8K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/otockpmmuh/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-        <div class="download-item">
-          <div>
-            <div class="download-name">XL SUPER XUTP XCS</div>
-            <div class="download-info">
-              <span class="info-item"><i class="fas fa-database"></i> 983.09 KB</span>
-              <span class="info-item"><i class="fas fa-download"></i> 2.9K</span>
-            </div>
-          </div>
-          <a href="https://simfile.co/obfpdu3tox/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
-        </div>
-      </div>
+        <button type="submit" class="btn-submit"><i class="fas fa-sign-in-alt"></i> Login</button>
+      </form>
     </div>
   </div>
-</section>
+
+  <!-- Notifikasi -->
+  <div class="notification" id="notification"></div>
+
+  <!-- Wrapper untuk konten utama -->
+  <div id="content-wrapper">
+    <header>
+      <div class="logo">
+        <i class="fas fa-cloud-download-alt"></i>
+      </div>
+      <h1>Download Center</h1>
+      <p class="subtitle">Temukan semua konfigurasi terbaru, tools, dan panduan untuk kebutuhan digital Anda</p>
+    </header>
+
+    <!-- Download Section -->
+    <section class="downloads-section">
+      <h2 class="section-title">List Config Terbaru</h2>
+      <div class="category-grid">
+        <!-- Kategori 1: Config XL -->
+        <div class="category-card fade-in">
+          <div class="category-header">
+            <h3 class="category-title"><i class="fas fa-download"></i> Config XL</h3>
+          </div>
+          <div class="download-list">
+            <div class="download-item">
+              <div>
+                <div class="download-name">XL XCS XUTP SUPER PREMIUM</div>
+                <div class="download-info">
+                  <span class="info-item"><i class="fas fa-database"></i> 983.09 KB</span>
+                  <span class="info-item"><i class="fas fa-download"></i> 0.5K</span>
+                </div>
+              </div>
+              <a href="https://simfile.co/obfpdu3tox/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
+            </div>
+            <div class="download-item">
+              <div>
+                <div class="download-name">XL CONFERENCE</div>
+                <div class="download-info">
+                  <span class="info-item"><i class="fas fa-database"></i> 717.36 KB</span>
+                  <span class="info-item"><i class="fas fa-download"></i> 0.2K</span>
+                </div>
+              </div>
+              <a href="https://simfile.co/ejnvyng8au/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
+            </div>
+            <div class="download-item">
+              <div>
+                <div class="download-name">XL UNLI TURBO VIDIO</div>
+                <div class="download-info">
+                  <span class="info-item"><i class="fas fa-database"></i> 952.76 KB</span>
+                  <span class="info-item"><i class="fas fa-download"></i> 0.3K</span>
+                </div>
+              </div>
+              <a href="https://simfile.co/bxiwvn0k5l/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Kategori 2: Config Telkomsel -->
+        <div class="category-card fade-in delay-1">
+          <div class="category-header">
+            <h3 class="category-title"><i class="fas fa-download"></i> Config Telkomsel</h3>
+          </div>
+          <div class="download-list">
+            <div class="download-item">
+              <div>
+                <div class="download-name">TSEL OPOK</div>
+                <div class="download-info">
+                  <span class="info-item"><i class="fas fa-database"></i> 717.55 KB</span>
+                  <span class="info-item"><i class="fas fa-download"></i> 0.8K</span>
+                </div>
+              </div>
+              <a href="https://simfile.co/otockpmmuh/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
+            </div>
+            <div class="download-item">
+              <div>
+                <div class="download-name">TSEL ILMUPEDIA</div>
+                <div class="download-info">
+                  <span class="info-item"><i class="fas fa-database"></i> 975.78 KB</span>
+                  <span class="info-item"><i class="fas fa-download"></i> 0.7K</span>
+                </div>
+              </div>
+              <a href="https://simfile.co/j2ydnbultf/"class="download-btn"> <i class="fas fa-download"></i> Download </a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Kategori 3: Config Axis -->
+        <div class="category-card fade-in delay-2">
+          <div class="category-header">
+            <h3 class="category-title"><i class="fas fa-download"></i> Config Axis</h3>
+          </div>
+          <div class="download-list">
+            <div class="download-item">
+              <div>
+                <div class="download-name">AXIS OPOK ALL TKP</div>
+                <div class="download-info">
+                  <span class="info-item"><i class="fas fa-database"></i> 475.81 KB</span>
+                  <span class="info-item"><i class="fas fa-download"></i> 1.3K</span>
+                </div>
+              </div>
+              <a href="https://simfile.co/lmgkaccb15/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
+            </div>
+            <div class="download-item">
+              <div>
+                <div class="download-name">AXIS SUSHIROLL DAN GENFLIX</div>
+                <div class="download-info">
+                  <span class="info-item"><i class="fas fa-database"></i> 3.17 MB</span>
+                  <span class="info-item"><i class="fas fa-download"></i> 0.8K</span>
+                </div>
+              </div>
+              <a href="https://simfile.co/xsfjy6b8iu/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Kategori 4: Config By U -->
+        <div class="category-card fade-in delay-3">
+          <div class="category-header">
+            <h3 class="category-title"><i class="fas fa-download"></i> Config By U</h3>
+          </div>
+          <div class="download-list">
+            <div class="download-item">
+              <div>
+                <div class="download-name">BY U OPOK ALL TKP</div>
+                <div class="download-info">
+                  <span class="info-item"><i class="fas fa-database"></i> 720.17 KB</span>
+                  <span class="info-item"><i class="fas fa-download"></i> 1.5K</span>
+                </div>
+              </div>
+              <a href="https://simfile.co/bbfkdhzc0p/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
+            </div>
+            <div class="download-item">
+              <div>
+                <div class="download-name">BY U ILMUPEDIA</div>
+                <div class="download-info">
+                  <span class="info-item"><i class="fas fa-database"></i> 975.83 KB</span>
+                  <span class="info-item"><i class="fas fa-download"></i> 1.5K</span>
+                </div>
+              </div>
+              <a href="https://simfile.co/0smgwpaorw/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
+            </div>
+          </div>
+        </div>
+      </div>
       
-    <!-- Footer -->
-    <footer>
-      <div class="social-links">
-        <!-- Facebook -->
-        <a href="https://www.facebook.com/snayderstore.2025" title="Facebook" target="_blank">
-          <i class="fab fa-facebook-f"></i>
-        </a>
-
-        <!-- WhatsApp -->
-        <a href="https://wa.me/6287866361260" title="WhatsApp" target="_blank">
-          <i class="fab fa-whatsapp"></i>
-        </a>
-        <!-- Telegram -->
-        <a href="https://t.me/snayderstore" title="Telegram" target="_blank">
-          <i class="fab fa-telegram"></i>
-        </a>
-
-        <!-- Email Baru -->
-        <a href="mailto:snaydersonly@gmail.com" title="Email" target="_blank">
-          <i class="fas fa-envelope"></i>
-        </a>
+      <!-- Popular Downloads Section -->
+      <div class="section-title" style="margin-top: 2rem; margin-bottom: 1rem">Download Terpopuler</div>
+      <div class="popular-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem">
+        <div class="category-card fade-in" style="grid-column: span 2; background: linear-gradient(135deg, rgba(51, 170, 255, 0.1), rgba(0, 102, 255, 0.1))">
+          <div class="category-header" style="background: transparent">
+            <h3 class="category-title"><i class="fas fa-fire"></i> Rekomendasi Spesial</h3>
+          </div>
+          <div class="download-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem">
+            <div class="download-item">
+              <div>
+                <div class="download-name">UDP ALL SIM CARD v5.0</div>
+                <div class="download-info">
+                  <span class="info-item"><i class="fas fa-database"></i> 481.76 KB</span>
+                  <span class="info-item"><i class="fas fa-download"></i> 5.2K</span>
+                </div>
+              </div>
+              <a href="https://simfile.co/wvdvopzhzs/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
+            </div>
+            <div class="download-item">
+              <div>
+                <div class="download-name">TSEL OPOK NEW</div>
+                <div class="download-info">
+                  <span class="info-item"><i class="fas fa-database"></i> 717.55 KB</span>
+                  <span class="info-item"><i class="fas fa-download"></i> 3.8K</span>
+                </div>
+              </div>
+              <a href="https://simfile.co/otockpmmuh/" class="download-btn"> <i class="fas fa-download"></i> Download </a>
+            </div>
+          </div>
+        </div>
       </div>
-      <p>&copy; 2025 <strong>SNAYDER'S STORE</strong> &mdash; Made with <i class="fas fa-heart" style="color: var(--accent)"></i></p>
-      <p style="margin-top: 0.5rem; font-size: 0.9rem">Jl. Digital No. 123, Kota Virtual, Indonesia</p>
-    </footer>
+    </section>
+  </div>
+  
+  <!-- Footer -->
+  <footer>
+    <div class="social-links">
+      <!-- Facebook -->
+      <a href="https://www.facebook.com/snayderstore.2025" title="Facebook" target="_blank">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <!-- WhatsApp -->
+      <a href="https://wa.me/6287866361260" title="WhatsApp" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+      </a>
+      <!-- Telegram -->
+      <a href="https://t.me/snayderstore" title="Telegram" target="_blank">
+        <i class="fab fa-telegram"></i>
+      </a>
+      <!-- Email -->
+      <a href="mailto:snaydersonly@gmail.com" title="Email" target="_blank">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </div>
+    <p>&copy; 2025 <strong>SNAYDER'S STORE</strong> &mdash; Made with <i class="fas fa-heart" style="color: var(--accent)"></i></p>
+    <p style="margin-top: 0.5rem; font-size: 0.9rem">Jl. Digital No. 123, Kota Virtual, Indonesia</p>
+  </footer>
 
-    <script>
-      // Perbaikan script login admin dan navbar
-      document.addEventListener("DOMContentLoaded", function () {
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Elemen DOM untuk modal admin
+      const adminLoginModal = document.getElementById("adminLoginModal");
+      const closeAdminModal = document.getElementById("closeAdminModal");
+      const adminLoginForm = document.getElementById("adminLoginForm");
+      const adminUsernameInput = document.getElementById("adminUsername");
+      const adminPasswordInput = document.getElementById("adminPassword");
+      const notification = document.getElementById("notification");
+      const adminLoginBtn = document.getElementById("adminLoginBtnNav");
+      const menuToggle = document.getElementById("menuToggle");
+      const navLinks = document.querySelector(".nav-links");
+      const barsIcon = menuToggle.querySelector('.fa-bars');
+      const timesIcon = menuToggle.querySelector('.fa-times');
 
-        // Elemen DOM untuk modal admin
-        const adminLoginModal = document.getElementById("adminLoginModal");
-        const closeAdminModal = document.getElementById("closeAdminModal");
-        const adminLoginForm = document.getElementById("adminLoginForm");
-        const adminUsernameInput = document.getElementById("adminUsername");
-        const adminPasswordInput = document.getElementById("adminPassword");
-        const notification = document.getElementById("notification");
-        const adminLoginBtn = document.getElementById("adminLoginBtnNav");
-        const menuToggle = document.getElementById("menuToggle");
-        const navLinks = document.querySelector(".nav-links");
-
-        // Tampilkan notifikasi
-        function showNotification(message, type) {
-          notification.textContent = message;
-          notification.className = `notification ${type}`;
-
-          setTimeout(() => {
-            notification.className = "notification";
-          }, 3000);
-        }
-
-        // Event listener untuk tombol admin login di navbar
-        if (adminLoginBtn) {
-          adminLoginBtn.addEventListener("click", () => {
-            adminLoginModal.classList.add("active");
-          });
-        }
-
-        // Tutup modal admin
-        if (closeAdminModal) {
-          closeAdminModal.addEventListener("click", () => {
-            adminLoginModal.classList.remove("active");
-          });
-        }
-
-        // Tutup modal jika klik di luar
-        adminLoginModal.addEventListener("click", function (e) {
-          if (e.target === adminLoginModal) {
-            adminLoginModal.classList.remove("active");
-          }
-        });
-
-// Login admin
-  adminLoginForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const username = adminUsernameInput.value;
-    const password = adminPasswordInput.value;
-
-    // Kirim permintaan login ke server
-    fetch('/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ username, password })
-    })
-    .then(response => {
-      if (response.status === 401) {
-        throw new Error('Unauthorized');
-      }
-      return response.json();
-    })
-    .then(data => {
-      if (data.success) {
-        localStorage.setItem("adminLoggedIn", "true");
-        showNotification("Login berhasil! Mengarahkan ke panel admin...", "success");
+      // Tampilkan notifikasi
+      function showNotification(message, type) {
+        notification.textContent = message;
+        notification.className = `notification ${type}`;
 
         setTimeout(() => {
-          window.location.href = "admin-panel.html";
-        }, 2000);
-      } else {
-        showNotification(data.message || "Username atau password salah!", "error");
+          notification.className = "notification";
+        }, 3000);
       }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      if (error.message === 'Unauthorized') {
-        showNotification("Username atau password salah!", "error");
-      } else {
-        showNotification("Terjadi kesalahan. Silakan coba lagi.", "error");
-      }
-    });
-  });
 
-        // Toggle menu mobile
-        if (menuToggle) {
-          menuToggle.addEventListener("click", () => {
-            navLinks.classList.toggle("active");
-          });
+      // Event listener untuk tombol admin login di navbar
+      if (adminLoginBtn) {
+        adminLoginBtn.addEventListener("click", () => {
+          adminLoginModal.classList.add("active");
+        });
+      }
+
+      // Tutup modal admin
+      if (closeAdminModal) {
+        closeAdminModal.addEventListener("click", () => {
+          adminLoginModal.classList.remove("active");
+        });
+      }
+
+      // Tutup modal jika klik di luar
+      adminLoginModal.addEventListener("click", function (e) {
+        if (e.target === adminLoginModal) {
+          adminLoginModal.classList.remove("active");
         }
+      });
 
-        document.addEventListener("click", function (e) {
-          if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
-            navLinks.classList.remove("active");
+      // Toggle menu mobile dan animasi ikon
+      menuToggle.addEventListener('click', function() {
+        // Toggle class active pada navLinks
+        navLinks.classList.toggle('active');
+        
+        // Toggle class active pada menuToggle untuk animasi ikon
+        this.classList.toggle('active');
+      });
+
+      // Tutup menu ketika klik di luar area menu
+      document.addEventListener("click", function (e) {
+        if (!navLinks.contains(e.target) && !menuToggle.contains(e.target) && navLinks.classList.contains('active')) {
+          navLinks.classList.remove("active");
+          menuToggle.classList.remove("active");
+        }
+      });
+
+      // Login admin
+      adminLoginForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const username = adminUsernameInput.value;
+        const password = adminPasswordInput.value;
+
+        // Kirim permintaan login ke server
+        fetch('/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ username, password })
+        })
+        .then(response => {
+          if (response.status === 401) {
+            throw new Error('Unauthorized');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.success) {
+            localStorage.setItem("adminLoggedIn", "true");
+            showNotification("Login berhasil! Mengarahkan ke panel admin...", "success");
+
+            setTimeout(() => {
+              window.location.href = "admin-panel.html";
+            }, 2000);
+          } else {
+            showNotification(data.message || "Username atau password salah!", "error");
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          if (error.message === 'Unauthorized') {
+            showNotification("Username atau password salah!", "error");
+          } else {
+            showNotification("Terjadi kesalahan. Silakan coba lagi.", "error");
           }
         });
       });
-    </script>
-  </body>
+    });
+  </script>
+</body>
 </html>
