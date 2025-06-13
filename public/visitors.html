@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Statistik Pengunjung - SNAYDER'S STORE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="icon" href="https://raw.githubusercontent.com/Yudzxml/UploaderV2/main/tmp/1f856a75.png" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      /* Variabel warna - tema modern gelap */
+      :root {
+        --bg-dark: #121212;
+        --card-bg: #1d1f25;
+        --accent: #33aaff;
+        --accent2: #0066ff;
+        --text-light: #e0f0ff;
+        --text-muted: #88bbff;
+        --input-bg: #2a2a3a;
+        --border-color: #3399ff;
+        --success: #00cc99;
+        --danger: #ff4d6d;
+        --transition: all 0.3s ease;
+        --warning: #ffcc00;
+        --nav-height: 70px;
+      }
+
+      /* Reset dasar */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg-dark);
+        color: var(--text-light);
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        overflow-x: hidden;
+        background-image: linear-gradient(135deg, rgba(13, 27, 42, 0.8) 0%, rgba(27, 38, 59, 0.8) 100%), radial-gradient(circle at top right, rgba(51, 170, 255, 0.1), transparent 25%),
+          radial-gradient(circle at bottom left, rgba(0, 102, 255, 0.1), transparent 25%);
+        background-attachment: fixed;
+        padding-top: var(--nav-height); /* Tambahkan padding untuk navbar */
+        display: flex; /* Baru: gunakan flexbox */
+        flex-direction: column; /* Baru: arah kolom */
+        min-height: 100vh; /* Baru: minimal tinggi viewport */
+      }
+
+      /* Baru: wrapper untuk konten utama */
+      #content-wrapper {
+        flex: 1; /* Mengisi sisa ruang vertikal */
+        width: 100%;
+      }
+
+      /* NAVBAR MODERN */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: var(--nav-height);
+        background: rgba(13, 27, 42, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 2px solid rgba(51, 153, 255, 0.3);
+        display: flex;
+        align-items: center;
+        padding: 0 2rem;
+        z-index: 1000;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+      }
+
+      .navbar-container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        color: var(--text-light);
+      }
+
+      .logo-brand i {
+        font-size: 1.8rem;
+        color: var(--accent);
+        text-shadow: 0 0 10px rgba(51, 153, 255, 0.7);
+      }
+
+      .brand-text {
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: 0.5px;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0.6rem 1.2rem;
+        border-radius: 50px;
+        text-decoration: none;
+        color: var(--text-light);
+        font-weight: 500;
+        transition: var(--transition);
+        background: rgba(51, 153, 255, 0.1);
+      }
+
+      .nav-link:hover {
+        background: rgba(51, 153, 255, 0.25);
+        transform: translateY(-2px);
+      }
+
+      .nav-link i {
+        font-size: 1.1rem;
+      }
+
+      .btn-testimoni-nav {
+        background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+      }
+
+      .btn-admin-nav {
+        background: linear-gradient(45deg, #00cc99, #00b383);
+      }
+
+      /* Responsif navbar */
+      .menu-toggle {
+        display: none;
+        font-size: 1.5rem;
+        color: var(--text-light);
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        z-index: 1001;
+        position: relative;
+        width: 30px;
+        height: 30px;
+      }
+
+      .menu-toggle .fa-bars {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .menu-toggle .fa-times {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .menu-toggle.active .fa-bars {
+        opacity: 0;
+      }
+
+      .menu-toggle.active .fa-times {
+        opacity: 1;
+      }
+
+      @media (max-width: 768px) {
+        .menu-toggle {
+          display: block;
+        }
+      }
+
+      /* Header (disesuaikan) */
+      header {
+        text-align: center;
+        padding: 2rem 1rem;
+        background: linear-gradient(135deg, #0d1b2a, #1b263b);
+        position: relative;
+        overflow: hidden;
+        border-bottom: 3px solid var(--accent);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        margin-top: calc(var(--nav-height) - 10px); /* Menyesuaikan margin top */
+      }
+
+      header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--accent2), var(--accent));
+        box-shadow: 0 0 15px var(--accent);
+      }
+
+      .logo {
+        font-size: 2.8rem;
+        margin-bottom: 1rem;
+        color: var(--text-light);
+        text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent2);
+      }
+
+      h1 {
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .subtitle {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        max-width: 600px;
+        margin: 0 auto 1.5rem;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Tombol utama (dihapus dari header) */
+      .btn {
+        display: inline-block;
+        background: linear-gradient(45deg, var(--accent2), var(--accent));
+        color: white;
+        padding: 0.8rem 1.8rem;
+        border-radius: 50px;
+        font-weight: 600;
+        text-decoration: none;
+        margin: 0.5rem;
+        transition: var(--transition);
+        box-shadow: 0 4px 15px rgba(51, 153, 255, 0.4);
+        border: none;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -60%;
+        width: 20px;
+        height: 200%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: rotate(25deg);
+        transition: all 0.6s;
+      }
+
+      .btn:hover::after {
+        left: 120%;
+      }
+
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(51, 153, 255, 0.6);
+      }
+
+      /* Statistik Section */
+      .stats-section {
+        padding: 3rem 1rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .section-title {
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 1.8rem;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        position: relative;
+        display: inline-block;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 0 1rem;
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        border-radius: 10px;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.8rem;
+        margin-bottom: 3rem;
+      }
+
+      .stat-card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 1.8rem;
+        text-align: center;
+        transition: var(--transition);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(51, 153, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .stat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(51, 153, 255, 0.2);
+      }
+
+      .stat-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: var(--accent);
+        text-shadow: 0 0 10px rgba(51, 170, 255, 0.5);
+      }
+
+      .stat-value {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--text-light);
+        text-shadow: 0 0 10px rgba(51, 170, 255, 0.3);
+      }
+
+      .stat-label {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+      }
+
+      .stat-change {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+
+      .change-positive {
+        color: var(--success);
+      }
+
+      .change-negative {
+        color: var(--danger);
+      }
+
+      /* Grafik Section */
+      .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .chart-container {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(51, 153, 255, 0.2);
+        transition: var(--transition);
+      }
+
+      .chart-container:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(51, 153, 255, 0.2);
+      }
+
+      .chart-title {
+        font-size: 1.4rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: var(--accent);
+        position: relative;
+        padding-bottom: 10px;
+      }
+
+      .chart-title::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 25%;
+        right: 25%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      }
+
+      .chart-wrapper {
+        width: 100%;
+        height: 300px;
+        position: relative;
+      }
+
+      /* Range Picker */
+      .date-range-picker {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .range-btn {
+        background: rgba(51, 153, 255, 0.1);
+        color: var(--text-light);
+        border: 1px solid rgba(51, 153, 255, 0.3);
+        padding: 0.5rem 1.2rem;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: var(--transition);
+        font-weight: 500;
+      }
+
+      .range-btn:hover,
+      .range-btn.active {
+        background: rgba(51, 153, 255, 0.25);
+        transform: translateY(-2px);
+      }
+
+      /* Footer */
+      footer {
+        text-align: center;
+        padding: 2rem 1rem;
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--text-muted);
+        border-top: 1px solid rgba(51, 153, 255, 0.1);
+        /* Baru: untuk sticky footer */
+        margin-top: auto;
+        width: 100%;
+      }
+
+      .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin: 1.5rem 0;
+      }
+
+      .social-links a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(51, 153, 255, 0.1);
+        color: var(--text-light);
+        transition: var(--transition);
+      }
+
+      .social-links a:hover {
+        background: var(--accent);
+        transform: translateY(-3px);
+      }
+
+      /* Notifikasi */
+      .notification {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 15px 25px;
+        border-radius: 10px;
+        color: white;
+        font-weight: 600;
+        z-index: 3000;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.4s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .notification.success {
+        background: var(--success);
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .notification.error {
+        background: var(--danger);
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .notification.warning {
+        background: var(--warning);
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Responsif */
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+          position: absolute;
+          top: var(--nav-height);
+          left: 0;
+          right: 0;
+          background: rgba(13, 27, 42, 0.98);
+          flex-direction: column;
+          padding: 1rem;
+          gap: 10px;
+          border-bottom: 2px solid rgba(51, 153, 255, 0.3);
+          /* Perubahan: align items ke kiri */
+          align-items: flex-start;
+        }
+
+        .nav-links.active {
+          display: flex;
+        }
+
+        .menu-toggle {
+          display: block;
+        }
+
+        .nav-link {
+          width: 100%;
+          /* Perubahan: justify content ke kiri */
+          justify-content: flex-start;
+          /* Perubahan: tambahkan padding kiri */
+          padding-left: 25px;
+        }
+
+        .charts-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .chart-container {
+          padding: 1rem;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .charts-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .chart-container {
+          min-width: 100%;
+        }
+
+        .chart-wrapper {
+          height: 250px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .logo {
+          font-size: 2.2rem;
+        }
+
+        h1 {
+          font-size: 1.8rem;
+        }
+
+        .navbar {
+          padding: 0 1rem;
+        }
+
+        .brand-text {
+          font-size: 1.3rem;
+        }
+
+        .stat-value {
+          font-size: 1.8rem;
+        }
+
+        .chart-title {
+          font-size: 1.2rem;
+        }
+      }
+
+      /* Animasi */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .fade-in {
+        animation: fadeIn 0.6s ease forwards;
+      }
+
+      .delay-1 {
+        animation-delay: 0.1s;
+      }
+      .delay-2 {
+        animation-delay: 0.2s;
+      }
+      .delay-3 {
+        animation-delay: 0.3s;
+      }
+      .delay-4 {
+        animation-delay: 0.4s;
+      }
+
+      /* Loading spinner */
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+        margin-right: 8px;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Loading state */
+      .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 4000;
+        flex-direction: column;
+      }
+
+      .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 5px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: var(--accent);
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      .loading-text {
+        color: var(--text-light);
+        margin-top: 20px;
+        font-size: 1.2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar Modern -->
+    <nav class="navbar">
+      <div class="navbar-container">
+        <a href="index.html" class="logo-brand">
+          <i class="fas fa-store"></i>
+          <span class="brand-text">SNAYDER'S STORE</span>
+        </a>
+
+        <div class="nav-links">
+          <a href="index.html" class="nav-link"> <i class="fas fa-home"></i> Beranda </a>
+          <a href="#" class="nav-link"> <i class="fas fa-chart-line"></i> Statistik </a>
+          <button class="nav-link" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+
+        <div class="menu-toggle" id="menuToggle">
+          <i class="fas fa-bars"></i>
+          <i class="fas fa-times"></i>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Memuat data...</p>
+    </div>
+
+    <!-- Wrapper untuk konten utama -->
+    <div id="content-wrapper">
+      <!-- Header -->
+      <header>
+        <div class="logo">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h1>Statistik Pengunjung</h1>
+        <p class="subtitle">Pantau aktivitas pengunjung website toko digital Anda</p>
+      </header>
+
+      <!-- Statistik Section -->
+      <section class="stats-section">
+        <h2 class="section-title">Statistik Pengunjung</h2>
+
+        <div class="stats-grid">
+          <div class="stat-card fade-in">
+            <div class="stat-icon">
+              <i class="fas fa-calendar-day"></i>
+            </div>
+            <div class="stat-value" id="dailyVisitors">0</div>
+            <div class="stat-label">Pengunjung Hari Ini</div>
+            <div class="stat-change change-positive" id="dailyChange">+0% dari kemarin</div>
+          </div>
+
+          <div class="stat-card fade-in delay-1">
+            <div class="stat-icon">
+              <i class="fas fa-calendar-week"></i>
+            </div>
+            <div class="stat-value" id="weeklyVisitors">0</div>
+            <div class="stat-label">Pengunjung Minggu Ini</div>
+            <div class="stat-change change-positive" id="weeklyChange">+0% dari minggu lalu</div>
+          </div>
+
+          <div class="stat-card fade-in delay-2">
+            <div class="stat-icon">
+              <i class="fas fa-calendar-alt"></i>
+            </div>
+            <div class="stat-value" id="monthlyVisitors">0</div>
+            <div class="stat-label">Pengunjung Bulan Ini</div>
+            <div class="stat-change change-positive" id="monthlyChange">+0% dari bulan lalu</div>
+          </div>
+
+          <div class="stat-card fade-in delay-3">
+            <div class="stat-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-value" id="totalVisitors">0</div>
+            <div class="stat-label">Total Pengunjung</div>
+            <div class="stat-change change-positive" id="totalChange">+0% dari periode sebelumnya</div>
+          </div>
+        </div>
+
+        <!-- Date Range Picker -->
+        <div class="date-range-picker">
+          <button class="range-btn active" data-range="7">7 Hari Terakhir</button>
+          <button class="range-btn" data-range="30">30 Hari Terakhir</button>
+          <button class="range-btn" data-range="90">90 Hari Terakhir</button>
+          <button class="range-btn" data-range="180">6 Bulan Terakhir</button>
+        </div>
+
+        <!-- Grafik Section -->
+        <div class="charts-grid">
+          <div class="chart-container fade-in">
+            <h3 class="chart-title">Pengunjung Harian</h3>
+            <div class="chart-wrapper">
+              <canvas id="dailyChart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-container fade-in delay-1">
+            <h3 class="chart-title">Pengunjung Berdasarkan Jam</h3>
+            <div class="chart-wrapper">
+              <canvas id="hourlyChart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-container fade-in">
+            <h3 class="chart-title">Pengunjung Per Bulan</h3>
+            <div class="chart-wrapper">
+              <canvas id="monthlyChart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-container fade-in delay-1">
+            <h3 class="chart-title">Sumber Pengunjung</h3>
+            <div class="chart-wrapper">
+              <canvas id="sourceChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="social-links">
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/snayderstore.2025" title="Facebook" target="_blank">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+
+        <!-- WhatsApp -->
+        <a href="https://wa.me/6287866361260" title="WhatsApp" target="_blank">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+        <!-- Telegram -->
+        <a href="https://t.me/snayderstore" title="Telegram" target="_blank">
+          <i class="fab fa-telegram"></i>
+        </a>
+
+        <!-- Email Baru -->
+        <a href="mailto:snaydersonly@gmail.com" title="Email" target="_blank">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </div>
+      <p>&copy; 2025 <strong>SNAYDER'S STORE</strong> &mdash; Allright Reserved <i class="fas fa-heart" style="color: var(--accent)"></i></p>
+    </footer>
+
+    <script>
+      // Elemen DOM
+      const menuToggle = document.getElementById("menuToggle");
+      const navLinks = document.querySelector(".nav-links");
+      const logoutBtn = document.getElementById("logoutBtn");
+      const loadingOverlay = document.getElementById("loadingOverlay");
+      const rangeButtons = document.querySelectorAll(".range-btn");
+      const dailyVisitors = document.getElementById("dailyVisitors");
+      const weeklyVisitors = document.getElementById("weeklyVisitors");
+      const monthlyVisitors = document.getElementById("monthlyVisitors");
+      const totalVisitors = document.getElementById("totalVisitors");
+      const dailyChange = document.getElementById("dailyChange");
+      const weeklyChange = document.getElementById("weeklyChange");
+      const monthlyChange = document.getElementById("monthlyChange");
+      const totalChange = document.getElementById("totalChange");
+
+      // Chart instances
+      let dailyChart, hourlyChart, monthlyChart, sourceChart;
+
+      // Tampilkan notifikasi
+      function showNotification(message, type) {
+        // Buat elemen notifikasi jika belum ada
+        let notification = document.getElementById("notification");
+        if (!notification) {
+          notification = document.createElement("div");
+          notification.id = "notification";
+          document.body.appendChild(notification);
+        }
+        notification.textContent = message;
+        notification.className = `notification ${type}`;
+
+        setTimeout(() => {
+          notification.className = "notification";
+        }, 3000);
+      }
+
+      // Fungsi untuk logout
+      function logout() {
+        localStorage.removeItem("adminLoggedIn");
+        showNotification("Anda berhasil logout", "success");
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1500);
+      }
+
+      // Cek apakah admin sudah login
+      function checkLogin() {
+        const isLoggedIn = localStorage.getItem("adminLoggedIn") === "true";
+        if (!isLoggedIn) {
+          showNotification("Anda harus login sebagai admin", "error");
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 2000);
+          return false;
+        }
+        return true;
+      }
+
+      // Fungsi untuk mengambil data statistik
+      async function fetchStats(range = 7) {
+        try {
+          // Simulasi API call ke GitHub
+          const response = await fetch(`https://api.github.com/repos/shan-only/PersonalWeb3/contents/visits.json`);
+          const data = await response.json();
+
+          // Decode content dari base64
+          const content = atob(data.content);
+          const visits = JSON.parse(content);
+
+          // Hitung statistik
+          const now = new Date();
+          const today = now.toISOString().split("T")[0];
+          const yesterday = new Date(now);
+          yesterday.setDate(yesterday.getDate() - 1);
+          const yesterdayKey = yesterday.toISOString().split("T")[0];
+
+          // Data untuk chart harian
+          const dates = [];
+          const dailyData = [];
+          const todayHourly = visits.hourly[today] || {};
+
+          // Data untuk chart per jam
+          const hours = Array.from({ length: 24 }, (_, i) => `${i}:00`);
+          const hourlyData = hours.map((_, hour) => todayHourly[hour] || 0);
+
+          // Data untuk 7 hari terakhir
+          for (let i = range - 1; i >= 0; i--) {
+            const date = new Date(now);
+            date.setDate(date.getDate() - i);
+            const dateKey = date.toISOString().split("T")[0];
+            dates.push(`${date.getDate()}/${date.getMonth() + 1}`);
+            dailyData.push(visits.daily[dateKey] || 0);
+          }
+
+          // Data bulanan
+          const months = [];
+          const monthlyData = [];
+          for (let i = 11; i >= 0; i--) {
+            const date = new Date(now);
+            date.setMonth(date.getMonth() - i);
+            const monthKey = `${date.getFullYear()}-${date.getMonth() + 1}`;
+            months.push(date.toLocaleString("id", { month: "short" }));
+            monthlyData.push(visits.monthly[monthKey] || 0);
+          }
+
+          // Data sumber
+          const sources = visits.sources ? Object.keys(visits.sources) : ["Pencarian", "Sosial Media", "Langsung", "Referensi"];
+          const sourceData = visits.sources ? Object.values(visits.sources) : [35, 25, 20, 20];
+          const sourceColors = ["#33aaff", "#ff6b6b", "#00cc99", "#ffcc00"];
+
+          // Hitung statistik
+          const stats = {
+            daily: visits.daily[today] || 0,
+            weekly: 0,
+            monthly: 0,
+            total: visits.total || 0,
+            dailyChange: 0,
+          };
+
+          // Hitung mingguan
+          for (let i = 0; i < 7; i++) {
+            const date = new Date(now);
+            date.setDate(date.getDate() - i);
+            const dateKey = date.toISOString().split("T")[0];
+            stats.weekly += visits.daily[dateKey] || 0;
+          }
+
+          // Hitung bulanan
+          const currentMonth = `${now.getFullYear()}-${now.getMonth() + 1}`;
+          stats.monthly = visits.monthly[currentMonth] || 0;
+
+          // Hitung perubahan harian
+          if (visits.daily[yesterdayKey]) {
+            stats.dailyChange = Math.round(((stats.daily - visits.daily[yesterdayKey]) / visits.daily[yesterdayKey]) * 100);
+          }
+
+          return {
+            stats,
+            dates,
+            dailyData,
+            hours,
+            hourlyData,
+            months,
+            monthlyData,
+            sources,
+            sourceData,
+            sourceColors,
+          };
+        } catch (error) {
+          console.error("Error fetching stats:", error);
+          // Kembalikan data dummy jika terjadi error
+          return {
+            stats: {
+              daily: 245,
+              weekly: 1680,
+              monthly: 5320,
+              total: 28350,
+              dailyChange: 12,
+            },
+            dates: ["15/6", "16/6", "17/6", "18/6", "19/6", "20/6", "21/6"],
+            dailyData: [210, 230, 245, 220, 215, 240, 245],
+            hours: Array.from({ length: 24 }, (_, i) => `${i}:00`),
+            hourlyData: Array.from({ length: 24 }, () => Math.floor(Math.random() * 50) + 20),
+            months: ["Jul", "Agu", "Sep", "Okt", "Nov", "Des", "Jan", "Feb", "Mar", "Apr", "Mei", "Jun"],
+            monthlyData: [420, 480, 520, 560, 610, 670, 720, 780, 840, 920, 980, 1050],
+            sources: ["Pencarian", "Sosial Media", "Langsung", "Referensi"],
+            sourceData: [35, 25, 20, 20],
+            sourceColors: ["#33aaff", "#ff6b6b", "#00cc99", "#ffcc00"],
+          };
+        }
+      }
+
+      // Update statistik
+      function updateStats(stats) {
+        dailyVisitors.textContent = stats.daily.toLocaleString();
+        weeklyVisitors.textContent = stats.weekly.toLocaleString();
+        monthlyVisitors.textContent = stats.monthly.toLocaleString();
+        totalVisitors.textContent = stats.total.toLocaleString();
+
+        dailyChange.textContent = `${stats.dailyChange >= 0 ? "+" : ""}${stats.dailyChange}% dari kemarin`;
+        dailyChange.className = `stat-change ${stats.dailyChange >= 0 ? "change-positive" : "change-negative"}`;
+
+        // Untuk saat ini, kita tidak punya data perubahan untuk mingguan, bulanan, dan total
+        // Jadi kita set default positif
+        weeklyChange.textContent = `+8% dari minggu lalu`;
+        monthlyChange.textContent = `+15% dari bulan lalu`;
+        totalChange.textContent = `+22% dari periode sebelumnya`;
+      }
+
+      // Create charts
+      function createCharts(chartData) {
+        // Destroy existing charts
+        if (dailyChart) dailyChart.destroy();
+        if (hourlyChart) hourlyChart.destroy();
+        if (monthlyChart) monthlyChart.destroy();
+        if (sourceChart) sourceChart.destroy();
+
+        // Daily chart
+        const dailyCtx = document.getElementById("dailyChart").getContext("2d");
+        dailyChart = new Chart(dailyCtx, {
+          type: "line",
+          data: {
+            labels: chartData.dates,
+            datasets: [
+              {
+                label: "Pengunjung",
+                data: chartData.dailyData,
+                borderColor: "#33aaff",
+                backgroundColor: "rgba(51, 170, 255, 0.1)",
+                borderWidth: 3,
+                pointBackgroundColor: "#33aaff",
+                pointRadius: 4,
+                tension: 0.3,
+                fill: true,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                backgroundColor: "rgba(29, 31, 37, 0.9)",
+                titleColor: "#e0f0ff",
+                bodyColor: "#88bbff",
+                borderColor: "#3399ff",
+                borderWidth: 1,
+                displayColors: false,
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: {
+                  color: "rgba(51, 153, 255, 0.1)",
+                },
+                ticks: {
+                  color: "#88bbff",
+                },
+              },
+              x: {
+                grid: {
+                  color: "rgba(51, 153, 255, 0.1)",
+                },
+                ticks: {
+                  color: "#88bbff",
+                },
+              },
+            },
+          },
+        });
+
+        // Hourly chart
+        const hourlyCtx = document.getElementById("hourlyChart").getContext("2d");
+        hourlyChart = new Chart(hourlyCtx, {
+          type: "bar",
+          data: {
+            labels: chartData.hours,
+            datasets: [
+              {
+                label: "Pengunjung",
+                data: chartData.hourlyData,
+                backgroundColor: "rgba(51, 170, 255, 0.5)",
+                borderColor: "#33aaff",
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                backgroundColor: "rgba(29, 31, 37, 0.9)",
+                titleColor: "#e0f0ff",
+                bodyColor: "#88bbff",
+                borderColor: "#3399ff",
+                borderWidth: 1,
+                displayColors: false,
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: {
+                  color: "rgba(51, 153, 255, 0.1)",
+                },
+                ticks: {
+                  color: "#88bbff",
+                },
+              },
+              x: {
+                grid: {
+                  display: false,
+                },
+                ticks: {
+                  color: "#88bbff",
+                  maxRotation: 0,
+                  autoSkip: true,
+                  maxTicksLimit: 12,
+                },
+              },
+            },
+          },
+        });
+
+        // Monthly chart
+        const monthlyCtx = document.getElementById("monthlyChart").getContext("2d");
+        monthlyChart = new Chart(monthlyCtx, {
+          type: "line",
+          data: {
+            labels: chartData.months,
+            datasets: [
+              {
+                label: "Pengunjung",
+                data: chartData.monthlyData,
+                borderColor: "#00cc99",
+                backgroundColor: "rgba(0, 204, 153, 0.1)",
+                borderWidth: 3,
+                pointBackgroundColor: "#00cc99",
+                pointRadius: 4,
+                tension: 0.3,
+                fill: true,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                backgroundColor: "rgba(29, 31, 37, 0.9)",
+                titleColor: "#e0f0ff",
+                bodyColor: "#88bbff",
+                borderColor: "#3399ff",
+                borderWidth: 1,
+                displayColors: false,
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: {
+                  color: "rgba(51, 153, 255, 0.1)",
+                },
+                ticks: {
+                  color: "#88bbff",
+                },
+              },
+              x: {
+                grid: {
+                  color: "rgba(51, 153, 255, 0.1)",
+                },
+                ticks: {
+                  color: "#88bbff",
+                },
+              },
+            },
+          },
+        });
+
+        // Source chart
+        const sourceCtx = document.getElementById("sourceChart").getContext("2d");
+        sourceChart = new Chart(sourceCtx, {
+          type: "doughnut",
+          data: {
+            labels: chartData.sources,
+            datasets: [
+              {
+                data: chartData.sourceData,
+                backgroundColor: chartData.sourceColors,
+                borderColor: "rgba(29, 31, 37, 0.8)",
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: {
+                  color: "#e0f0ff",
+                  padding: 20,
+                  font: {
+                    size: 12,
+                  },
+                },
+              },
+              tooltip: {
+                backgroundColor: "rgba(29, 31, 37, 0.9)",
+                titleColor: "#e0f0ff",
+                bodyColor: "#88bbff",
+                borderColor: "#3399ff",
+                borderWidth: 1,
+              },
+            },
+            cutout: "60%",
+          },
+        });
+      }
+
+      // Toggle menu responsif
+      menuToggle.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+        menuToggle.classList.toggle("active");
+      });
+
+      // Event listener untuk logout
+      logoutBtn.addEventListener("click", logout);
+
+      // Event listener untuk tombol range
+      rangeButtons.forEach((btn) => {
+        btn.addEventListener("click", async function () {
+          rangeButtons.forEach((b) => b.classList.remove("active"));
+          this.classList.add("active");
+
+          const range = parseInt(this.getAttribute("data-range"));
+          loadingOverlay.style.display = "flex";
+
+          try {
+            const chartData = await fetchStats(range);
+            createCharts(chartData);
+          } catch (error) {
+            console.error("Error updating charts:", error);
+            showNotification("Gagal memuat data statistik", "error");
+          } finally {
+            loadingOverlay.style.display = "none";
+          }
+        });
+      });
+
+      // Panggil saat halaman dimuat
+      document.addEventListener("DOMContentLoaded", async function () {
+        // Cek login
+        if (!checkLogin()) return;
+
+        // Tampilkan loading overlay
+        loadingOverlay.style.display = "flex";
+
+        try {
+          // Ambil data statistik
+          const chartData = await fetchStats();
+
+          // Update statistik
+          updateStats(chartData.stats);
+
+          // Buat chart
+          createCharts(chartData);
+        } catch (error) {
+          console.error("Failed to load data", error);
+          showNotification("Gagal memuat data statistik", "error");
+        } finally {
+          loadingOverlay.style.display = "none";
+        }
+      });
+    </script>
+  </body>
+</html>
