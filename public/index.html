@@ -144,6 +144,40 @@
         font-size: 1.5rem;
         color: var(--text-light);
         cursor: pointer;
+        transition: transform 0.3s ease;
+        z-index: 1001;
+        position: relative;
+        width: 30px;
+        height: 30px;
+      }
+      
+      .menu-toggle .fa-bars {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: opacity 0.3s ease;
+      }
+      
+      .menu-toggle .fa-times {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      
+      .menu-toggle.active .fa-bars {
+        opacity: 0;
+      }
+      
+      .menu-toggle.active .fa-times {
+        opacity: 1;
+      }
+
+      @media (max-width: 768px) {
+        .menu-toggle {
+          display: block;
+        }
       }
 
       /* Header (disesuaikan) */
@@ -748,22 +782,6 @@
         .menu-toggle {
           display: block;
         }
-        /* Tambahan untuk animasi hamburger */
-        .menu-toggle {
-          transition: transform 0.3s ease;
-        }
-
-        .menu-toggle.active i.fa-bars {
-          display: none;
-        }
-
-        .menu-toggle i.fa-times {
-          display: none;
-        }
-
-        .menu-toggle.active i.fa-times {
-          display: block;
-        }
 
         .nav-link {
           width: 100%;
@@ -931,6 +949,7 @@
 
         <div class="menu-toggle" id="menuToggle">
           <i class="fas fa-bars"></i>
+          <i class="fas fa-times"></i>
         </div>
       </div>
     </nav>
@@ -1078,6 +1097,7 @@
       document.addEventListener("click", function (e) {
         if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
           navLinks.classList.remove("active");
+          menuToggle.classList.remove("active");
         }
       });
 
@@ -1495,29 +1515,12 @@
         });
       });
 
-      // Fungsi untuk mengganti ikon menu toggle
-      function toggleMenuIcon() {
-        const menuIcon = menuToggle.querySelector("i");
-        if (navLinks.classList.contains("active")) {
-          menuToggle.classList.add("active");
-        } else {
-          menuToggle.classList.remove("active");
-        }
-      }
-
       // Toggle menu responsif
       menuToggle.addEventListener("click", () => {
         navLinks.classList.toggle("active");
-        toggleMenuIcon();
+        menuToggle.classList.toggle("active");
       });
 
-      // Tutup menu mobile saat klik di luar nav-links dan tombol toggle
-      document.addEventListener("click", function (e) {
-        if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
-          navLinks.classList.remove("active");
-          toggleMenuIcon();
-        }
-      });
       // Panggil saat halaman dimuat
       document.addEventListener("DOMContentLoaded", async () => {
         // Tampilkan loading overlay
