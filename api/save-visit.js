@@ -92,11 +92,14 @@ module.exports = async (req, res) => {
       if (error.statusCode !== 404) throw error;
     }
 
-    // Update visit data
+    // Update visit data with WIB time (UTC+7)
     const now = new Date();
-    const dateKey = now.toISOString().split("T")[0];
-    const hourKey = now.getHours();
-    const monthKey = `${now.getFullYear()}-${now.getMonth() + 1}`;
+    const wibOffset = 7 * 60 * 60 * 1000; // UTC+7 in milliseconds
+    const wibTime = new Date(now.getTime() + wibOffset);
+
+    const dateKey = wibTime.toISOString().split("T")[0];
+    const hourKey = wibTime.getHours();
+    const monthKey = `${wibTime.getFullYear()}-${String(wibTime.getMonth() + 1).padStart(2, '0')}`;
 
     visits.total = (visits.total || 0) + 1;
     visits.daily[dateKey] = (visits.daily[dateKey] || 0) + 1;
@@ -111,7 +114,7 @@ module.exports = async (req, res) => {
 
     // Update file on GitHub
     const updatePayload = {
-      message: `Update visit data ${now.toISOString()}`,
+      message: `Update visit data ${wibTime.toISOString()}`,
       content: Buffer.from(JSON.stringify(visits, null, 2)).toString("base64"),
       branch: BRANCH,
     };
@@ -136,9 +139,11 @@ module.exports = async (req, res) => {
         };
 
         const now = new Date();
-        const dateKey = now.toISOString().split("T")[0];
-        const hourKey = now.getHours();
-        const monthKey = `${now.getFullYear()}-${now.getMonth() + 1}`;
+        const wibOffset = 7 * 60 * 60 * 1000;
+        const wibTime = new Date(now.getTime() + wibOffset);
+        const dateKey = wibTime.toISOString().split("T")[0];
+        const hourKey = wibTime.getHours();
+        const monthKey = `${wibTime.getFullYear()}-${String(wibTime.getMonth() + 1).padStart(2, '0')}`;
 
         initialData.daily[dateKey] = 1;
         initialData.hourly[dateKey] = { [hourKey]: 1 };
