@@ -41,15 +41,14 @@
         background-image: linear-gradient(135deg, rgba(13, 27, 42, 0.8) 0%, rgba(27, 38, 59, 0.8) 100%), radial-gradient(circle at top right, rgba(51, 170, 255, 0.1), transparent 25%),
           radial-gradient(circle at bottom left, rgba(0, 102, 255, 0.1), transparent 25%);
         background-attachment: fixed;
-        padding-top: var(--nav-height); /* Tambahkan padding untuk navbar */
-        display: flex; /* Baru: gunakan flexbox */
-        flex-direction: column; /* Baru: arah kolom */
-        min-height: 100vh; /* Baru: minimal tinggi viewport */
+        padding-top: var(--nav-height);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
       }
 
-      /* Baru: wrapper untuk konten utama */
       #content-wrapper {
-        flex: 1; /* Mengisi sisa ruang vertikal */
+        flex: 1;
         width: 100%;
       }
 
@@ -181,7 +180,7 @@
         }
       }
 
-      /* Header (disesuaikan) */
+      /* Header */
       header {
         text-align: center;
         padding: 2rem 1rem;
@@ -190,7 +189,7 @@
         overflow: hidden;
         border-bottom: 3px solid var(--accent);
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-        margin-top: calc(var(--nav-height) - 10px); /* Menyesuaikan margin top */
+        margin-top: calc(var(--nav-height) - 10px);
       }
 
       header::before {
@@ -230,7 +229,7 @@
         text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
       }
 
-      /* Tombol utama (dihapus dari header) */
+      /* Tombol utama */
       .btn {
         display: inline-block;
         background: linear-gradient(45deg, var(--accent2), var(--accent));
@@ -450,7 +449,6 @@
         background: rgba(0, 0, 0, 0.3);
         color: var(--text-muted);
         border-top: 1px solid rgba(51, 153, 255, 0.1);
-        /* Baru: untuk sticky footer */
         margin-top: auto;
         width: 100%;
       }
@@ -526,7 +524,6 @@
           padding: 1rem;
           gap: 10px;
           border-bottom: 2px solid rgba(51, 153, 255, 0.3);
-          /* Perubahan: align items ke kiri */
           align-items: flex-start;
         }
 
@@ -540,9 +537,7 @@
 
         .nav-link {
           width: 100%;
-          /* Perubahan: justify content ke kiri */
           justify-content: flex-start;
-          /* Perubahan: tambahkan padding kiri */
           padding-left: 25px;
         }
 
@@ -685,7 +680,6 @@
         <div class="nav-links">
           <a href="index.html" class="nav-link"> <i class="fas fa-home"></i> Beranda </a>
           <a href="#" class="nav-link"> <i class="fas fa-chart-line"></i> Statistik </a>
-          <button class="nav-link" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
 
         <div class="menu-toggle" id="menuToggle">
@@ -824,7 +818,6 @@
       // Elemen DOM
       const menuToggle = document.getElementById("menuToggle");
       const navLinks = document.querySelector(".nav-links");
-      const logoutBtn = document.getElementById("logoutBtn");
       const loadingOverlay = document.getElementById("loadingOverlay");
       const rangeButtons = document.querySelectorAll(".range-btn");
       const dailyVisitors = document.getElementById("dailyVisitors");
@@ -838,10 +831,10 @@
 
       // Chart instances
       let dailyChart, hourlyChart, monthlyChart, sourceChart;
+      const API_BASE_URL = "/api"; // Sesuaikan dengan path API Anda
 
       // Tampilkan notifikasi
       function showNotification(message, type) {
-        // Buat elemen notifikasi jika belum ada
         let notification = document.getElementById("notification");
         if (!notification) {
           notification = document.createElement("div");
@@ -856,121 +849,56 @@
         }, 3000);
       }
 
-      // Fungsi untuk logout
-      function logout() {
-        localStorage.removeItem("adminLoggedIn");
-        showNotification("Anda berhasil logout", "success");
-        setTimeout(() => {
-          window.location.href = "index.html";
-        }, 1500);
-      }
-
-      // Cek apakah admin sudah login
-      function checkLogin() {
-        const isLoggedIn = localStorage.getItem("adminLoggedIn") === "true";
-        if (!isLoggedIn) {
-          showNotification("Anda harus login sebagai admin", "error");
-          setTimeout(() => {
-            window.location.href = "index.html";
-          }, 2000);
-          return false;
+      // Fungsi untuk mencatat kunjungan
+      async function recordVisit() {
+        try {
+          const response = await fetch(`${API_BASE_URL}/save-visit`, {
+            method: "POST",
+          });
+          const data = await response.json();
+          if (!data.success) {
+            console.error("Failed to record visit");
+          }
+        } catch (error) {
+          console.error("Error recording visit:", error);
         }
-        return true;
       }
 
       // Fungsi untuk mengambil data statistik
       async function fetchStats(range = 7) {
         try {
-          // Simulasi API call ke GitHub
-          const response = await fetch(`https://api.github.com/repos/shan-only/PersonalWeb3/contents/visits.json`);
+          const response = await fetch(`${API_BASE_URL}/get-stats`);
+          if (!response.ok) throw new Error("Failed to fetch stats");
           const data = await response.json();
 
-          // Decode content dari base64
-          const content = atob(data.content);
-          const visits = JSON.parse(content);
-
-          // Hitung statistik
+          // Proses data untuk chart harian berdasarkan range
           const now = new Date();
-          const today = now.toISOString().split("T")[0];
-          const yesterday = new Date(now);
-          yesterday.setDate(yesterday.getDate() - 1);
-          const yesterdayKey = yesterday.toISOString().split("T")[0];
-
-          // Data untuk chart harian
           const dates = [];
           const dailyData = [];
-          const todayHourly = visits.hourly[today] || {};
 
-          // Data untuk chart per jam
-          const hours = Array.from({ length: 24 }, (_, i) => `${i}:00`);
-          const hourlyData = hours.map((_, hour) => todayHourly[hour] || 0);
-
-          // Data untuk 7 hari terakhir
           for (let i = range - 1; i >= 0; i--) {
             const date = new Date(now);
             date.setDate(date.getDate() - i);
             const dateKey = date.toISOString().split("T")[0];
             dates.push(`${date.getDate()}/${date.getMonth() + 1}`);
-            dailyData.push(visits.daily[dateKey] || 0);
-          }
-
-          // Data bulanan
-          const months = [];
-          const monthlyData = [];
-          for (let i = 11; i >= 0; i--) {
-            const date = new Date(now);
-            date.setMonth(date.getMonth() - i);
-            const monthKey = `${date.getFullYear()}-${date.getMonth() + 1}`;
-            months.push(date.toLocaleString("id", { month: "short" }));
-            monthlyData.push(visits.monthly[monthKey] || 0);
-          }
-
-          // Data sumber
-          const sources = visits.sources ? Object.keys(visits.sources) : ["Pencarian", "Sosial Media", "Langsung", "Referensi"];
-          const sourceData = visits.sources ? Object.values(visits.sources) : [35, 25, 20, 20];
-          const sourceColors = ["#33aaff", "#ff6b6b", "#00cc99", "#ffcc00"];
-
-          // Hitung statistik
-          const stats = {
-            daily: visits.daily[today] || 0,
-            weekly: 0,
-            monthly: 0,
-            total: visits.total || 0,
-            dailyChange: 0,
-          };
-
-          // Hitung mingguan
-          for (let i = 0; i < 7; i++) {
-            const date = new Date(now);
-            date.setDate(date.getDate() - i);
-            const dateKey = date.toISOString().split("T")[0];
-            stats.weekly += visits.daily[dateKey] || 0;
-          }
-
-          // Hitung bulanan
-          const currentMonth = `${now.getFullYear()}-${now.getMonth() + 1}`;
-          stats.monthly = visits.monthly[currentMonth] || 0;
-
-          // Hitung perubahan harian
-          if (visits.daily[yesterdayKey]) {
-            stats.dailyChange = Math.round(((stats.daily - visits.daily[yesterdayKey]) / visits.daily[yesterdayKey]) * 100);
+            dailyData.push(data.dailyData[i] || 0);
           }
 
           return {
-            stats,
+            stats: data.stats,
             dates,
             dailyData,
-            hours,
-            hourlyData,
-            months,
-            monthlyData,
-            sources,
-            sourceData,
-            sourceColors,
+            hours: data.hours,
+            hourlyData: data.hourlyData,
+            months: data.months,
+            monthlyData: data.monthlyData,
+            sources: data.sources,
+            sourceData: data.sourceData,
+            sourceColors: data.sourceColors,
           };
         } catch (error) {
           console.error("Error fetching stats:", error);
-          // Kembalikan data dummy jika terjadi error
+          // Kembalikan data dummy
           return {
             stats: {
               daily: 245,
@@ -1238,9 +1166,6 @@
         menuToggle.classList.toggle("active");
       });
 
-      // Event listener untuk logout
-      logoutBtn.addEventListener("click", logout);
-
       // Event listener untuk tombol range
       rangeButtons.forEach((btn) => {
         btn.addEventListener("click", async function () {
@@ -1264,11 +1189,11 @@
 
       // Panggil saat halaman dimuat
       document.addEventListener("DOMContentLoaded", async function () {
-        // Cek login
-        if (!checkLogin()) return;
-
         // Tampilkan loading overlay
         loadingOverlay.style.display = "flex";
+
+        // Catat kunjungan baru
+        await recordVisit();
 
         try {
           // Ambil data statistik
@@ -1285,6 +1210,17 @@
         } finally {
           loadingOverlay.style.display = "none";
         }
+
+        // Perbarui data setiap 5 menit
+        setInterval(async () => {
+          try {
+            const chartData = await fetchStats();
+            updateStats(chartData.stats);
+            createCharts(chartData);
+          } catch (error) {
+            console.error("Failed to refresh data", error);
+          }
+        }, 300000); // 5 menit
       });
     </script>
   </body>
