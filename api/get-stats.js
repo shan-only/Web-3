@@ -88,10 +88,13 @@ module.exports = async (req, res) => {
       };
     }
 
-    // Calculate statistics
+    // Calculate statistics with WIB time (UTC+7)
     const now = new Date();
-    const today = now.toISOString().split("T")[0];
-    const yesterday = new Date(now);
+    const wibOffset = 7 * 60 * 60 * 1000; // UTC+7 in milliseconds
+    const wibTime = new Date(now.getTime() + wibOffset);
+
+    const today = wibTime.toISOString().split("T")[0];
+    const yesterday = new Date(wibTime);
     yesterday.setDate(yesterday.getDate() - 1);
     const yesterdayKey = yesterday.toISOString().split("T")[0];
 
@@ -104,16 +107,16 @@ module.exports = async (req, res) => {
       hourly: visits.hourly[today] || {},
     };
 
-    // Calculate weekly
+    // Calculate weekly (last 7 days)
     for (let i = 0; i < 7; i++) {
-      const date = new Date(now);
+      const date = new Date(wibTime);
       date.setDate(date.getDate() - i);
       const dateKey = date.toISOString().split("T")[0];
       stats.weekly += visits.daily[dateKey] || 0;
     }
 
     // Calculate monthly
-    const currentMonth = `${now.getFullYear()}-${now.getMonth() + 1}`;
+    const currentMonth = `${wibTime.getFullYear()}-${String(wibTime.getMonth() + 1).padStart(2, '0')}`;
     stats.monthly = visits.monthly[currentMonth] || 0;
 
     // Calculate daily change
@@ -121,26 +124,35 @@ module.exports = async (req, res) => {
       stats.dailyChange = Math.round(((stats.daily - visits.daily[yesterdayKey]) / visits.daily[yesterdayKey]) * 100);
     }
 
-    // Prepare chart data
+    // Prepare chart data for daily (last 7 days) in WIB
     const dates = [];
     const dailyData = [];
     for (let i = 6; i >= 0; i--) {
-      const date = new Date(now);
+      const date = new Date(wibTime);
       date.setDate(date.getDate() - i);
       const dateKey = date.toISOString().split("T")[0];
-      dates.push(`${date.getDate()}/${date.getMonth() + 1}`);
+      dates.push(`${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}`);
       dailyData.push(visits.daily[dateKey] || 0);
     }
 
+    // Prepare hourly data for today in WIB
     const hours = Array.from({ length: 24 }, (_, i) => `${i}:00`);
-    const hourlyData = hours.map((_, hour) => stats.hourly[hour] || 0);
+    let hourlyData = Array(24).fill(0);
+    
+    // If we have hourly data for today, use it
+    if (visits.hourly[today]) {
+      for (let hour = 0; hour < 24; hour++) {
+        hourlyData[hour] = visits.hourly[today][hour] || 0;
+      }
+    }
 
+    // Prepare monthly data for the last 12 months
     const months = [];
     const monthlyData = [];
     for (let i = 11; i >= 0; i--) {
-      const date = new Date(now);
+      const date = new Date(wibTime);
       date.setMonth(date.getMonth() - i);
-      const monthKey = `${date.getFullYear()}-${date.getMonth() + 1}`;
+      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
       months.push(date.toLocaleString("id", { month: "short" }));
       monthlyData.push(visits.monthly[monthKey] || 0);
     }
