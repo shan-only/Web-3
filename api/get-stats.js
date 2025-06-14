@@ -73,10 +73,22 @@ module.exports = async (req, res) => {
     // Get visits.json content
     const fileData = await githubRequest(`/repos/${REPO}/contents/${FILEPATH}?ref=${BRANCH}`);
 
-    const content = Buffer.from(fileData.content, "base64").toString();
-    const visits = JSON.parse(content);
+    let visits;
+    try {
+      const content = Buffer.from(fileData.content, "base64").toString();
+      visits = JSON.parse(content);
+    } catch (parseError) {
+      console.error("JSON parse error, using default structure", parseError);
+      visits = { 
+        total: 0, 
+        daily: {}, 
+        hourly: {}, 
+        monthly: {}, 
+        sources: {} 
+      };
+    }
 
-    // Calculate statistics (same as original)
+    // Calculate statistics
     const now = new Date();
     const today = now.toISOString().split("T")[0];
     const yesterday = new Date(now);
@@ -109,7 +121,7 @@ module.exports = async (req, res) => {
       stats.dailyChange = Math.round(((stats.daily - visits.daily[yesterdayKey]) / visits.daily[yesterdayKey]) * 100);
     }
 
-    // Prepare chart data (same as original)
+    // Prepare chart data
     const dates = [];
     const dailyData = [];
     for (let i = 6; i >= 0; i--) {
