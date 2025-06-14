@@ -1,5 +1,4 @@
-const GAS_URL = "https://script.google.com/macros/s/AKfycbz_fdqOgLn3SoEaMeq-nsAAsdUapDKpRjjJG5ALvJarqnG4QgHQKYO8uJO9mQCMdt4w/exec
-"; // URL deploy GAS
+const GAS_URL = "https://script.google.com/macros/s/AKfycbz_fdqOgLn3SoEaMeq-nsAAsdUapDKpRjjJG5ALvJarqnG4QgHQKYO8uJO9mQCMdt4w/exec";
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
