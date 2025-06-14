@@ -648,7 +648,7 @@
             </div>
             <div class="stat-value" id="weeklyVisitors">0</div>
             <div class="stat-label">Pengunjung Minggu Ini</div>
-            <div class="stat-change change-positive" id="weeklyChange">+0% dari minggu lalu</div>
+            <div class="stat-change" id="weeklyChange">Perubahan: data tidak tersedia</div>
           </div>
 
           <div class="stat-card fade-in delay-2">
@@ -657,7 +657,7 @@
             </div>
             <div class="stat-value" id="monthlyVisitors">0</div>
             <div class="stat-label">Pengunjung Bulan Ini</div>
-            <div class="stat-change change-positive" id="monthlyChange">+0% dari bulan lalu</div>
+            <div class="stat-change" id="monthlyChange">Perubahan: data tidak tersedia</div>
           </div>
 
           <div class="stat-card fade-in delay-3">
@@ -666,7 +666,7 @@
             </div>
             <div class="stat-value" id="totalVisitors">0</div>
             <div class="stat-label">Total Pengunjung</div>
-            <div class="stat-change change-positive" id="totalChange">+0% dari periode sebelumnya</div>
+            <div class="stat-change" id="totalChange">Data periode sebelumnya tidak tersedia</div>
           </div>
         </div>
 
@@ -747,7 +747,7 @@
 
       // Chart instances
       let dailyChart, hourlyChart, monthlyChart, sourceChart;
-      const API_BASE_URL = window.location.origin + "/api"; // Base URL dinamis
+      const API_BASE_URL = window.location.origin; // Base URL dinamis
 
       // Tampilkan notifikasi
       function showNotification(message, type) {
@@ -768,7 +768,7 @@
       // Fungsi untuk mencatat kunjungan
       async function recordVisit() {
         try {
-          const response = await fetch(`${API_BASE_URL}/save-visit`, {
+          const response = await fetch(`${API_BASE_URL}/api/save-visit`, {
             method: "POST",
           });
 
@@ -787,53 +787,24 @@
       }
 
       // Fungsi untuk mengambil data statistik
-      async function fetchStats(range = 7) {
+      async function fetchStats() {
         try {
-          const response = await fetch(`${API_BASE_URL}/get-stats`);
+          const response = await fetch(`${API_BASE_URL}/api/get-stats`);
 
           if (!response.ok) {
             throw new Error("Gagal memuat statistik");
           }
 
           const data = await response.json();
-
-          // Hitung data untuk perubahan persentase
-          const now = new Date();
-          const yesterday = new Date(now);
-          yesterday.setDate(yesterday.getDate() - 1);
-          const yesterdayKey = yesterday.toISOString().split("T")[0];
-          const yesterdayCount = data.daily[yesterdayKey] || 0;
-
-          // Hitung minggu lalu: 7 hari sebelum hari pertama dalam rentang
-          let lastWeekTotal = 0;
-          for (let i = range + 6; i >= range; i--) {
-            const date = new Date(now);
-            date.setDate(date.getDate() - i);
-            const dateKey = date.toISOString().split("T")[0];
-            lastWeekTotal += data.daily[dateKey] || 0;
-          }
-
-          // Hitung bulan lalu
-          const lastMonthDate = new Date(now);
-          lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
-          const lastMonthKey = `${lastMonthDate.getFullYear()}-${lastMonthDate.getMonth() + 1}`;
-          const lastMonthCount = data.monthly[lastMonthKey] || 0;
-
-          // Fungsi untuk menghitung persentase perubahan
-          const calculateChange = (current, previous) => {
-            if (previous === 0) return current > 0 ? 100 : 0;
-            return Math.round(((current - previous) / previous) * 100);
-          };
-
+          
+          // Kembalikan data dalam format yang diharapkan
           return {
             stats: {
               daily: data.stats.daily || 0,
               weekly: data.stats.weekly || 0,
               monthly: data.stats.monthly || 0,
               total: data.stats.total || 0,
-              yesterday: yesterdayCount,
-              lastWeek: lastWeekTotal,
-              lastMonth: lastMonthCount,
+              dailyChange: data.stats.dailyChange || 0
             },
             dates: data.dates,
             dailyData: data.dailyData,
@@ -843,8 +814,7 @@
             monthlyData: data.monthlyData,
             sources: data.sources,
             sourceData: data.sourceData,
-            sourceColors: data.sourceColors,
-            calculateChange,
+            sourceColors: data.sourceColors
           };
         } catch (error) {
           console.error("Error fetching stats:", error);
@@ -854,27 +824,21 @@
       }
 
       // Update statistik
-      function updateStats(stats, calculateChange) {
+      function updateStats(stats) {
         dailyVisitors.textContent = stats.daily.toLocaleString();
         weeklyVisitors.textContent = stats.weekly.toLocaleString();
         monthlyVisitors.textContent = stats.monthly.toLocaleString();
         totalVisitors.textContent = stats.total.toLocaleString();
 
-        const dailyChangeVal = calculateChange(stats.daily, stats.yesterday);
-        const weeklyChangeVal = calculateChange(stats.weekly, stats.lastWeek);
-        const monthlyChangeVal = calculateChange(stats.monthly, stats.lastMonth);
-
+        const dailyChangeVal = stats.dailyChange;
         dailyChange.textContent = `${dailyChangeVal >= 0 ? "+" : ""}${dailyChangeVal}% dari kemarin`;
         dailyChange.className = `stat-change ${dailyChangeVal >= 0 ? "change-positive" : "change-negative"}`;
 
-        weeklyChange.textContent = `${weeklyChangeVal >= 0 ? "+" : ""}${weeklyChangeVal}% dari minggu lalu`;
-        weeklyChange.className = `stat-change ${weeklyChangeVal >= 0 ? "change-positive" : "change-negative"}`;
-
-        monthlyChange.textContent = `${monthlyChangeVal >= 0 ? "+" : ""}${monthlyChangeVal}% dari bulan lalu`;
-        monthlyChange.className = `stat-change ${monthlyChangeVal >= 0 ? "change-positive" : "change-negative"}`;
-
-        // Total change tidak dihitung karena tidak ada data sebelumnya
-        totalChange.textContent = "Data periode sebelumnya tidak tersedia";
+        // Untuk perubahan mingguan dan bulanan, tidak dihitung oleh backend
+        weeklyChange.textContent = "Perubahan: data tidak tersedia";
+        monthlyChange.textContent = "Perubahan: data tidak tersedia";
+        weeklyChange.className = "stat-change";
+        monthlyChange.className = "stat-change";
       }
 
       // Create charts
@@ -1112,13 +1076,12 @@
           rangeButtons.forEach((b) => b.classList.remove("active"));
           this.classList.add("active");
 
-          const range = parseInt(this.getAttribute("data-range"));
           loadingOverlay.style.display = "flex";
 
           try {
-            const chartData = await fetchStats(range);
+            const chartData = await fetchStats();
+            updateStats(chartData.stats);
             createCharts(chartData);
-            updateStats(chartData.stats, chartData.calculateChange);
           } catch (error) {
             console.error("Error updating charts:", error);
           } finally {
@@ -1136,11 +1099,11 @@
           // Catat kunjungan baru
           await recordVisit();
 
-          // Ambil data statistik (default range 7 hari)
+          // Ambil data statistik
           const chartData = await fetchStats();
 
           // Update statistik
-          updateStats(chartData.stats, chartData.calculateChange);
+          updateStats(chartData.stats);
 
           // Buat chart
           createCharts(chartData);
@@ -1154,12 +1117,9 @@
         // Perbarui data setiap 5 menit
         setInterval(async () => {
           try {
-            const activeRange = document.querySelector(".range-btn.active");
-            const range = activeRange ? parseInt(activeRange.getAttribute("data-range")) : 7;
-
             loadingOverlay.style.display = "flex";
-            const chartData = await fetchStats(range);
-            updateStats(chartData.stats, chartData.calculateChange);
+            const chartData = await fetchStats();
+            updateStats(chartData.stats);
             createCharts(chartData);
             loadingOverlay.style.display = "none";
           } catch (error) {
