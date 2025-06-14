@@ -78,8 +78,15 @@ module.exports = async (req, res) => {
     try {
       fileData = await githubRequest(`/repos/${REPO}/contents/${FILEPATH}?ref=${BRANCH}`);
 
-      const content = Buffer.from(fileData.content, "base64").toString();
-      visits = JSON.parse(content);
+      // Handle parsing errors by resetting visits data
+      try {
+        const content = Buffer.from(fileData.content, "base64").toString();
+        visits = JSON.parse(content);
+      } catch (parseError) {
+        console.error("JSON parse error, resetting visits data", parseError);
+        visits = { total: 0, daily: {}, hourly: {}, monthly: {}, sources: {} };
+      }
+      
       sha = fileData.sha;
     } catch (error) {
       if (error.statusCode !== 404) throw error;
