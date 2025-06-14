@@ -1,4 +1,4 @@
-const GAS_URL = "https://script.google.com/macros/s/AKfycbySJSoLG8A5AE7Sf4Kav7728FYbc-ok9ov6vcdospm_jIZ_oiojDwz5df45bZSUqNSy/exec
+const GAS_URL = "https://script.google.com/macros/s/AKfycbz_fdqOgLn3SoEaMeq-nsAAsdUapDKpRjjJG5ALvJarqnG4QgHQKYO8uJO9mQCMdt4w/exec
 "; // URL deploy GAS
 
 module.exports = async (req, res) => {
