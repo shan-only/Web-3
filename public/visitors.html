@@ -766,23 +766,42 @@
         }, 3000);
       }
 
-      // Fungsi untuk mencatat kunjungan
-      async function recordVisit() {
+      // Fungsi untuk mendapatkan tanggal hari ini dalam format YYYY-MM-DD (WIB)
+      function getTodayWIB() {
+        const now = new Date();
+        const wibOffset = 7 * 60 * 60 * 1000; // UTC+7 dalam milidetik
+        const wibTime = new Date(now.getTime() + wibOffset);
+        return wibTime.toISOString().split('T')[0];
+      }
+
+      // Fungsi untuk mencatat kunjungan dengan localStorage
+      async function recordVisitWithLocalStorage() {
+        const today = getTodayWIB();
+        const lastVisitDate = localStorage.getItem('visitDate');
+
+        // Jika sudah mengunjungi hari ini, tidak perlu catat lagi
+        if (lastVisitDate === today) {
+          return;
+        }
+
         try {
           const response = await fetch(`${API_BASE_URL}/api/save-visit`, {
             method: "POST",
           });
 
           if (!response.ok) {
-            throw new Error("Gagal mencatat kunjungan");
+            throw new Error('Gagal mencatat kunjungan');
           }
 
           const data = await response.json();
-          if (!data.success) {
-            showNotification("Gagal mencatat kunjungan", "error");
+          if (data.success) {
+            // Set localStorage dengan tanggal hari ini
+            localStorage.setItem('visitDate', today);
+          } else {
+            throw new Error('Response tidak sukses');
           }
         } catch (error) {
-          console.error("Error recording visit:", error);
+          console.error('Error recording visit:', error);
           showNotification("Gagal mencatat kunjungan", "error");
         }
       }
@@ -1097,8 +1116,8 @@
         loadingOverlay.style.display = "flex";
 
         try {
-          // Catat kunjungan baru
-          await recordVisit();
+          // Catat kunjungan baru dengan localStorage
+          await recordVisitWithLocalStorage();
 
           // Ambil data statistik
           const chartData = await fetchStats();
