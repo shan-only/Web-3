@@ -1,30 +1,82 @@
-import { Octokit } from "@octokit/rest";
+const https = require("https");
 
-export default async (req, res) => {
-  // Set CORS headers
+const TOKEN = process.env.GITHUB_TOKEN;
+const REPO = "shan-only/PersonalWeb3";
+const FILEPATH = "visits.json";
+const BRANCH = "main";
+
+function githubRequest(path, method = "GET", data = null) {
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: "api.github.com",
+      path,
+      method,
+      headers: {
+        "User-Agent": "Vercel-App",
+        Authorization: `token ${TOKEN}`,
+        Accept: "application/vnd.github.v3+json",
+        "Content-Type": "application/json",
+      },
+    };
+
+    const req = https.request(options, (res) => {
+      let body = "";
+      res.on("data", (chunk) => (body += chunk));
+      res.on("end", () => {
+        try {
+          const json = JSON.parse(body || "{}");
+          if (res.statusCode >= 200 && res.statusCode < 300) {
+            resolve(json);
+          } else {
+            reject({
+              statusCode: res.statusCode,
+              message: json.message || `GitHub API error: ${res.statusCode}`,
+              errors: json.errors,
+            });
+          }
+        } catch (e) {
+          reject({
+            statusCode: 500,
+            message: "JSON parse error",
+            details: e.message,
+          });
+        }
+      });
+    });
+
+    req.on("error", (error) => {
+      reject({
+        statusCode: 500,
+        message: "Network error",
+        details: error.message,
+      });
+    });
+
+    if (data) {
+      req.write(JSON.stringify(data));
+    }
+    req.end();
+  });
+}
+
+module.exports = async (req, res) => {
+  // Handle CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-  // Handle OPTIONS request for CORS preflight
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
 
-  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-
   try {
-    const { data } = await octokit.repos.getContent({
-      owner: "shan-only",
-      repo: "PersonalWeb3",
-      path: "visits.json",
-      ref: "main",
-    });
+    // Get visits.json content
+    const fileData = await githubRequest(`/repos/${REPO}/contents/${FILEPATH}?ref=${BRANCH}`);
 
-    const content = Buffer.from(data.content, "base64").toString();
+    const content = Buffer.from(fileData.content, "base64").toString();
     const visits = JSON.parse(content);
 
-    // Calculate statistics
+    // Calculate statistics (same as original)
     const now = new Date();
     const today = now.toISOString().split("T")[0];
     const yesterday = new Date(now);
@@ -40,7 +92,7 @@ export default async (req, res) => {
       hourly: visits.hourly[today] || {},
     };
 
-    // Calculate weekly (last 7 days)
+    // Calculate weekly
     for (let i = 0; i < 7; i++) {
       const date = new Date(now);
       date.setDate(date.getDate() - i);
@@ -57,7 +109,7 @@ export default async (req, res) => {
       stats.dailyChange = Math.round(((stats.daily - visits.daily[yesterdayKey]) / visits.daily[yesterdayKey]) * 100);
     }
 
-    // Data for charts
+    // Prepare chart data (same as original)
     const dates = [];
     const dailyData = [];
     for (let i = 6; i >= 0; i--) {
