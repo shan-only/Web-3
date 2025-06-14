@@ -1,1144 +1,1156 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Statistik Pengunjung - SNAYDER'S STORE</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="https://raw.githubusercontent.com/Yudzxml/UploaderV2/main/tmp/1f856a75.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="icon" href="https://raw.githubusercontent.com/Yudzxml/UploaderV2/main/tmp/1f856a75.png" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root {
-            --bg-dark: #121212;
-            --card-bg: #1d1f25;
-            --accent: #33aaff;
-            --accent2: #0066ff;
-            --text-light: #e0f0ff;
-            --text-muted: #88bbff;
-            --input-bg: #2a2a3a;
-            --border-color: #3399ff;
-            --success: #00cc99;
-            --danger: #ff4d6d;
-            --transition: all 0.3s ease;
-            --warning: #ffcc00;
-            --nav-height: 70px;
-        }
+      :root {
+        --bg-dark: #121212;
+        --card-bg: #1d1f25;
+        --accent: #33aaff;
+        --accent2: #0066ff;
+        --text-light: #e0f0ff;
+        --text-muted: #88bbff;
+        --input-bg: #2a2a3a;
+        --border-color: #3399ff;
+        --success: #00cc99;
+        --danger: #ff4d6d;
+        --transition: all 0.3s ease;
+        --warning: #ffcc00;
+        --nav-height: 70px;
+      }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            overflow-x: hidden;
-            background-image: linear-gradient(135deg, rgba(13, 27, 42, 0.8) 0%, rgba(27, 38, 59, 0.8) 100%), radial-gradient(circle at top right, rgba(51, 170, 255, 0.1), transparent 25%), radial-gradient(circle at bottom left, rgba(0, 102, 255, 0.1), transparent 25%);
-            background-attachment: fixed;
-            padding-top: var(--nav-height);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+      body {
+        background-color: var(--bg-dark);
+        color: var(--text-light);
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        overflow-x: hidden;
+        background-image: linear-gradient(135deg, rgba(13, 27, 42, 0.8) 0%, rgba(27, 38, 59, 0.8) 100%), radial-gradient(circle at top right, rgba(51, 170, 255, 0.1), transparent 25%),
+          radial-gradient(circle at bottom left, rgba(0, 102, 255, 0.1), transparent 25%);
+        background-attachment: fixed;
+        padding-top: var(--nav-height);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
 
-        #content-wrapper {
-            flex: 1;
-            width: 100%;
-        }
+      #content-wrapper {
+        flex: 1;
+        width: 100%;
+      }
 
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: var(--nav-height);
-            background: rgba(13, 27, 42, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 2px solid rgba(51, 153, 255, 0.3);
-            display: flex;
-            align-items: center;
-            padding: 0 2rem;
-            z-index: 1000;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-        }
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: var(--nav-height);
+        background: rgba(13, 27, 42, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 2px solid rgba(51, 153, 255, 0.3);
+        display: flex;
+        align-items: center;
+        padding: 0 2rem;
+        z-index: 1000;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+      }
 
-        .navbar-container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+      .navbar-container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-        .logo-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: var(--text-light);
-        }
+      .logo-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        color: var(--text-light);
+      }
 
-        .logo-brand i {
-            font-size: 1.8rem;
-            color: var(--accent);
-            text-shadow: 0 0 10px rgba(51, 153, 255, 0.7);
-        }
+      .logo-brand i {
+        font-size: 1.8rem;
+        color: var(--accent);
+        text-shadow: 0 0 10px rgba(51, 153, 255, 0.7);
+      }
 
-        .brand-text {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 0.5px;
-        }
+      .brand-text {
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: 0.5px;
+      }
 
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0.6rem 1.2rem;
+        border-radius: 50px;
+        text-decoration: none;
+        color: var(--text-light);
+        font-weight: 500;
+        transition: var(--transition);
+        background: rgba(51, 153, 255, 0.1);
+      }
+
+      .nav-link:hover {
+        background: rgba(51, 153, 255, 0.25);
+        transform: translateY(-2px);
+      }
+
+      .nav-link i {
+        font-size: 1.1rem;
+      }
+
+      .menu-toggle {
+        display: none;
+        font-size: 1.5rem;
+        color: var(--text-light);
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        z-index: 1001;
+        position: relative;
+        width: 30px;
+        height: 30px;
+      }
+
+      .menu-toggle .fa-bars {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .menu-toggle .fa-times {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .menu-toggle.active .fa-bars {
+        opacity: 0;
+      }
+
+      .menu-toggle.active .fa-times {
+        opacity: 1;
+      }
+
+      header {
+        text-align: center;
+        padding: 2rem 1rem;
+        background: linear-gradient(135deg, #0d1b2a, #1b263b);
+        position: relative;
+        overflow: hidden;
+        border-bottom: 3px solid var(--accent);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        margin-top: calc(var(--nav-height) - 10px);
+      }
+
+      header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--accent2), var(--accent));
+        box-shadow: 0 0 15px var(--accent);
+      }
+
+      .logo {
+        font-size: 2.8rem;
+        margin-bottom: 1rem;
+        color: var(--text-light);
+        text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent2);
+      }
+
+      h1 {
+        font-size: 2.2rem;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .subtitle {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        max-width: 600px;
+        margin: 0 auto 1.5rem;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      }
+
+      .stats-section {
+        padding: 3rem 1rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .section-title {
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 1.8rem;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        position: relative;
+        display: inline-block;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 0 1rem;
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        border-radius: 10px;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.8rem;
+        margin-bottom: 3rem;
+      }
+
+      .stat-card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 1.8rem;
+        text-align: center;
+        transition: var(--transition);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(51, 153, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .stat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(51, 153, 255, 0.2);
+      }
+
+      .stat-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: var(--accent);
+        text-shadow: 0 0 10px rgba(51, 170, 255, 0.5);
+      }
+
+      .stat-value {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--text-light);
+        text-shadow: 0 0 10px rgba(51, 170, 255, 0.3);
+      }
+
+      .stat-label {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+      }
+
+      .stat-change {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+
+      .change-positive {
+        color: var(--success);
+      }
+
+      .change-negative {
+        color: var(--danger);
+      }
+
+      .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .chart-container {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(51, 153, 255, 0.2);
+        transition: var(--transition);
+      }
+
+      .chart-container:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(51, 153, 255, 0.2);
+      }
+
+      .chart-title {
+        font-size: 1.4rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: var(--accent);
+        position: relative;
+        padding-bottom: 10px;
+      }
+
+      .chart-title::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 25%;
+        right: 25%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      }
+
+      .chart-wrapper {
+        width: 100%;
+        height: 300px;
+        position: relative;
+      }
+
+      .date-range-picker {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .range-btn {
+        background: rgba(51, 153, 255, 0.1);
+        color: var(--text-light);
+        border: 1px solid rgba(51, 153, 255, 0.3);
+        padding: 0.5rem 1.2rem;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: var(--transition);
+        font-weight: 500;
+      }
+
+      .range-btn:hover,
+      .range-btn.active {
+        background: rgba(51, 153, 255, 0.25);
+        transform: translateY(-2px);
+      }
+
+      footer {
+        text-align: center;
+        padding: 2rem 1rem;
+        background: rgba(0, 0, 0, 0.3);
+        color: var(--text-muted);
+        border-top: 1px solid rgba(51, 153, 255, 0.1);
+        margin-top: auto;
+        width: 100%;
+      }
+
+      .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin: 1.5rem 0;
+      }
+
+      .social-links a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(51, 153, 255, 0.1);
+        color: var(--text-light);
+        transition: var(--transition);
+      }
+
+      .social-links a:hover {
+        background: var(--accent);
+        transform: translateY(-3px);
+      }
+
+      .notification {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 15px 25px;
+        border-radius: 10px;
+        color: white;
+        font-weight: 600;
+        z-index: 3000;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.4s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .notification.success {
+        background: var(--success);
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .notification.error {
+        background: var(--danger);
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .notification.warning {
+        background: var(--warning);
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 4000;
+        flex-direction: column;
+      }
+
+      .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 5px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: var(--accent);
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      .loading-text {
+        color: var(--text-light);
+        margin-top: 20px;
+        font-size: 1.2rem;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .fade-in {
+        animation: fadeIn 0.6s ease forwards;
+      }
+
+      .delay-1 {
+        animation-delay: 0.1s;
+      }
+      .delay-2 {
+        animation-delay: 0.2s;
+      }
+      .delay-3 {
+        animation-delay: 0.3s;
+      }
+      .delay-4 {
+        animation-delay: 0.4s;
+      }
+
+      @media (max-width: 768px) {
         .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+          display: none;
+          position: absolute;
+          top: var(--nav-height);
+          left: 0;
+          right: 0;
+          background: rgba(13, 27, 42, 0.98);
+          flex-direction: column;
+          padding: 1rem;
+          gap: 10px;
+          border-bottom: 2px solid rgba(51, 153, 255, 0.3);
+          align-items: flex-start;
         }
 
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 0.6rem 1.2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            color: var(--text-light);
-            font-weight: 500;
-            transition: var(--transition);
-            background: rgba(51, 153, 255, 0.1);
-        }
-
-        .nav-link:hover {
-            background: rgba(51, 153, 255, 0.25);
-            transform: translateY(-2px);
-        }
-
-        .nav-link i {
-            font-size: 1.1rem;
+        .nav-links.active {
+          display: flex;
         }
 
         .menu-toggle {
-            display: none;
-            font-size: 1.5rem;
-            color: var(--text-light);
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            z-index: 1001;
-            position: relative;
-            width: 30px;
-            height: 30px;
+          display: block;
         }
 
-        .menu-toggle .fa-bars {
-            position: absolute;
-            top: 0;
-            left: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .menu-toggle .fa-times {
-            position: absolute;
-            top: 0;
-            left: 0;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .menu-toggle.active .fa-bars {
-            opacity: 0;
-        }
-
-        .menu-toggle.active .fa-times {
-            opacity: 1;
-        }
-
-        header {
-            text-align: center;
-            padding: 2rem 1rem;
-            background: linear-gradient(135deg, #0d1b2a, #1b263b);
-            position: relative;
-            overflow: hidden;
-            border-bottom: 3px solid var(--accent);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            margin-top: calc(var(--nav-height) - 10px);
-        }
-
-        header::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent2), var(--accent));
-            box-shadow: 0 0 15px var(--accent);
-        }
-
-        .logo {
-            font-size: 2.8rem;
-            margin-bottom: 1rem;
-            color: var(--text-light);
-            text-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent2);
-        }
-
-        h1 {
-            font-size: 2.2rem;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .subtitle {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto 1.5rem;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .stats-section {
-            padding: 3rem 1rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 2rem;
-            font-size: 1.8rem;
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            position: relative;
-            display: inline-block;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 0 1rem;
-        }
-
-        .section-title::after {
-            content: "";
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
-            border-radius: 10px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.8rem;
-            margin-bottom: 3rem;
-        }
-
-        .stat-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 1.8rem;
-            text-align: center;
-            transition: var(--transition);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(51, 153, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(51, 153, 255, 0.2);
-        }
-
-        .stat-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--accent);
-            text-shadow: 0 0 10px rgba(51, 170, 255, 0.5);
-        }
-
-        .stat-value {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--text-light);
-            text-shadow: 0 0 10px rgba(51, 170, 255, 0.3);
-        }
-
-        .stat-label {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-        }
-
-        .stat-change {
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .change-positive {
-            color: var(--success);
-        }
-
-        .change-negative {
-            color: var(--danger);
+        .nav-link {
+          width: 100%;
+          justify-content: flex-start;
+          padding-left: 25px;
         }
 
         .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+          grid-template-columns: 1fr;
         }
 
         .chart-container {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(51, 153, 255, 0.2);
-            transition: var(--transition);
+          padding: 1rem;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .charts-grid {
+          grid-template-columns: 1fr;
         }
 
-        .chart-container:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(51, 153, 255, 0.2);
-        }
-
-        .chart-title {
-            font-size: 1.4rem;
-            text-align: center;
-            margin-bottom: 1.5rem;
-            color: var(--accent);
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .chart-title::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 25%;
-            right: 25%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        .chart-container {
+          min-width: 100%;
         }
 
         .chart-wrapper {
-            width: 100%;
-            height: 300px;
-            position: relative;
+          height: 250px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .logo {
+          font-size: 2.2rem;
         }
 
-        .date-range-picker {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
+        h1 {
+          font-size: 1.8rem;
         }
 
-        .range-btn {
-            background: rgba(51, 153, 255, 0.1);
-            color: var(--text-light);
-            border: 1px solid rgba(51, 153, 255, 0.3);
-            padding: 0.5rem 1.2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: var(--transition);
-            font-weight: 500;
+        .navbar {
+          padding: 0 1rem;
         }
 
-        .range-btn:hover,
-        .range-btn.active {
-            background: rgba(51, 153, 255, 0.25);
-            transform: translateY(-2px);
+        .brand-text {
+          font-size: 1.3rem;
         }
 
-        footer {
-            text-align: center;
-            padding: 2rem 1rem;
-            background: rgba(0, 0, 0, 0.3);
-            color: var(--text-muted);
-            border-top: 1px solid rgba(51, 153, 255, 0.1);
-            margin-top: auto;
-            width: 100%;
+        .stat-value {
+          font-size: 1.8rem;
         }
 
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 1.5rem 0;
+        .chart-title {
+          font-size: 1.2rem;
         }
-
-        .social-links a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(51, 153, 255, 0.1);
-            color: var(--text-light);
-            transition: var(--transition);
-        }
-
-        .social-links a:hover {
-            background: var(--accent);
-            transform: translateY(-3px);
-        }
-
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 10px;
-            color: white;
-            font-weight: 600;
-            z-index: 3000;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.4s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .notification.success {
-            background: var(--success);
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .notification.error {
-            background: var(--danger);
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .notification.warning {
-            background: var(--warning);
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 4000;
-            flex-direction: column;
-        }
-
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: var(--accent);
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        .loading-text {
-            color: var(--text-light);
-            margin-top: 20px;
-            font-size: 1.2rem;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.6s ease forwards;
-        }
-
-        .delay-1 {
-            animation-delay: 0.1s;
-        }
-        .delay-2 {
-            animation-delay: 0.2s;
-        }
-        .delay-3 {
-            animation-delay: 0.3s;
-        }
-        .delay-4 {
-            animation-delay: 0.4s;
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: var(--nav-height);
-                left: 0;
-                right: 0;
-                background: rgba(13, 27, 42, 0.98);
-                flex-direction: column;
-                padding: 1rem;
-                gap: 10px;
-                border-bottom: 2px solid rgba(51, 153, 255, 0.3);
-                align-items: flex-start;
-            }
-
-            .nav-links.active {
-                display: flex;
-            }
-
-            .menu-toggle {
-                display: block;
-            }
-
-            .nav-link {
-                width: 100%;
-                justify-content: flex-start;
-                padding-left: 25px;
-            }
-
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .chart-container {
-                padding: 1rem;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .chart-container {
-                min-width: 100%;
-            }
-
-            .chart-wrapper {
-                height: 250px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo {
-                font-size: 2.2rem;
-            }
-
-            h1 {
-                font-size: 1.8rem;
-            }
-
-            .navbar {
-                padding: 0 1rem;
-            }
-
-            .brand-text {
-                font-size: 1.3rem;
-            }
-
-            .stat-value {
-                font-size: 1.8rem;
-            }
-
-            .chart-title {
-                font-size: 1.2rem;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="navbar-container">
-            <a href="index.html" class="logo-brand">
-                <i class="fas fa-store"></i>
-                <span class="brand-text">SNAYDER'S STORE</span>
-            </a>
+      <div class="navbar-container">
+        <a href="index.html" class="logo-brand">
+          <i class="fas fa-store"></i>
+          <span class="brand-text">SNAYDER'S STORE</span>
+        </a>
 
-            <div class="nav-links">
-                <a href="index.html" class="nav-link"> <i class="fas fa-home"></i> Beranda </a>
-                <a href="dowloads.html" class="nav-link"> <i class="fas fa-download"></i> Download Config </a>
-                <a href="#" class="nav-link"> <i class="fas fa-chart-line"></i> Statistik </a>
-            </div>
-
-            <div class="menu-toggle" id="menuToggle">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-times"></i>
-            </div>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link"> <i class="fas fa-home"></i> Beranda </a>
+          <a href="dowloads.html" class="nav-link"> <i class="fas fa-download"></i> Download Config </a>
+          <a href="#" class="nav-link"> <i class="fas fa-chart-line"></i> Statistik </a>
         </div>
+
+        <div class="menu-toggle" id="menuToggle">
+          <i class="fas fa-bars"></i>
+          <i class="fas fa-times"></i>
+        </div>
+      </div>
     </nav>
 
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-        <p class="loading-text">Memuat data...</p>
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Memuat data...</p>
     </div>
 
     <!-- Content Wrapper -->
     <div id="content-wrapper">
-        <!-- Header -->
-        <header>
-            <div class="logo">
-                <i class="fas fa-chart-line"></i>
+      <!-- Header -->
+      <header>
+        <div class="logo">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h1>Statistik Pengunjung</h1>
+        <p class="subtitle">Pantau aktivitas pengunjung website toko digital Anda</p>
+      </header>
+
+      <!-- Statistik Section -->
+      <section class="stats-section">
+        <h2 class="section-title">Statistik Pengunjung</h2>
+
+        <div class="stats-grid">
+          <div class="stat-card fade-in">
+            <div class="stat-icon">
+              <i class="fas fa-calendar-day"></i>
             </div>
-            <h1>Statistik Pengunjung</h1>
-            <p class="subtitle">Pantau aktivitas pengunjung website toko digital Anda</p>
-        </header>
+            <div class="stat-value" id="dailyVisitors">0</div>
+            <div class="stat-label">Pengunjung Hari Ini</div>
+            <div class="stat-change change-positive" id="dailyChange">+0% dari kemarin</div>
+          </div>
 
-        <!-- Statistik Section -->
-        <section class="stats-section">
-            <h2 class="section-title">Statistik Pengunjung</h2>
-
-            <div class="stats-grid">
-                <div class="stat-card fade-in">
-                    <div class="stat-icon">
-                        <i class="fas fa-calendar-day"></i>
-                    </div>
-                    <div class="stat-value" id="dailyVisitors">0</div>
-                    <div class="stat-label">Pengunjung Hari Ini</div>
-                    <div class="stat-change change-positive" id="dailyChange">+0% dari kemarin</div>
-                </div>
-
-                <div class="stat-card fade-in delay-1">
-                    <div class="stat-icon">
-                        <i class="fas fa-calendar-week"></i>
-                    </div>
-                    <div class="stat-value" id="weeklyVisitors">0</div>
-                    <div class="stat-label">Pengunjung Minggu Ini</div>
-                    <div class="stat-change" id="weeklyChange">Perubahan: data tidak tersedia</div>
-                </div>
-
-                <div class="stat-card fade-in delay-2">
-                    <div class="stat-icon">
-                        <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div class="stat-value" id="monthlyVisitors">0</div>
-                    <div class="stat-label">Pengunjung Bulan Ini</div>
-                    <div class="stat-change" id="monthlyChange">Perubahan: data tidak tersedia</div>
-                </div>
-
-                <div class="stat-card fade-in delay-3">
-                    <div class="stat-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="stat-value" id="totalVisitors">0</div>
-                    <div class="stat-label">Total Pengunjung</div>
-                    <div class="stat-change" id="totalChange">Data periode sebelumnya tidak tersedia</div>
-                </div>
+          <div class="stat-card fade-in delay-1">
+            <div class="stat-icon">
+              <i class="fas fa-calendar-week"></i>
             </div>
+            <div class="stat-value" id="weeklyVisitors">0</div>
+            <div class="stat-label">Pengunjung Minggu Ini</div>
+            <div class="stat-change" id="weeklyChange">Perubahan: data tidak tersedia</div>
+          </div>
 
-            <!-- Date Range Picker -->
-            <div class="date-range-picker">
-                <button class="range-btn active" data-range="7">7 Hari Terakhir</button>
-                <button class="range-btn" data-range="30">30 Hari Terakhir</button>
-                <button class="range-btn" data-range="90">90 Hari Terakhir</button>
-                <button class="range-btn" data-range="180">6 Bulan Terakhir</button>
+          <div class="stat-card fade-in delay-2">
+            <div class="stat-icon">
+              <i class="fas fa-calendar-alt"></i>
             </div>
+            <div class="stat-value" id="monthlyVisitors">0</div>
+            <div class="stat-label">Pengunjung Bulan Ini</div>
+            <div class="stat-change" id="monthlyChange">Perubahan: data tidak tersedia</div>
+          </div>
 
-            <!-- Grafik Section -->
-            <div class="charts-grid">
-                <div class="chart-container fade-in">
-                    <h3 class="chart-title">Pengunjung Harian</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="dailyChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-container fade-in delay-1">
-                    <h3 class="chart-title">Pengunjung Berdasarkan Jam</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="hourlyChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-container fade-in">
-                    <h3 class="chart-title">Pengunjung Per Bulan</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="monthlyChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-container fade-in delay-1">
-                    <h3 class="chart-title">Sumber Pengunjung</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="sourceChart"></canvas>
-                    </div>
-                </div>
+          <div class="stat-card fade-in delay-3">
+            <div class="stat-icon">
+              <i class="fas fa-users"></i>
             </div>
-        </section>
+            <div class="stat-value" id="totalVisitors">0</div>
+            <div class="stat-label">Total Pengunjung</div>
+            <div class="stat-change" id="totalChange">Data periode sebelumnya tidak tersedia</div>
+          </div>
+        </div>
+
+        <!-- Date Range Picker -->
+        <div class="date-range-picker">
+          <button class="range-btn active" data-range="7">7 Hari Terakhir</button>
+          <button class="range-btn" data-range="30">30 Hari Terakhir</button>
+          <button class="range-btn" data-range="90">90 Hari Terakhir</button>
+          <button class="range-btn" data-range="180">6 Bulan Terakhir</button>
+        </div>
+
+        <!-- Grafik Section -->
+        <div class="charts-grid">
+          <div class="chart-container fade-in">
+            <h3 class="chart-title">Pengunjung Harian</h3>
+            <div class="chart-wrapper">
+              <canvas id="dailyChart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-container fade-in delay-1">
+            <h3 class="chart-title">Pengunjung Berdasarkan Jam</h3>
+            <div class="chart-wrapper">
+              <canvas id="hourlyChart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-container fade-in">
+            <h3 class="chart-title">Pengunjung Per Bulan</h3>
+            <div class="chart-wrapper">
+              <canvas id="monthlyChart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-container fade-in delay-1">
+            <h3 class="chart-title">Sumber Pengunjung</h3>
+            <div class="chart-wrapper">
+              <canvas id="sourceChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
 
     <!-- Footer -->
     <footer>
-        <div class="social-links">
-            <a href="https://www.facebook.com/snayderstore.2025" title="Facebook" target="_blank">
-                <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="https://wa.me/6287866361260" title="WhatsApp" target="_blank">
-                <i class="fab fa-whatsapp"></i>
-            </a>
-            <a href="https://t.me/snayderstore" title="Telegram" target="_blank">
-                <i class="fab fa-telegram"></i>
-            </a>
-            <a href="mailto:snaydersonly@gmail.com" title="Email" target="_blank">
-                <i class="fas fa-envelope"></i>
-            </a>
-        </div>
-        <p>&copy; 2025 <strong>SNAYDER'S STORE</strong> &mdash; Allright Reserved <i class="fas fa-heart" style="color: var(--accent)"></i></p>
+      <div class="social-links">
+        <a href="https://www.facebook.com/snayderstore.2025" title="Facebook" target="_blank">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="https://wa.me/6287866361260" title="WhatsApp" target="_blank">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://t.me/snayderstore" title="Telegram" target="_blank">
+          <i class="fab fa-telegram"></i>
+        </a>
+        <a href="mailto:snaydersonly@gmail.com" title="Email" target="_blank">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </div>
+      <p>&copy; 2025 <strong>SNAYDER'S STORE</strong> &mdash; Allright Reserved <i class="fas fa-heart" style="color: var(--accent)"></i></p>
     </footer>
 
     <script>
-        const menuToggle = document.getElementById("menuToggle");
-        const navLinks = document.querySelector(".nav-links");
-        const loadingOverlay = document.getElementById("loadingOverlay");
-        const rangeButtons = document.querySelectorAll(".range-btn");
-        const dailyVisitors = document.getElementById("dailyVisitors");
-        const weeklyVisitors = document.getElementById("weeklyVisitors");
-        const monthlyVisitors = document.getElementById("monthlyVisitors");
-        const totalVisitors = document.getElementById("totalVisitors");
-        const dailyChange = document.getElementById("dailyChange");
-        const weeklyChange = document.getElementById("weeklyChange");
-        const monthlyChange = document.getElementById("monthlyChange");
-        const totalChange = document.getElementById("totalChange");
+      const menuToggle = document.getElementById("menuToggle");
+      const navLinks = document.querySelector(".nav-links");
+      const loadingOverlay = document.getElementById("loadingOverlay");
+      const rangeButtons = document.querySelectorAll(".range-btn");
+      const dailyVisitors = document.getElementById("dailyVisitors");
+      const weeklyVisitors = document.getElementById("weeklyVisitors");
+      const monthlyVisitors = document.getElementById("monthlyVisitors");
+      const totalVisitors = document.getElementById("totalVisitors");
+      const dailyChange = document.getElementById("dailyChange");
+      const weeklyChange = document.getElementById("weeklyChange");
+      const monthlyChange = document.getElementById("monthlyChange");
+      const totalChange = document.getElementById("totalChange");
 
-        // Chart instances
-        let dailyChart, hourlyChart, monthlyChart, sourceChart;
-        const API_BASE_URL = window.location.origin; // Base URL dinamis
+      // Chart instances
+      let dailyChart, hourlyChart, monthlyChart, sourceChart;
+      const API_BASE_URL = window.location.origin; // Base URL dinamis
 
-        // Tampilkan notifikasi
-        function showNotification(message, type) {
-            let notification = document.getElementById("notification");
-            if (!notification) {
-                notification = document.createElement("div");
-                notification.id = "notification";
-                document.body.appendChild(notification);
-            }
-            notification.textContent = message;
-            notification.className = `notification ${type}`;
+      // Tampilkan notifikasi
+      function showNotification(message, type) {
+        let notification = document.getElementById("notification");
+        if (!notification) {
+          notification = document.createElement("div");
+          notification.id = "notification";
+          document.body.appendChild(notification);
+        }
+        notification.textContent = message;
+        notification.className = `notification ${type}`;
 
-            setTimeout(() => {
-                notification.className = "notification";
-            }, 3000);
+        setTimeout(() => {
+          notification.className = "notification";
+        }, 3000);
+      }
+
+      // Fungsi untuk mendapatkan tanggal hari ini dalam format YYYY-MM-DD (WIB)
+      function getTodayWIB() {
+        const now = new Date();
+        const wibOffset = 7 * 60 * 60 * 1000; // UTC+7 dalam milidetik
+        const wibTime = new Date(now.getTime() + wibOffset);
+        return wibTime.toISOString().split("T")[0];
+      }
+
+      // Fungsi untuk mencatat kunjungan dengan localStorage
+      async function recordVisitWithLocalStorage() {
+        const today = getTodayWIB();
+        const lastVisitDate = localStorage.getItem("visitDate");
+
+        // Jika sudah mengunjungi hari ini, tidak perlu catat lagi
+        if (lastVisitDate === today) {
+          return;
         }
 
-        // Fungsi untuk mendapatkan tanggal hari ini dalam format YYYY-MM-DD (WIB)
-        function getTodayWIB() {
-            const now = new Date();
-            const wibOffset = 7 * 60 * 60 * 1000; // UTC+7 dalam milidetik
-            const wibTime = new Date(now.getTime() + wibOffset);
-            return wibTime.toISOString().split("T")[0];
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/save-visit`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}),
+          });
+
+          if (!response.ok) {
+            throw new Error("Gagal mencatat kunjungan");
+          }
+          const data = await response.json();
+          if (data.success) {
+            // Set localStorage dengan tanggal hari ini
+            localStorage.setItem("visitDate", today);
+          } else {
+            throw new Error("Response tidak sukses");
+          }
+        } catch (error) {
+          console.error("Error recording visit:", error);
+          showNotification("Gagal mencatat kunjungan", "error");
         }
+      }
 
-        // Fungsi untuk mencatat kunjungan dengan localStorage
-        async function recordVisitWithLocalStorage() {
-            const today = getTodayWIB();
-            const lastVisitDate = localStorage.getItem("visitDate");
+      // Fungsi untuk mengambil data statistik
+      async function fetchStats() {
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/get-stats`);
 
-            // Jika sudah mengunjungi hari ini, tidak perlu catat lagi
-            if (lastVisitDate === today) {
-                return;
-            }
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
 
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/save-visit`, {
-                    method: "POST",
-                });
-
-                if (!response.ok) {
-                    throw new Error("Gagal mencatat kunjungan");
-                }
-
-                const data = await response.json();
-                if (data.success) {
-                    // Set localStorage dengan tanggal hari ini
-                    localStorage.setItem("visitDate", today);
-                } else {
-                    throw new Error("Response tidak sukses");
-                }
-            } catch (error) {
-                console.error("Error recording visit:", error);
-                showNotification("Gagal mencatat kunjungan", "error");
-            }
+          return await response.json();
+        } catch (error) {
+          console.error("Error fetching stats:", error);
+          return {
+            stats: {
+              daily: 0,
+              weekly: 0,
+              monthly: 0,
+              total: 0,
+              dailyChange: 0,
+              hourly: Array(24).fill(0),
+            },
+            dates: [],
+            dailyData: [],
+            hours: Array.from({ length: 24 }, (_, i) => `${i}:00`),
+            hourlyData: Array(24).fill(0),
+            months: [],
+            monthlyData: [],
+            sources: [],
+            sourceData: [],
+            sourceColors: ["#33aaff", "#ff6b6b", "#00cc99", "#ffcc00", "#9933ff", "#ff9933"],
+          };
         }
+      }
 
-        // Fungsi untuk mengambil data statistik
-        async function fetchStats() {
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/get-stats`);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                return await response.json();
-            } catch (error) {
-                console.error("Error fetching stats:", error);
-                return {
-                    stats: { 
-                        daily: 0, 
-                        weekly: 0, 
-                        monthly: 0, 
-                        total: 0, 
-                        dailyChange: 0, 
-                        hourly: {} 
-                    },
-                    dates: [],
-                    dailyData: [],
-                    hours: Array.from({ length: 24 }, (_, i) => `${i}:00`),
-                    hourlyData: Array(24).fill(0),
-                    months: [],
-                    monthlyData: [],
-                    sources: [],
-                    sourceData: [],
-                    sourceColors: ["#33aaff", "#ff6b6b", "#00cc99", "#ffcc00", "#9933ff", "#ff9933"]
-                };
-            }
+      // Update statistik
+      function updateStats(stats) {
+        dailyVisitors.textContent = stats.daily.toLocaleString();
+        weeklyVisitors.textContent = stats.weekly.toLocaleString();
+        monthlyVisitors.textContent = stats.monthly.toLocaleString();
+        totalVisitors.textContent = stats.total.toLocaleString();
+
+        const dailyChangeVal = stats.dailyChange || 0;
+        dailyChange.textContent = `${dailyChangeVal >= 0 ? "+" : ""}${dailyChangeVal}% dari kemarin`;
+        dailyChange.className = `stat-change ${dailyChangeVal >= 0 ? "change-positive" : "change-negative"}`;
+
+        // Untuk perubahan mingguan dan bulanan
+        weeklyChange.textContent = "Perubahan: data tidak tersedia";
+        monthlyChange.textContent = "Perubahan: data tidak tersedia";
+        weeklyChange.className = "stat-change";
+        monthlyChange.className = "stat-change";
+      }
+
+      // Create charts
+      function createCharts(chartData) {
+        try {
+          // Destroy existing charts to avoid memory leaks
+          if (dailyChart) dailyChart.destroy();
+          if (hourlyChart) hourlyChart.destroy();
+          if (monthlyChart) monthlyChart.destroy();
+          if (sourceChart) sourceChart.destroy();
+
+          // Daily Visitors Chart
+          const dailyCtx = document.getElementById("dailyChart").getContext("2d");
+          dailyChart = new Chart(dailyCtx, {
+            type: "line",
+            data: {
+              labels: chartData.dates,
+              datasets: [
+                {
+                  label: "Pengunjung Harian",
+                  data: chartData.dailyData,
+                  borderColor: "#33aaff",
+                  backgroundColor: "rgba(51, 170, 255, 0.1)",
+                  borderWidth: 3,
+                  tension: 0.3,
+                  fill: true,
+                  pointBackgroundColor: "#fff",
+                  pointBorderWidth: 2,
+                  pointRadius: 4,
+                  pointHoverRadius: 6,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: false,
+                },
+                tooltip: {
+                  backgroundColor: "rgba(29, 31, 37, 0.9)",
+                  titleColor: "#e0f0ff",
+                  bodyColor: "#e0f0ff",
+                  borderColor: "#3399ff",
+                  borderWidth: 1,
+                  padding: 12,
+                  displayColors: false,
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  grid: {
+                    color: "rgba(51, 153, 255, 0.1)",
+                  },
+                  ticks: {
+                    color: "#88bbff",
+                  },
+                },
+                x: {
+                  grid: {
+                    display: false,
+                  },
+                  ticks: {
+                    color: "#88bbff",
+                  },
+                },
+              },
+            },
+          });
+
+          // Hourly Visitors Chart
+          const hourlyCtx = document.getElementById("hourlyChart").getContext("2d");
+          hourlyChart = new Chart(hourlyCtx, {
+            type: "bar",
+            data: {
+              labels: chartData.hours,
+              datasets: [
+                {
+                  label: "Pengunjung per Jam",
+                  data: chartData.hourlyData,
+                  backgroundColor: "rgba(51, 170, 255, 0.7)",
+                  borderColor: "rgba(51, 170, 255, 1)",
+                  borderWidth: 1,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: false,
+                },
+                tooltip: {
+                  backgroundColor: "rgba(29, 31, 37, 0.9)",
+                  titleColor: "#e0f0ff",
+                  bodyColor: "#e0f0ff",
+                  borderColor: "#3399ff",
+                  borderWidth: 1,
+                  padding: 12,
+                  displayColors: false,
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  grid: {
+                    color: "rgba(51, 153, 255, 0.1)",
+                  },
+                  ticks: {
+                    color: "#88bbff",
+                  },
+                },
+                x: {
+                  grid: {
+                    display: false,
+                  },
+                  ticks: {
+                    color: "#88bbff",
+                  },
+                },
+              },
+            },
+          });
+
+          // Monthly Visitors Chart
+          const monthlyCtx = document.getElementById("monthlyChart").getContext("2d");
+          monthlyChart = new Chart(monthlyCtx, {
+            type: "bar",
+            data: {
+              labels: chartData.months,
+              datasets: [
+                {
+                  label: "Pengunjung per Bulan",
+                  data: chartData.monthlyData,
+                  backgroundColor: chartData.months.map((_, i) => chartData.sourceColors[i % chartData.sourceColors.length]),
+                  borderColor: "rgba(29, 31, 37, 0.8)",
+                  borderWidth: 1,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: false,
+                },
+                tooltip: {
+                  backgroundColor: "rgba(29, 31, 37, 0.9)",
+                  titleColor: "#e0f0ff",
+                  bodyColor: "#e0f0ff",
+                  borderColor: "#3399ff",
+                  borderWidth: 1,
+                  padding: 12,
+                  displayColors: false,
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  grid: {
+                    color: "rgba(51, 153, 255, 0.1)",
+                  },
+                  ticks: {
+                    color: "#88bbff",
+                  },
+                },
+                x: {
+                  grid: {
+                    display: false,
+                  },
+                  ticks: {
+                    color: "#88bbff",
+                  },
+                },
+              },
+            },
+          });
+
+          // Sources Chart
+          const sourceCtx = document.getElementById("sourceChart").getContext("2d");
+          sourceChart = new Chart(sourceCtx, {
+            type: "doughnut",
+            data: {
+              labels: chartData.sources,
+              datasets: [
+                {
+                  data: chartData.sourceData,
+                  backgroundColor: chartData.sourceColors,
+                  borderColor: "rgba(29, 31, 37, 0.8)",
+                  borderWidth: 2,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  position: "right",
+                  labels: {
+                    color: "#e0f0ff",
+                    padding: 20,
+                    usePointStyle: true,
+                    pointStyle: "circle",
+                  },
+                },
+                tooltip: {
+                  backgroundColor: "rgba(29, 31, 37, 0.9)",
+                  titleColor: "#e0f0ff",
+                  bodyColor: "#e0f0ff",
+                  borderColor: "#3399ff",
+                  borderWidth: 1,
+                  padding: 12,
+                },
+              },
+              cutout: "60%",
+            },
+          });
+        } catch (error) {
+          console.error("Error creating charts:", error);
+          showNotification("Gagal memuat grafik statistik", "error");
         }
+      }
 
-        // Update statistik
-        function updateStats(stats) {
-            dailyVisitors.textContent = stats.daily.toLocaleString();
-            weeklyVisitors.textContent = stats.weekly.toLocaleString();
-            monthlyVisitors.textContent = stats.monthly.toLocaleString();
-            totalVisitors.textContent = stats.total.toLocaleString();
+      // Toggle menu responsif
+      menuToggle.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+        menuToggle.classList.toggle("active");
+      });
 
-            const dailyChangeVal = stats.dailyChange || 0;
-            dailyChange.textContent = `${dailyChangeVal >= 0 ? "+" : ""}${dailyChangeVal}% dari kemarin`;
-            dailyChange.className = `stat-change ${dailyChangeVal >= 0 ? "change-positive" : "change-negative"}`;
+      // Event listener untuk tombol range
+      rangeButtons.forEach((btn) => {
+        btn.addEventListener("click", async function () {
+          rangeButtons.forEach((b) => b.classList.remove("active"));
+          this.classList.add("active");
 
-            // Untuk perubahan mingguan dan bulanan
-            weeklyChange.textContent = "Perubahan: data tidak tersedia";
-            monthlyChange.textContent = "Perubahan: data tidak tersedia";
-            weeklyChange.className = "stat-change";
-            monthlyChange.className = "stat-change";
-        }
+          loadingOverlay.style.display = "flex";
 
-        // Create charts
-        function createCharts(chartData) {
-            try {
-                // Destroy existing charts to avoid memory leaks
-                if (dailyChart) dailyChart.destroy();
-                if (hourlyChart) hourlyChart.destroy();
-                if (monthlyChart) monthlyChart.destroy();
-                if (sourceChart) sourceChart.destroy();
-
-                // Daily Visitors Chart
-                const dailyCtx = document.getElementById('dailyChart').getContext('2d');
-                dailyChart = new Chart(dailyCtx, {
-                    type: 'line',
-                    data: {
-                        labels: chartData.dates,
-                        datasets: [{
-                            label: 'Pengunjung Harian',
-                            data: chartData.dailyData,
-                            borderColor: '#33aaff',
-                            backgroundColor: 'rgba(51, 170, 255, 0.1)',
-                            borderWidth: 3,
-                            tension: 0.3,
-                            fill: true,
-                            pointBackgroundColor: '#fff',
-                            pointBorderWidth: 2,
-                            pointRadius: 4,
-                            pointHoverRadius: 6
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                backgroundColor: 'rgba(29, 31, 37, 0.9)',
-                                titleColor: '#e0f0ff',
-                                bodyColor: '#e0f0ff',
-                                borderColor: '#3399ff',
-                                borderWidth: 1,
-                                padding: 12,
-                                displayColors: false
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    color: 'rgba(51, 153, 255, 0.1)'
-                                },
-                                ticks: {
-                                    color: '#88bbff'
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    display: false
-                                },
-                                ticks: {
-                                    color: '#88bbff'
-                                }
-                            }
-                        }
-                    }
-                });
-
-                // Hourly Visitors Chart
-                const hourlyCtx = document.getElementById('hourlyChart').getContext('2d');
-                hourlyChart = new Chart(hourlyCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: chartData.hours,
-                        datasets: [{
-                            label: 'Pengunjung per Jam',
-                            data: chartData.hourlyData,
-                            backgroundColor: 'rgba(51, 170, 255, 0.7)',
-                            borderColor: 'rgba(51, 170, 255, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                backgroundColor: 'rgba(29, 31, 37, 0.9)',
-                                titleColor: '#e0f0ff',
-                                bodyColor: '#e0f0ff',
-                                borderColor: '#3399ff',
-                                borderWidth: 1,
-                                padding: 12,
-                                displayColors: false
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    color: 'rgba(51, 153, 255, 0.1)'
-                                },
-                                ticks: {
-                                    color: '#88bbff'
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    display: false
-                                },
-                                ticks: {
-                                    color: '#88bbff'
-                                }
-                            }
-                        }
-                    }
-                });
-
-                // Monthly Visitors Chart
-                const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
-                monthlyChart = new Chart(monthlyCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: chartData.months,
-                        datasets: [{
-                            label: 'Pengunjung per Bulan',
-                            data: chartData.monthlyData,
-                            backgroundColor: chartData.months.map((_, i) => chartData.sourceColors[i % chartData.sourceColors.length]),
-                            borderColor: 'rgba(29, 31, 37, 0.8)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                backgroundColor: 'rgba(29, 31, 37, 0.9)',
-                                titleColor: '#e0f0ff',
-                                bodyColor: '#e0f0ff',
-                                borderColor: '#3399ff',
-                                borderWidth: 1,
-                                padding: 12,
-                                displayColors: false
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    color: 'rgba(51, 153, 255, 0.1)'
-                                },
-                                ticks: {
-                                    color: '#88bbff'
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    display: false
-                                },
-                                ticks: {
-                                    color: '#88bbff'
-                                }
-                            }
-                        }
-                    }
-                });
-
-                // Sources Chart
-                const sourceCtx = document.getElementById('sourceChart').getContext('2d');
-                sourceChart = new Chart(sourceCtx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: chartData.sources,
-                        datasets: [{
-                            data: chartData.sourceData,
-                            backgroundColor: chartData.sourceColors,
-                            borderColor: 'rgba(29, 31, 37, 0.8)',
-                            borderWidth: 2
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'right',
-                                labels: {
-                                    color: '#e0f0ff',
-                                    padding: 20,
-                                    usePointStyle: true,
-                                    pointStyle: 'circle'
-                                }
-                            },
-                            tooltip: {
-                                backgroundColor: 'rgba(29, 31, 37, 0.9)',
-                                titleColor: '#e0f0ff',
-                                bodyColor: '#e0f0ff',
-                                borderColor: '#3399ff',
-                                borderWidth: 1,
-                                padding: 12
-                            }
-                        },
-                        cutout: '60%'
-                    }
-                });
-            } catch (error) {
-                console.error("Error creating charts:", error);
-                showNotification("Gagal memuat grafik statistik", "error");
-            }
-        }
-
-        // Toggle menu responsif
-        menuToggle.addEventListener("click", () => {
-            navLinks.classList.toggle("active");
-            menuToggle.classList.toggle("active");
+          try {
+            const chartData = await fetchStats();
+            updateStats(chartData.stats);
+            createCharts(chartData);
+          } catch (error) {
+            console.error("Error updating charts:", error);
+          } finally {
+            loadingOverlay.style.display = "none";
+          }
         });
+      });
 
-        // Event listener untuk tombol range
-        rangeButtons.forEach((btn) => {
-            btn.addEventListener("click", async function () {
-                rangeButtons.forEach((b) => b.classList.remove("active"));
-                this.classList.add("active");
+      // Panggil saat halaman dimuat
+      document.addEventListener("DOMContentLoaded", async function () {
+        // Tampilkan loading overlay
+        loadingOverlay.style.display = "flex";
 
-                loadingOverlay.style.display = "flex";
+        try {
+          // Catat kunjungan baru dengan localStorage
+          await recordVisitWithLocalStorage();
 
-                try {
-                    const chartData = await fetchStats();
-                    updateStats(chartData.stats);
-                    createCharts(chartData);
-                } catch (error) {
-                    console.error("Error updating charts:", error);
-                } finally {
-                    loadingOverlay.style.display = "none";
-                }
-            });
-        });
+          // Ambil data statistik
+          const chartData = await fetchStats();
 
-        // Panggil saat halaman dimuat
-        document.addEventListener("DOMContentLoaded", async function () {
-            // Tampilkan loading overlay
+          // Update statistik
+          updateStats(chartData.stats);
+
+          // Buat chart
+          createCharts(chartData);
+        } catch (error) {
+          console.error("Failed to load data", error);
+          showNotification("Gagal memuat data statistik", "error");
+        } finally {
+          loadingOverlay.style.display = "none";
+        }
+
+        // Perbarui data setiap 5 menit
+        setInterval(async () => {
+          try {
             loadingOverlay.style.display = "flex";
-
-            try {
-                // Catat kunjungan baru dengan localStorage
-                await recordVisitWithLocalStorage();
-
-                // Ambil data statistik
-                const chartData = await fetchStats();
-
-                // Update statistik
-                updateStats(chartData.stats);
-
-                // Buat chart
-                createCharts(chartData);
-            } catch (error) {
-                console.error("Failed to load data", error);
-                showNotification("Gagal memuat data statistik", "error");
-            } finally {
-                loadingOverlay.style.display = "none";
-            }
-
-            // Perbarui data setiap 5 menit
-            setInterval(async () => {
-                try {
-                    loadingOverlay.style.display = "flex";
-                    const chartData = await fetchStats();
-                    updateStats(chartData.stats);
-                    createCharts(chartData);
-                    loadingOverlay.style.display = "none";
-                } catch (error) {
-                    console.error("Failed to refresh data", error);
-                    showNotification("Gagal memperbarui data", "error");
-                    loadingOverlay.style.display = "none";
-                }
-            }, 300000); // 5 menit
-        });
+            const chartData = await fetchStats();
+            updateStats(chartData.stats);
+            createCharts(chartData);
+            loadingOverlay.style.display = "none";
+          } catch (error) {
+            console.error("Failed to refresh data", error);
+            showNotification("Gagal memperbarui data", "error");
+            loadingOverlay.style.display = "none";
+          }
+        }, 300000); // 5 menit
+      });
     </script>
-</body>
+  </body>
 </html>
