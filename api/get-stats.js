@@ -1,20 +1,30 @@
 import { Octokit } from "@octokit/rest";
 
 export default async (req, res) => {
+  // Set CORS headers
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+  // Handle OPTIONS request for CORS preflight
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
   try {
     const { data } = await octokit.repos.getContent({
       owner: "shan-only",
-      repo: "shan-only/PersonalWeb3",
+      repo: "PersonalWeb3",
       path: "visits.json",
-      ref: "main", // Ganti dengan branch yang sesuai
+      ref: "main",
     });
 
     const content = Buffer.from(data.content, "base64").toString();
     const visits = JSON.parse(content);
 
-    // Hitung statistik
+    // Calculate statistics
     const now = new Date();
     const today = now.toISOString().split("T")[0];
     const yesterday = new Date(now);
@@ -30,7 +40,7 @@ export default async (req, res) => {
       hourly: visits.hourly[today] || {},
     };
 
-    // Hitung mingguan (7 hari terakhir)
+    // Calculate weekly (last 7 days)
     for (let i = 0; i < 7; i++) {
       const date = new Date(now);
       date.setDate(date.getDate() - i);
@@ -38,16 +48,16 @@ export default async (req, res) => {
       stats.weekly += visits.daily[dateKey] || 0;
     }
 
-    // Hitung bulanan
+    // Calculate monthly
     const currentMonth = `${now.getFullYear()}-${now.getMonth() + 1}`;
     stats.monthly = visits.monthly[currentMonth] || 0;
 
-    // Hitung perubahan harian
+    // Calculate daily change
     if (visits.daily[yesterdayKey]) {
       stats.dailyChange = Math.round(((stats.daily - visits.daily[yesterdayKey]) / visits.daily[yesterdayKey]) * 100);
     }
 
-    // Data untuk chart
+    // Data for charts
     const dates = [];
     const dailyData = [];
     for (let i = 6; i >= 0; i--) {
