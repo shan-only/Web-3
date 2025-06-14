@@ -1158,23 +1158,6 @@
             ];
             renderTestimonials(testimonials);
         });
-        // Fungsi untuk merekam kunjungan
-  async function recordVisit() {
-    try {
-      const response = await fetch('/api/save-visit', {
-        method: 'POST'
-      });
-
-      if (!response.ok) {
-        console.error('Gagal merekam kunjungan');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  }
-
-  // Panggil saat halaman dimuat
-  document.addEventListener('DOMContentLoaded', recordVisit);
     </script>
 </body>
 </html>
