@@ -1,5 +1,5 @@
 // get-stats.js
-const GAS_URL = "https://script.google.com/macros/s/AKfycbyVDHIc1FlHVDXmzyAXNMZ6dmZNQwDWrUAlgAhMfPoc6wzCxxGyCaunjkNdKFYm3kbU/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwrTl7pBgUy655M07KnpsoXEeID7jzT4AlqKbcuPTSb9IWPjqRE-XfPcurBB90dciUc/exec";
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
