@@ -745,10 +745,20 @@
       const weeklyChange = document.getElementById("weeklyChange");
       const monthlyChange = document.getElementById("monthlyChange");
       const totalChange = document.getElementById("totalChange");
+      const noDataMessage = document.getElementById("noDataMessage");
+      const debugPanel = document.getElementById("debugPanel");
 
       // Chart instances
       let dailyChart, hourlyChart, monthlyChart, sourceChart;
       const API_BASE_URL = window.location.origin; // Base URL dinamis
+
+      // Fungsi untuk menambahkan log ke debug panel
+      function addDebugLog(message) {
+        const logEntry = document.createElement("div");
+        logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+        debugPanel.appendChild(logEntry);
+        debugPanel.scrollTop = debugPanel.scrollHeight;
+      }
 
       // Tampilkan notifikasi
       function showNotification(message, type) {
@@ -764,6 +774,8 @@
         setTimeout(() => {
           notification.className = "notification";
         }, 3000);
+        
+        addDebugLog(`Notification: ${message} (${type})`);
       }
 
       // Fungsi untuk mendapatkan tanggal hari ini dalam format YYYY-MM-DD (WIB)
@@ -781,11 +793,13 @@
 
         // Jika sudah mengunjungi hari ini, tidak perlu catat lagi
         if (lastVisitDate === today) {
+          addDebugLog("Kunjungan hari ini sudah tercatat");
           return;
         }
 
         try {
           const source = document.referrer || "direct";
+          addDebugLog(`Mencatat kunjungan baru dari: ${source}`);
           
           const response = await fetch(`${API_BASE_URL}/api/save-visit`, {
             method: "POST",
@@ -795,6 +809,8 @@
             body: JSON.stringify({ source })
           });
 
+          addDebugLog(`Response status: ${response.status}`);
+
           if (!response.ok) {
             throw new Error('Gagal mencatat kunjungan');
           }
@@ -803,11 +819,13 @@
           if (data.success) {
             // Set localStorage dengan tanggal hari ini
             localStorage.setItem('visitDate', today);
+            addDebugLog("Kunjungan berhasil dicatat");
           } else {
             throw new Error('Response tidak sukses');
           }
         } catch (error) {
           console.error('Error recording visit:', error);
+          addDebugLog(`Error: ${error.message}`);
           showNotification("Gagal mencatat kunjungan", "error");
         }
       }
@@ -815,22 +833,25 @@
       // Fungsi untuk mengambil data statistik
       async function fetchStats() {
         try {
+          addDebugLog("Memulai pengambilan data statistik");
           const response = await fetch(`${API_BASE_URL}/api/get-stats`);
-
+          addDebugLog(`Response status: ${response.status}`);
+          
           if (!response.ok) {
             throw new Error("Gagal memuat statistik");
           }
 
           const data = await response.json();
+          addDebugLog("Data statistik berhasil diterima");
           
           // Kembalikan data dalam format yang diharapkan
           return {
             stats: {
-              daily: data.daily || 0,
-              weekly: data.weekly || 0,
-              monthly: data.monthly || 0,
-              total: data.total || 0,
-              dailyChange: data.dailyChange || 0
+              daily: data.stats?.daily || 0,
+              weekly: data.stats?.weekly || 0,
+              monthly: data.stats?.monthly || 0,
+              total: data.stats?.total || 0,
+              dailyChange: data.stats?.dailyChange || 0
             },
             dates: data.dates || [],
             dailyData: data.dailyData || [],
@@ -844,8 +865,22 @@
           };
         } catch (error) {
           console.error("Error fetching stats:", error);
+          addDebugLog(`Error: ${error.message}`);
           showNotification("Gagal memuat data statistik", "error");
-          throw error;
+          
+          // Return default empty data
+          return {
+            stats: { daily: 0, weekly: 0, monthly: 0, total: 0, dailyChange: 0 },
+            dates: [],
+            dailyData: [],
+            hours: [],
+            hourlyData: [],
+            months: [],
+            monthlyData: [],
+            sources: [],
+            sourceData: [],
+            sourceColors: []
+          };
         }
       }
 
@@ -865,10 +900,22 @@
         monthlyChange.textContent = "Perubahan: data tidak tersedia";
         weeklyChange.className = "stat-change";
         monthlyChange.className = "stat-change";
+        
+        addDebugLog("Statistik diperbarui");
       }
 
       // Create charts
       function createCharts(chartData) {
+        // Tampilkan pesan jika data kosong
+        if (chartData.dates.length === 0 || chartData.dailyData.length === 0) {
+          console.warn("No data available for charts");
+          addDebugLog("Tidak ada data yang tersedia untuk grafik");
+          noDataMessage.style.display = "block";
+          return;
+        } else {
+          noDataMessage.style.display = "none";
+        }
+
         // Destroy existing charts
         if (dailyChart) dailyChart.destroy();
         if (hourlyChart) hourlyChart.destroy();
@@ -1088,6 +1135,8 @@
             cutout: "60%",
           },
         });
+        
+        addDebugLog("Grafik berhasil dibuat");
       }
 
       // Toggle menu responsif
@@ -1110,6 +1159,7 @@
             createCharts(chartData);
           } catch (error) {
             console.error("Error updating charts:", error);
+            addDebugLog(`Error: ${error.message}`);
           } finally {
             loadingOverlay.style.display = "none";
           }
@@ -1118,6 +1168,13 @@
 
       // Panggil saat halaman dimuat
       document.addEventListener("DOMContentLoaded", async function () {
+        // Aktifkan debug panel untuk pengembangan
+        if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+          debugPanel.style.display = "block";
+        }
+        
+        addDebugLog("Halaman dimuat");
+        
         // Tampilkan loading overlay
         loadingOverlay.style.display = "flex";
 
@@ -1127,6 +1184,7 @@
 
           // Ambil data statistik
           const chartData = await fetchStats();
+          addDebugLog(`Data diterima: ${JSON.stringify(chartData).substring(0, 100)}...`);
 
           // Update statistik
           updateStats(chartData.stats);
@@ -1135,6 +1193,7 @@
           createCharts(chartData);
         } catch (error) {
           console.error("Failed to load data", error);
+          addDebugLog(`Error: ${error.message}`);
           showNotification("Gagal memuat data statistik", "error");
         } finally {
           loadingOverlay.style.display = "none";
@@ -1150,6 +1209,7 @@
             loadingOverlay.style.display = "none";
           } catch (error) {
             console.error("Failed to refresh data", error);
+            addDebugLog(`Error: ${error.message}`);
             showNotification("Gagal memperbarui data", "error");
             loadingOverlay.style.display = "none";
           }
