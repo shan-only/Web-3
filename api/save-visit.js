@@ -1,5 +1,5 @@
 // save-visit.js
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwrTl7pBgUy655M07KnpsoXEeID7jzT4AlqKbcuPTSb9IWPjqRE-XfPcurBB90dciUc/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzIxZXy4A1_V8LWh3Moitg_xXbTv8YW7zQyEPyHQ5tJnKPZbY_EwonsGD4LjP_yGhgh/exec";
 
 module.exports = async (req, res) => {
   // Handle CORS
