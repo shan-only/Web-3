@@ -2,37 +2,41 @@
 const GAS_URL = "https://script.google.com/macros/s/AKfycbwrTl7pBgUy655M07KnpsoXEeID7jzT4AlqKbcuPTSb9IWPjqRE-XfPcurBB90dciUc/exec";
 
 module.exports = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  // Handle CORS
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
 
   try {
-    const source = req.headers.referer || 'direct';
+    // Get source from headers
+    const source = req.headers.referer || "direct";
     
-    const response = await fetch(GAS_URL, {
-      method: 'POST',
+    // Send data to Google Apps Script
+    const response = await fetch(`${GAS_URL}/exec`, {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        action: 'save-visit',
-        source
-      })
+      body: JSON.stringify({ source })
     });
 
-    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(`GAS responded with status: ${response.status}`);
+    }
+
+    const result = await response.json();
     
-    if (data.success) {
+    if (result.success) {
       res.status(200).json({ success: true });
     } else {
-      throw new Error(data.error || 'Failed to save visit');
+      throw new Error("GAS returned unsuccessful response");
     }
   } catch (error) {
-    console.error('Error saving visit:', error);
-    res.status(500).json({ error: error.message });
+    console.error("Error saving visit:", error);
+    res.status(500).json({ error: "Failed to save visit" });
   }
 };
