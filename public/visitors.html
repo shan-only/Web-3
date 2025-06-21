@@ -732,6 +732,7 @@
     </footer>
 
     <script>
+      // Elemen DOM
       const menuToggle = document.getElementById("menuToggle");
       const navLinks = document.querySelector(".nav-links");
       const loadingOverlay = document.getElementById("loadingOverlay");
@@ -747,7 +748,7 @@
 
       // Chart instances
       let dailyChart, hourlyChart, monthlyChart, sourceChart;
-      const GAS_URL = "https://script.google.com/macros/s/AKfycbwrTl7pBgUy655M07KnpsoXEeID7jzT4AlqKbcuPTSb9IWPjqRE-XfPcurBB90dciUc/exec";
+      const API_BASE_URL = window.location.origin; // Base URL dinamis
 
       // Tampilkan notifikasi
       function showNotification(message, type) {
@@ -770,13 +771,13 @@
         const now = new Date();
         const wibOffset = 7 * 60 * 60 * 1000; // UTC+7 dalam milidetik
         const wibTime = new Date(now.getTime() + wibOffset);
-        return wibTime.toISOString().split("T")[0];
+        return wibTime.toISOString().split('T')[0];
       }
 
       // Fungsi untuk mencatat kunjungan dengan localStorage
       async function recordVisitWithLocalStorage() {
         const today = getTodayWIB();
-        const lastVisitDate = localStorage.getItem("visitDate");
+        const lastVisitDate = localStorage.getItem('visitDate');
 
         // Jika sudah mengunjungi hari ini, tidak perlu catat lagi
         if (lastVisitDate === today) {
@@ -784,29 +785,29 @@
         }
 
         try {
-          const response = await fetch(GAS_URL, {
+          const source = document.referrer || "direct";
+          
+          const response = await fetch(`${API_BASE_URL}/api/save-visit`, {
             method: "POST",
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-              action: 'save-visit',
-              source: document.referrer || 'direct'
-            }),
+            body: JSON.stringify({ source })
           });
 
           if (!response.ok) {
-            throw new Error("Gagal mencatat kunjungan");
+            throw new Error('Gagal mencatat kunjungan');
           }
+
           const data = await response.json();
           if (data.success) {
             // Set localStorage dengan tanggal hari ini
-            localStorage.setItem("visitDate", today);
+            localStorage.setItem('visitDate', today);
           } else {
-            throw new Error("Response tidak sukses");
+            throw new Error('Response tidak sukses');
           }
         } catch (error) {
-          console.error("Error recording visit:", error);
+          console.error('Error recording visit:', error);
           showNotification("Gagal mencatat kunjungan", "error");
         }
       }
@@ -814,60 +815,52 @@
       // Fungsi untuk mengambil data statistik
       async function fetchStats() {
         try {
-          const response = await fetch(`${GAS_URL}?action=get-stats`);
-          console.log('Response status:', response.status);
-          
+          const response = await fetch(`${API_BASE_URL}/api/get-stats`);
+
           if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error("Gagal memuat statistik");
           }
 
           const data = await response.json();
-          console.log('Data stats:', data);
-          return data;
-        } catch (error) {
-          console.error("Error fetching stats:", error);
+          
+          // Kembalikan data dalam format yang diharapkan
           return {
             stats: {
-              daily: 0,
-              weekly: 0,
-              monthly: 0,
-              total: 0,
-              dailyChange: 0,
-              hourly: Array(24).fill(0),
+              daily: data.daily || 0,
+              weekly: data.weekly || 0,
+              monthly: data.monthly || 0,
+              total: data.total || 0,
+              dailyChange: data.dailyChange || 0
             },
-            dates: [],
-            dailyData: [],
-            hours: Array.from({ length: 24 }, (_, i) => `${i}:00`),
-            hourlyData: Array(24).fill(0),
-            months: [],
-            monthlyData: [],
-            sources: [],
-            sourceData: [],
-            sourceColors: ["#33aaff", "#ff6b6b", "#00cc99", "#ffcc00", "#9933ff", "#ff9933"],
+            dates: data.dates || [],
+            dailyData: data.dailyData || [],
+            hours: data.hours || [],
+            hourlyData: data.hourlyData || [],
+            months: data.months || [],
+            monthlyData: data.monthlyData || [],
+            sources: data.sources || [],
+            sourceData: data.sourceData || [],
+            sourceColors: data.sourceColors || []
           };
+        } catch (error) {
+          console.error("Error fetching stats:", error);
+          showNotification("Gagal memuat data statistik", "error");
+          throw error;
         }
       }
 
       // Update statistik
-      function updateStats(data) {
-        // Pastikan properti stats ada dalam data
-        if (!data || !data.stats) {
-          console.error('Data stats tidak ditemukan:', data);
-          return;
-        }
-        
-        const stats = data.stats;
-        
+      function updateStats(stats) {
         dailyVisitors.textContent = stats.daily.toLocaleString();
         weeklyVisitors.textContent = stats.weekly.toLocaleString();
         monthlyVisitors.textContent = stats.monthly.toLocaleString();
         totalVisitors.textContent = stats.total.toLocaleString();
 
-        const dailyChangeVal = stats.dailyChange || 0;
+        const dailyChangeVal = stats.dailyChange;
         dailyChange.textContent = `${dailyChangeVal >= 0 ? "+" : ""}${dailyChangeVal}% dari kemarin`;
         dailyChange.className = `stat-change ${dailyChangeVal >= 0 ? "change-positive" : "change-negative"}`;
 
-        // Untuk perubahan mingguan dan bulanan
+        // Untuk perubahan mingguan dan bulanan, tidak dihitung oleh backend
         weeklyChange.textContent = "Perubahan: data tidak tersedia";
         monthlyChange.textContent = "Perubahan: data tidak tersedia";
         weeklyChange.className = "stat-change";
@@ -876,228 +869,225 @@
 
       // Create charts
       function createCharts(chartData) {
-        try {
-          // Destroy existing charts to avoid memory leaks
-          if (dailyChart) dailyChart.destroy();
-          if (hourlyChart) hourlyChart.destroy();
-          if (monthlyChart) monthlyChart.destroy();
-          if (sourceChart) sourceChart.destroy();
+        // Destroy existing charts
+        if (dailyChart) dailyChart.destroy();
+        if (hourlyChart) hourlyChart.destroy();
+        if (monthlyChart) monthlyChart.destroy();
+        if (sourceChart) sourceChart.destroy();
 
-          // Daily Visitors Chart
-          const dailyCtx = document.getElementById("dailyChart").getContext("2d");
-          dailyChart = new Chart(dailyCtx, {
-            type: "line",
-            data: {
-              labels: chartData.dates,
-              datasets: [
-                {
-                  label: "Pengunjung Harian",
-                  data: chartData.dailyData,
-                  borderColor: "#33aaff",
-                  backgroundColor: "rgba(51, 170, 255, 0.1)",
-                  borderWidth: 3,
-                  tension: 0.3,
-                  fill: true,
-                  pointBackgroundColor: "#fff",
-                  pointBorderWidth: 2,
-                  pointRadius: 4,
-                  pointHoverRadius: 6,
-                },
-              ],
+        // Daily chart
+        const dailyCtx = document.getElementById("dailyChart").getContext("2d");
+        dailyChart = new Chart(dailyCtx, {
+          type: "line",
+          data: {
+            labels: chartData.dates,
+            datasets: [
+              {
+                label: "Pengunjung",
+                data: chartData.dailyData,
+                borderColor: "#33aaff",
+                backgroundColor: "rgba(51, 170, 255, 0.1)",
+                borderWidth: 3,
+                pointBackgroundColor: "#33aaff",
+                pointRadius: 4,
+                tension: 0.3,
+                fill: true,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                backgroundColor: "rgba(29, 31, 37, 0.9)",
+                titleColor: "#e0f0ff",
+                bodyColor: "#88bbff",
+                borderColor: "#3399ff",
+                borderWidth: 1,
+                displayColors: false,
+              },
             },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: {
+                  color: "rgba(51, 153, 255, 0.1)",
+                },
+                ticks: {
+                  color: "#88bbff",
+                },
+              },
+              x: {
+                grid: {
+                  color: "rgba(51, 153, 255, 0.1)",
+                },
+                ticks: {
+                  color: "#88bbff",
+                },
+              },
+            },
+          },
+        });
+
+        // Hourly chart
+        const hourlyCtx = document.getElementById("hourlyChart").getContext("2d");
+        hourlyChart = new Chart(hourlyCtx, {
+          type: "bar",
+          data: {
+            labels: chartData.hours,
+            datasets: [
+              {
+                label: "Pengunjung",
+                data: chartData.hourlyData,
+                backgroundColor: "rgba(51, 170, 255, 0.5)",
+                borderColor: "#33aaff",
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                backgroundColor: "rgba(29, 31, 37, 0.9)",
+                titleColor: "#e0f0ff",
+                bodyColor: "#88bbff",
+                borderColor: "#3399ff",
+                borderWidth: 1,
+                displayColors: false,
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: {
+                  color: "rgba(51, 153, 255, 0.1)",
+                },
+                ticks: {
+                  color: "#88bbff",
+                },
+              },
+              x: {
+                grid: {
                   display: false,
                 },
-                tooltip: {
-                  backgroundColor: "rgba(29, 31, 37, 0.9)",
-                  titleColor: "#e0f0ff",
-                  bodyColor: "#e0f0ff",
-                  borderColor: "#3399ff",
-                  borderWidth: 1,
-                  padding: 12,
-                  displayColors: false,
-                },
-              },
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  grid: {
-                    color: "rgba(51, 153, 255, 0.1)",
-                  },
-                  ticks: {
-                    color: "#88bbff",
-                  },
-                },
-                x: {
-                  grid: {
-                    display: false,
-                  },
-                  ticks: {
-                    color: "#88bbff",
-                  },
+                ticks: {
+                  color: "#88bbff",
+                  maxRotation: 0,
+                  autoSkip: true,
+                  maxTicksLimit: 12,
                 },
               },
             },
-          });
+          },
+        });
 
-          // Hourly Visitors Chart
-          const hourlyCtx = document.getElementById("hourlyChart").getContext("2d");
-          hourlyChart = new Chart(hourlyCtx, {
-            type: "bar",
-            data: {
-              labels: chartData.hours,
-              datasets: [
-                {
-                  label: "Pengunjung per Jam",
-                  data: chartData.hourlyData,
-                  backgroundColor: "rgba(51, 170, 255, 0.7)",
-                  borderColor: "rgba(51, 170, 255, 1)",
-                  borderWidth: 1,
-                },
-              ],
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  display: false,
-                },
-                tooltip: {
-                  backgroundColor: "rgba(29, 31, 37, 0.9)",
-                  titleColor: "#e0f0ff",
-                  bodyColor: "#e0f0ff",
-                  borderColor: "#3399ff",
-                  borderWidth: 1,
-                  padding: 12,
-                  displayColors: false,
-                },
+        // Monthly chart
+        const monthlyCtx = document.getElementById("monthlyChart").getContext("2d");
+        monthlyChart = new Chart(monthlyCtx, {
+          type: "line",
+          data: {
+            labels: chartData.months,
+            datasets: [
+              {
+                label: "Pengunjung",
+                data: chartData.monthlyData,
+                borderColor: "#00cc99",
+                backgroundColor: "rgba(0, 204, 153, 0.1)",
+                borderWidth: 3,
+                pointBackgroundColor: "#00cc99",
+                pointRadius: 4,
+                tension: 0.3,
+                fill: true,
               },
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  grid: {
-                    color: "rgba(51, 153, 255, 0.1)",
-                  },
-                  ticks: {
-                    color: "#88bbff",
-                  },
-                },
-                x: {
-                  grid: {
-                    display: false,
-                  },
-                  ticks: {
-                    color: "#88bbff",
-                  },
-                },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false,
+              },
+              tooltip: {
+                backgroundColor: "rgba(29, 31, 37, 0.9)",
+                titleColor: "#e0f0ff",
+                bodyColor: "#88bbff",
+                borderColor: "#3399ff",
+                borderWidth: 1,
+                displayColors: false,
               },
             },
-          });
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: {
+                  color: "rgba(51, 153, 255, 0.1)",
+                },
+                ticks: {
+                  color: "#88bbff",
+                },
+              },
+              x: {
+                grid: {
+                  color: "rgba(51, 153, 255, 0.1)",
+                },
+                ticks: {
+                  color: "#88bbff",
+                },
+              },
+            },
+          },
+        });
 
-          // Monthly Visitors Chart
-          const monthlyCtx = document.getElementById("monthlyChart").getContext("2d");
-          monthlyChart = new Chart(monthlyCtx, {
-            type: "bar",
-            data: {
-              labels: chartData.months,
-              datasets: [
-                {
-                  label: "Pengunjung per Bulan",
-                  data: chartData.monthlyData,
-                  backgroundColor: chartData.months.map((_, i) => chartData.sourceColors[i % chartData.sourceColors.length]),
-                  borderColor: "rgba(29, 31, 37, 0.8)",
-                  borderWidth: 1,
-                },
-              ],
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  display: false,
-                },
-                tooltip: {
-                  backgroundColor: "rgba(29, 31, 37, 0.9)",
-                  titleColor: "#e0f0ff",
-                  bodyColor: "#e0f0ff",
-                  borderColor: "#3399ff",
-                  borderWidth: 1,
-                  padding: 12,
-                  displayColors: false,
-                },
+        // Source chart
+        const sourceCtx = document.getElementById("sourceChart").getContext("2d");
+        sourceChart = new Chart(sourceCtx, {
+          type: "doughnut",
+          data: {
+            labels: chartData.sources,
+            datasets: [
+              {
+                data: chartData.sourceData,
+                backgroundColor: chartData.sourceColors,
+                borderColor: "rgba(29, 31, 37, 0.8)",
+                borderWidth: 2,
               },
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  grid: {
-                    color: "rgba(51, 153, 255, 0.1)",
-                  },
-                  ticks: {
-                    color: "#88bbff",
-                  },
-                },
-                x: {
-                  grid: {
-                    display: false,
-                  },
-                  ticks: {
-                    color: "#88bbff",
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: {
+                  color: "#e0f0ff",
+                  padding: 20,
+                  font: {
+                    size: 12,
                   },
                 },
               },
-            },
-          });
-
-          // Sources Chart
-          const sourceCtx = document.getElementById("sourceChart").getContext("2d");
-          sourceChart = new Chart(sourceCtx, {
-            type: "doughnut",
-            data: {
-              labels: chartData.sources,
-              datasets: [
-                {
-                  data: chartData.sourceData,
-                  backgroundColor: chartData.sourceColors,
-                  borderColor: "rgba(29, 31, 37, 0.8)",
-                  borderWidth: 2,
-                },
-              ],
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                legend: {
-                  position: "right",
-                  labels: {
-                    color: "#e0f0ff",
-                    padding: 20,
-                    usePointStyle: true,
-                    pointStyle: "circle",
-                  },
-                },
-                tooltip: {
-                  backgroundColor: "rgba(29, 31, 37, 0.9)",
-                  titleColor: "#e0f0ff",
-                  bodyColor: "#e0f0ff",
-                  borderColor: "#3399ff",
-                  borderWidth: 1,
-                  padding: 12,
-                },
+              tooltip: {
+                backgroundColor: "rgba(29, 31, 37, 0.9)",
+                titleColor: "#e0f0ff",
+                bodyColor: "#88bbff",
+                borderColor: "#3399ff",
+                borderWidth: 1,
               },
-              cutout: "60%",
             },
-          });
-        } catch (error) {
-          console.error("Error creating charts:", error);
-          showNotification("Gagal memuat grafik statistik", "error");
-        }
+            cutout: "60%",
+          },
+        });
       }
 
       // Toggle menu responsif
@@ -1116,11 +1106,10 @@
 
           try {
             const chartData = await fetchStats();
-            updateStats(chartData);
+            updateStats(chartData.stats);
             createCharts(chartData);
           } catch (error) {
             console.error("Error updating charts:", error);
-            showNotification("Gagal memperbarui statistik", "error");
           } finally {
             loadingOverlay.style.display = "none";
           }
@@ -1140,7 +1129,7 @@
           const chartData = await fetchStats();
 
           // Update statistik
-          updateStats(chartData);
+          updateStats(chartData.stats);
 
           // Buat chart
           createCharts(chartData);
@@ -1156,7 +1145,7 @@
           try {
             loadingOverlay.style.display = "flex";
             const chartData = await fetchStats();
-            updateStats(chartData);
+            updateStats(chartData.stats);
             createCharts(chartData);
             loadingOverlay.style.display = "none";
           } catch (error) {
