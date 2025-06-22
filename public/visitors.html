@@ -794,7 +794,7 @@
 
         // Chart instances
         let dailyChart, hourlyChart, monthlyChart, sourceChart;
-        const GAS_URL = "https://script.google.com/macros/s/AKfycbzIxZXy4A1_V8LWh3Moitg_xXbTv8YW7zQyEPyHQ5tJnKPZbY_EwonsGD4LjP_yGhgh/exec";
+        const API_BASE_URL = window.location.origin; // Base URL dinamis
         let dataCache = null; // Cache untuk data statistik
         let lastFetchTime = 0; // Waktu terakhir pengambilan data
 
@@ -845,7 +845,7 @@
             try {
                 const source = document.referrer || "direct";
                 
-                const response = await fetch(GAS_URL, {
+                const response = await fetch(`${API_BASE_URL}/api/save-visit`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -879,8 +879,7 @@
             }
 
             try {
-                // Tambahkan timestamp untuk menghindari cache
-                const response = await fetch(`${GAS_URL}?timestamp=${now}`);
+                const response = await fetch(`${API_BASE_URL}/api/get-stats`);
 
                 if (!response.ok) {
                     throw new Error("Gagal memuat statistik");
@@ -903,8 +902,8 @@
                     hourlyData: data.hourlyData || [],
                     months: data.months || [],
                     monthlyData: data.monthlyData || [],
-                    sourceLabels: data.sourceLabels || [],
-                    sourceValues: data.sourceValues || [],
+                    sources: data.sources || [],
+                    sourceData: data.sourceData || [],
                     sourceColors: data.sourceColors || []
                 };
                 
@@ -924,8 +923,8 @@
                     hourlyData: [],
                     months: [],
                     monthlyData: [],
-                    sourceLabels: [],
-                    sourceValues: [],
+                    sources: [],
+                    sourceData: [],
                     sourceColors: []
                 };
             }
@@ -1143,10 +1142,10 @@
             sourceChart = new Chart(sourceCtx, {
                 type: "doughnut",
                 data: {
-                    labels: chartData.sourceLabels,
+                    labels: chartData.sources,
                     datasets: [
                         {
-                            data: chartData.sourceValues,
+                            data: chartData.sourceData,
                             backgroundColor: chartData.sourceColors,
                             borderColor: "rgba(29, 31, 37, 0.8)",
                             borderWidth: 2,
